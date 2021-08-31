@@ -1,4 +1,8 @@
-# Getting Started with Create React App
+# ASD 41026 - Project
+
+This repository contains the front end react application which uses the [we-music-api](https://github.com/peefeeyatko/we-music-api) backend service.
+
+## Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
