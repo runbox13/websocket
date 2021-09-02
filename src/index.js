@@ -1,18 +1,35 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import './index.css';
+import {
+  BrowserRouter as Router,
+  Route,
+  Switch
+} from 'react-router-dom';
 
-function HelloWorld(props) {
-  console.log(props);
-  return (
-    <div>
-     <h1>{props.name}</h1>
-     <p>Something cool</p>
-    </div>
-  );
-}
+// css
+import './index.css';
+import 'bootstrap/dist/css/bootstrap.min.css';
+
+// partials
+import Header from './partial/header';
+import Footer from './partial/footer';
+
+// pages
+import App from './App.js'
+import Login from './page/login';
+import NotFound from "./page/404";
+import Register from './page/register';
 
 ReactDOM.render(
-  <HelloWorld name="Hello World!"/>,
+  <Router>
+    <Header />
+    <Switch>
+      <Route exact path="/" component={App} />
+      <Route path="/login" component={Login} />
+      <Route path="/register" component={Register} />
+      <Route component={NotFound} />
+    </Switch>
+    <Footer />
+  </Router>,
   document.getElementById('root')
 );
