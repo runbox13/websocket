@@ -6,7 +6,8 @@ const Login = () => {
         <div className="container main">
             
             <div className="col-md-8 mx-auto">
-                <div className="card">
+                <div className="card bg-light">
+
                     <div className="card-header">
                         <h1>Login</h1>
                     </div>
