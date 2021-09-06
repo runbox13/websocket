@@ -31,6 +31,9 @@ const Header = (props) => {
               <NavItem>
                   <NavLink href="/login">Login</NavLink>
               </NavItem>
+              <NavItem>
+                  <NavLink href="/profile">Profile</NavLink>
+              </NavItem>
             </Nav>
           </Collapse>
         </Navbar>
