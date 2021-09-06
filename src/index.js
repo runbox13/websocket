@@ -8,6 +8,8 @@ import {
 import { Provider } from 'react-redux'
 import store from './store/index'
 
+// Hello World - Rey
+
 // css
 import './index.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
