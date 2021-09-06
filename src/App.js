@@ -7,15 +7,15 @@ function App() {
       <header className="App-header">
         <img src={logo} className="App-logo" alt="logo" />
         <p>
-          Welcome to WeMusic.
+          Welcome to WeMusic
         </p>
         <a
           className="App-link"
-          href="https://reactjs.org"
+          href="https://canvas.uts.edu.au/"
           target="_blank"
           rel="noopener noreferrer"
         >
-          Learn React
+          UTS Canvas
         </a>
       </header>
     </div>
