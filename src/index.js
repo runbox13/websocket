@@ -21,7 +21,6 @@ import App from './App.js'
 import Login from './page/login';
 import NotFound from "./page/404";
 import Register from './page/register';
-import Profile from './page/profile';
 
 // attach state to window object for debugging
 window.store = store;
@@ -34,7 +33,6 @@ ReactDOM.render(
         <Route exact path="/" component={App} />
         <Route path="/login" component={Login} />
         <Route path="/register" component={Register} />
-        <Route path="/profile" component={Profile} />
         <Route component={NotFound} />
       </Switch>
       <Footer />
