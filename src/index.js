@@ -5,6 +5,8 @@ import {
   Route,
   Switch
 } from 'react-router-dom';
+import { Provider } from 'react-redux'
+import store from './store/index'
 
 // css
 import './index.css';
@@ -21,17 +23,22 @@ import NotFound from "./page/404";
 import Register from './page/register';
 import Profile from './page/profile';
 
+// attach state to window object for debugging
+window.store = store;
+
 ReactDOM.render(
-  <Router>
-    <Header />
-    <Switch>
-      <Route exact path="/" component={App} />
-      <Route path="/login" component={Login} />
-      <Route path="/register" component={Register} />
-      <Route path="/profile" component={Profile} />
-      <Route component={NotFound} />
-    </Switch>
-    <Footer />
-  </Router>,
+  <Provider store={store}>
+    <Router>
+      <Header />
+      <Switch>
+        <Route exact path="/" component={App} />
+        <Route path="/login" component={Login} />
+        <Route path="/register" component={Register} />
+        <Route path="/profile" component={Profile} />
+        <Route component={NotFound} />
+      </Switch>
+      <Footer />
+    </Router>
+  </Provider>,
   document.getElementById('root')
 );
