@@ -6,6 +6,8 @@ import {
   Switch
 } from 'react-router-dom'
 import { Provider } from 'react-redux'
+
+// redux store
 import store from './store/index'
 
 // css
@@ -22,6 +24,7 @@ import Lobby from "./page/lobby"
 import Login from './page/login'
 import NotFound from "./page/404"
 import Register from './page/register'
+import Profile from './page/profile'
 
 // attach state to window object for debugging
 window.store = store
@@ -33,6 +36,7 @@ ReactDOM.render(
       <Switch>
         <Route exact path="/" component={App} />
         <Route path="/lobby" component={Lobby} />
+        <Route path="/profile" component={Profile} />
         <Route path="/login" component={Login} />
         <Route path="/register" component={Register} />
         <Route component={NotFound} />
