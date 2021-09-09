@@ -32,4 +32,4 @@ ReactDOM.render(
     <Footer />
   </Router>,
   document.getElementById('root')
-);
+  );
