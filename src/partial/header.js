@@ -49,14 +49,6 @@ class Header extends React.Component {
                     <NavItem>
                         <NavLink to="/login" className="nav-link">Login</NavLink>
                     </NavItem>
-                  </>
-                }
-
-                {Object.keys(this.props.user).length > 0 && /* logged in */
-                  <>
-                    <NavItem>
-                        <NavLink to="/lobby" className="nav-link">Lobby</NavLink>
-                    </NavItem>
                     <NavItem>
                         <NavLink to="/profile" className="nav-link">Profile</NavLink>
                     </NavItem>
