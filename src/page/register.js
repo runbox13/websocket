@@ -1,4 +1,5 @@
 import React from 'react';
+import axios from 'axios';
 import { connect } from 'react-redux'
 import { Form, FormGroup, Label, Input, Button } from 'reactstrap';
 
@@ -10,7 +11,7 @@ class Register extends React.Component {
             password: '' 
         }
 
-        this.handleChange = this.handleChange.bind(this);
+        this.handleChange = this.handleChange.bind(this)
         this.handleSubmit = this.handleSubmit.bind(this)
     }
 
@@ -25,7 +26,26 @@ class Register extends React.Component {
     }
 
     handleSubmit(event) {
-        alert('POST ' + this.props.api);
+
+        axios
+            .post(this.props.api + '/user/store', {
+                email: this.state.email,
+                password: this.state.password
+            })
+            .then((response) => {
+                console.log(response.data);
+                // dispatch USER_SESSION action to save user data to redux store
+                this.props.dispatch({
+                    type: 'USER_SESSION',
+                    payload: response.data.user
+                })
+                // redirect to lobby
+                this.props.history.push('/lobby');
+            }).catch(error => {
+                alert(error);
+                console.log(error);
+            });
+
         event.preventDefault();
     }
 
@@ -34,7 +54,8 @@ class Register extends React.Component {
             <div className="container main">
                 
                 <div className="col-md-8 mx-auto">
-                    <div className="card">
+                    <div className="card bg-light">
+
                         <div className="card-header">
                             <h1>Register</h1>
                         </div>
@@ -82,6 +103,15 @@ const mapStateToProps = state => {
         api: state.api,
         user: state.user
     }
-};
+}
 
-export default connect(mapStateToProps)(Register);
+const mapDispatchToProps = dispatch => {
+    return {
+        dispatch
+    }
+}
+
+export default connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(Register);
