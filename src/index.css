@@ -47,6 +47,10 @@ form .form-group {
 }
 
 .video-wrapper {
-  height: 600px;
+  height: 100%;
+}
+
+.centerChatroom {
+  height: calc(100vh - 200px);
 }
 
