@@ -38,7 +38,7 @@ const Room = (props) =>{
   return(
     <article className='chatroom'>
       <img src={img}/>
-      <h1>{title}</h1>
+      <a href="https://www.youtube.com/watch?v=dQw4w9WgXcQ"><h1>{title}</h1></a>
       <h4>{views} listeners</h4>
     </article>
   )
