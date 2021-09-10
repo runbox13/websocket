@@ -1,11 +1,11 @@
 import React from 'react';
-import { Container, Row, Col } from 'reactstrap';
-
+import { Container, Row, Col, Card } from 'reactstrap';
+import ReactPlayer from 'react-player'
 
 function SidebarPlaylist() {
     return(
         <div class="sideBarPlaylist">
-            TestLeft
+            <p>Playlists</p>
         </div>
     );
 }
@@ -13,7 +13,7 @@ function SidebarPlaylist() {
 function SideBarChatbox() {
     return(
         <div class="sideBarChatbox">
-            TestRight
+            <p>Chat</p>
         </div>
     );
 }
@@ -21,7 +21,12 @@ function SideBarChatbox() {
 function CenterChatroom() {
     return(
         <div class="centerChatroom">
-            Test
+            <div class="video-wrapper">
+                <ReactPlayer  url='https://www.youtube.com/watch?v=dQw4w9WgXcQ' playing={true} controls={true} width={"100%"} height={"100%"}/>
+           </div>
+           <Card>
+               <Card body>Rick Roll</Card>
+           </Card>
         </div>
     );
 }
@@ -29,16 +34,15 @@ function CenterChatroom() {
 
 class Chatroom extends React.Component {
 
-
     render() {
     return(
         <>
-        <Container>
+        <Container fluid>
             <Row>
                 <Col>
                     <SidebarPlaylist/>
                 </Col>
-                <Col>
+                <Col xs={8}>
                     <CenterChatroom/>
                 </Col>
                 <Col>

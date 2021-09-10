@@ -35,3 +35,23 @@ form .form-group {
   background-color: rgba(0, 0, 0, .03);
   text-align: center;
 }
+
+.sideBarPlaylist {
+  height: calc(100vh - 100px);
+  background:rgba(63, 78, 119, 0.911);
+}
+
+.sideBarChatbox {
+  height: calc(100vh - 100px);
+  background:rgba(63, 78, 119, 0.911);
+}
+
+.sideBarChatbox, .sideBarPlaylist > p {
+  color:white;
+  text-align: center;
+}
+
+.video-wrapper {
+  height: 600px;
+}
+
