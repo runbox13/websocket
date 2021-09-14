@@ -1,30 +1,40 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
+import React from 'react'
+import ReactDOM from 'react-dom'
 import {
   BrowserRouter as Router,
   Route,
   Switch
-} from 'react-router-dom';
+} from 'react-router-dom'
 import { Provider } from 'react-redux'
+
+// redux store
 import store from './store/index'
 
 // css
-import './index.css';
-import 'bootstrap/dist/css/bootstrap.min.css';
+import './index.css'
+import 'bootstrap/dist/css/bootstrap.min.css'
 
 // partials
-import Header from './partial/header';
-import Footer from './partial/footer';
+import Header from './partial/header'
+import Footer from './partial/footer'
 
 // pages
 import App from './App.js'
+<<<<<<< HEAD
 import Login from './page/login';
 import NotFound from "./page/404";
 import Register from './page/register';
 import Chatroom from './page/chatroom'
+=======
+import Lobby from "./page/lobby"
+import Login from './page/login'
+import NotFound from "./page/404"
+import Register from './page/register'
+import Profile from './page/profile'
+>>>>>>> c3452c82ba571de679e2a5677ae7ba20d929a591
 
 // attach state to window object for debugging
-window.store = store;
+window.store = store
 
 ReactDOM.render(
   <Provider store={store}>
@@ -32,6 +42,8 @@ ReactDOM.render(
       <Header />
       <Switch>
         <Route exact path="/" component={App} />
+        <Route path="/lobby" component={Lobby} />
+        <Route path="/profile" component={Profile} />
         <Route path="/login" component={Login} />
         <Route path="/register" component={Register} />        
         <Route exact path="/chatroom" component={Chatroom} />
