@@ -20,18 +20,13 @@ import Footer from './partial/footer'
 
 // pages
 import App from './App.js'
-<<<<<<< HEAD
-import Login from './page/login';
-import NotFound from "./page/404";
-import Register from './page/register';
-import Chatroom from './page/chatroom'
-=======
 import Lobby from "./page/lobby"
 import Login from './page/login'
 import NotFound from "./page/404"
 import Register from './page/register'
 import Profile from './page/profile'
->>>>>>> c3452c82ba571de679e2a5677ae7ba20d929a591
+import Chatroom from './page/chatroom'
+
 
 // attach state to window object for debugging
 window.store = store
