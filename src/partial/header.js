@@ -5,7 +5,8 @@ import {
   NavbarToggler,
   NavbarBrand,
   Nav,
-  NavItem
+  NavItem,
+  Alert
 } from 'reactstrap';
 import { connect } from 'react-redux';
 import { NavLink, Link } from 'react-router-dom';
@@ -14,17 +15,17 @@ class Header extends React.Component {
   constructor() {
     super()
     this.state = { 
-        isOpen: false
+        isOpen: false,
+        logoutAlert: (window.location.search.indexOf('logout') !== -1)
     }
 
-    this.handleChange = this.handleChange.bind(this);
+    this.onDismiss = this.onDismiss.bind(this)
+    this.handleChange = this.handleChange.bind(this)
   }
 
-  handleChange() {
-      this.setState({
-        isOpen: !this.state.isOpen
-      });
-  }
+  handleChange() { this.setState({ isOpen: !this.state.isOpen }) }
+
+  onDismiss() { this.setState({ logoutAlert: false }) }
 
   render() {
     return (
@@ -69,6 +70,11 @@ class Header extends React.Component {
             </Collapse>
           </Navbar>
         </header>
+
+        <Alert color="success" className="home-alert" isOpen={this.state.logoutAlert} toggle={this.onDismiss}>
+          Success! You are now logged out
+        </Alert>
+
       </div>
     )
   }
@@ -80,6 +86,13 @@ const mapStateToProps = state => {
   }
 }
 
+const mapDispatchToProps = dispatch => {
+  return {
+      dispatch
+  }
+}
+
 export default connect(
-  mapStateToProps
+  mapStateToProps,
+  mapDispatchToProps
 )(Header);
