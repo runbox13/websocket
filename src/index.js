@@ -24,7 +24,8 @@ import Lobby from "./page/lobby"
 import Login from './page/login'
 import NotFound from "./page/404"
 import Register from './page/register'
-import Profile from './page/profile'
+import ManageRoom from './page/user/room'
+import Profile from './page/user/profile'
 
 // attach state to window object for debugging
 window.store = store
@@ -36,9 +37,13 @@ ReactDOM.render(
       <Switch>
         <Route exact path="/" component={App} />
         <Route path="/lobby" component={Lobby} />
+        
         <Route path="/profile" component={Profile} />
+        <Route path="/manage-rooms" component={ManageRoom} />
+        
         <Route path="/login" component={Login} />
         <Route path="/register" component={Register} />
+        
         <Route component={NotFound} />
       </Switch>
       <Footer />
