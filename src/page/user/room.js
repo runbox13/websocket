@@ -79,7 +79,7 @@ class ManageRoom extends React.Component {
                                 <td className="text-truncate">{room.description}</td>
                                 <td className="text-right">
                                     <Button color="primary">Edit</Button>
-                                    <Button color="danger" onClick={(i) => this.handleDelete(room.id, i)}>Delete</Button>
+                                    <Button color="danger" onClick={() => this.handleDelete(room.id, i)}>Delete</Button>
                                 </td>
                             </tr>
                         ))}
