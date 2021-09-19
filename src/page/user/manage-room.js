@@ -20,14 +20,13 @@ class ManageRoom extends React.Component {
     componentDidMount() {
         axios.get(this.props.api + 'room/created-by/' + this.props.user.id)
             .then((response) => {
-                console.log(response.data);
                 this.setState({
                     isLoaded: true,
                     rooms: response.data
-                });
+                })
             }).catch(error => {
-                alert(error);
-                console.log(error);
+                alert(error)
+                console.log(error)
             });
     }
 
@@ -45,6 +44,11 @@ class ManageRoom extends React.Component {
                     })
                 });
         }
+    }
+
+    handleEdit(roomId) {
+        let path = '/manage-rooms/update?id=' + roomId
+        this.props.history.push(path)
     }
 
     render() {
@@ -80,8 +84,10 @@ class ManageRoom extends React.Component {
                                 <td>{room.name}</td>
                                 <td className="text-truncate">{room.description}</td>
                                 <td className="text-right">
-                                    <Button color="primary">Edit</Button>
-                                    <Button color="danger" onClick={() => this.handleDelete(room.id, i)}>Delete</Button>
+                                    <Button color="primary" 
+                                        onClick={() => this.handleEdit(room.id)}>Edit</Button>
+                                    <Button color="danger" 
+                                        onClick={() => this.handleDelete(room.id, i)}>Delete</Button>
                                 </td>
                             </tr>
                         ))}
