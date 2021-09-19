@@ -1,12 +1,12 @@
 import React from 'react'
 import axios from 'axios'
 import { connect } from 'react-redux'
-import { 
+import {
     Alert,
     Table,
     Button,
-    Spinner 
-} from 'reactstrap';
+    Spinner
+} from 'reactstrap'
 
 class ManageRoom extends React.Component {
     constructor() {
@@ -53,7 +53,9 @@ class ManageRoom extends React.Component {
                 <h1 className="mb-3">Manage Rooms</h1>
 
                 <div className="clearfix">
-                    <Button className="float-end">Create Room</Button>
+                    <Button 
+                        className="float-end" 
+                        onClick={() => this.props.history.push('/manage-rooms/create')}>Create Room</Button>
                 </div>
                 
                 {!this.state.isLoaded &&

@@ -24,8 +24,9 @@ import Lobby from "./page/lobby"
 import Login from './page/login'
 import NotFound from "./page/404"
 import Register from './page/register'
-import ManageRoom from './page/user/room'
 import Profile from './page/user/profile'
+import ManageRoom from './page/user/room'
+import CreateRoom from './page/user/create-room'
 
 // attach state to window object for debugging
 window.store = store
@@ -39,7 +40,9 @@ ReactDOM.render(
         <Route path="/lobby" component={Lobby} />
         
         <Route path="/profile" component={Profile} />
-        <Route path="/manage-rooms" component={ManageRoom} />
+
+        <Route exact path="/manage-rooms" component={ManageRoom} />
+        <Route path="/manage-rooms/create" component={CreateRoom} />
         
         <Route path="/login" component={Login} />
         <Route path="/register" component={Register} />

@@ -61,3 +61,11 @@ table.manage-rooms .btn {
 .text-right {
   text-align: right;
 }
+
+#desc {
+  min-height: 120px;
+}
+
+.mr-10 {
+  margin-right: 10px;
+}
