@@ -1,5 +1,5 @@
 import './App.css'
-import React from 'react';
+import React from 'react'
 import logo from './logo.svg'
 import { connect } from 'react-redux'
 
@@ -39,4 +39,4 @@ const mapDispatchToProps = dispatch => {
 
 export default connect(
   mapDispatchToProps
-)(App);
+)(App)
