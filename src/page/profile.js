@@ -1,8 +1,7 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
-import 'react-tabs/style/react-tabs.css';
-
+import { Tab, Tabs, TabList, TabPanel } from 'react-tabs'
+import 'react-tabs/style/react-tabs.css'
 
 
 class Profile extends React.Component {
@@ -14,11 +13,11 @@ class Profile extends React.Component {
 
     render() {
         return (
-            <><div className="container main">
-                <h1>Profile</h1>
-            
-            
-             
+            <div className="container main">
+                <div className="mb-4">
+                    <h1>Profile</h1>
+                    <code>username</code>
+                </div>
 
                 <Tabs>
                     <TabList>
@@ -27,33 +26,27 @@ class Profile extends React.Component {
                         <Tab>Bio</Tab>
                     </TabList>
 
-                    /* get data from user to put into these tabs.
-                     edit profile should affect bio */
+                    {
+                        // get data from user to put into these tabs.
+                        // edit profile should affect bio
+                    }
                      
-
                     <TabPanel>
-                    <p> Created channel </p>
-
+                        <p>Created Channels</p>
                     </TabPanel>
 
                     <TabPanel>
-                        <p> followed channels </p>
+                        <p>Followed Channels</p>
                     </TabPanel>
 
                     <TabPanel>
-                        <p> Bio </p>
+                        <p>Bio</p>
                     </TabPanel>
-
                 </Tabs>
-
-                </div> 
-            
-            </>
+            </div> 
         )
-
-        
     }
-};
+}
 
 const mapStateToProps = state => {
     return { 
