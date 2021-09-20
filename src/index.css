@@ -69,3 +69,11 @@ table.manage-rooms .btn {
 .mr-10 {
   margin-right: 10px;
 }
+
+.code-link {
+  cursor: pointer;
+}
+
+.code-link:hover {
+  text-decoration: underline;
+}
