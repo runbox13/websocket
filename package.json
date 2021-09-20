@@ -13,6 +13,7 @@
     "react-redux": "^7.2.5",
     "react-router-dom": "^5.2.1",
     "react-scripts": "4.0.3",
+    "react-tabs": "^3.2.2",
     "reactstrap": "^8.9.0",
     "redux": "^4.1.1",
     "web-vitals": "^1.1.2"
@@ -43,7 +44,6 @@
   },
   "description": "This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).",
   "main": "index.js",
-  "devDependencies": {},
   "repository": {
     "type": "git",
     "url": "git+https://github.com/peefeeyatko/we-music-client.git"
