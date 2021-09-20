@@ -24,7 +24,8 @@ import Lobby from "./page/lobby"
 import Login from './page/login'
 import NotFound from "./page/404"
 import Register from './page/register'
-import Profile from './page/user/profile'
+import Profile from './page/profile'
+import ManageProfile from './page/user/manage-profile'
 import ManageRoom from './page/user/manage-room'
 import CreateRoom from './page/user/create-room'
 import UpdateRoom from './page/user/update-room'
@@ -42,9 +43,11 @@ ReactDOM.render(
         
         <Route path="/profile" component={Profile} />
 
+        <Route exact path="/manage-profile" component={ManageProfile} />
         <Route exact path="/manage-rooms" component={ManageRoom} />
         <Route exact path="/manage-rooms/create" component={CreateRoom} />
         <Route exact path="/manage-rooms/update" component={UpdateRoom} />
+
         
         <Route path="/login" component={Login} />
         <Route path="/register" component={Register} />
