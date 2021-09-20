@@ -48,3 +48,24 @@ form .form-group {
   background-color: transparent;
   border: 0;
 }
+
+table.manage-rooms .btn {
+  width: 73px;
+  margin-right: 5px;
+}
+
+.spinner-border .sr-only {
+  display: none;
+}
+
+.text-right {
+  text-align: right;
+}
+
+#desc {
+  min-height: 120px;
+}
+
+.mr-10 {
+  margin-right: 10px;
+}

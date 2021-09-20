@@ -11,6 +11,7 @@ class Lobby extends React.Component {
         return (
             <div className="container main">
                 <h1>Lobby</h1>
+                <p>Hey there, <code>{this.props.user.display_name}</code></p>
             </div>
         );
     }
