@@ -5,6 +5,10 @@ import {
   NavbarToggler,
   NavbarBrand,
   Nav,
+  UncontrolledDropdown,
+  DropdownToggle,
+  DropdownMenu,
+  DropdownItem,
   NavItem,
   Alert
 } from 'reactstrap';
@@ -58,12 +62,26 @@ class Header extends React.Component {
                     <NavItem>
                         <NavLink to="/lobby" className="nav-link">Lobby</NavLink>
                     </NavItem>
-                    <NavItem>
-                        <NavLink to="/profile" className="nav-link">Profile</NavLink>
-                    </NavItem>
-                    <NavItem>
-                        <a href="/?logout" className="nav-link">Logout</a>
-                    </NavItem>
+
+                    <UncontrolledDropdown nav inNavbar>
+                      <DropdownToggle nav caret>
+                        Account
+                      </DropdownToggle>
+                      <DropdownMenu right>
+                        <DropdownItem>
+                          <NavLink to="/manage-profile" className="nav-link">Profile</NavLink>
+                        </DropdownItem>
+                        <DropdownItem>
+                          <NavLink to="/manage-rooms" className="nav-link">Rooms</NavLink>
+                        </DropdownItem>
+                        <DropdownItem divider />
+                        <DropdownItem>
+                          <NavItem>
+                            <a href="/?logout" className="nav-link">Logout</a>
+                          </NavItem>
+                        </DropdownItem>
+                      </DropdownMenu>
+                    </UncontrolledDropdown>
                   </>
                 }
               </Nav>

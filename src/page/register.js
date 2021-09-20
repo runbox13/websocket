@@ -28,7 +28,7 @@ class Register extends React.Component {
     handleSubmit(event) {
 
         axios
-            .post(this.props.api + '/user/store', {
+            .post(this.props.api + 'user/store', {
                 email: this.state.email,
                 password: this.state.password
             })

@@ -1,7 +1,7 @@
 import React from 'react';
 import { Container, Row, Col, Card } from 'reactstrap';
 import ReactPlayer from 'react-player'
-import { useSelector } from 'react-redux';
+//import { useSelector } from 'react-redux';
 
 function SidebarPlaylist() {
     return(
