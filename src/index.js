@@ -20,13 +20,6 @@ import Footer from './partial/footer'
 
 // pages
 import App from './App.js'
-<<<<<<< HEAD
-import Login from './page/login';
-import NotFound from "./page/404";
-import Register from './page/register';
-import Profile from './page/profile';
-window.store = store;
-=======
 import Lobby from "./page/lobby"
 import Login from './page/login'
 import NotFound from "./page/404"
@@ -40,7 +33,6 @@ import UpdateRoom from './page/user/update-room'
 // attach state to window object for debugging
 window.store = store
 
->>>>>>> 8e5b20bca62f96e2597777f09e1067422aac47e3
 ReactDOM.render(
   <Provider store={store}>
     <Router>
@@ -59,11 +51,7 @@ ReactDOM.render(
         
         <Route path="/login" component={Login} />
         <Route path="/register" component={Register} />
-<<<<<<< HEAD
-        <Route path="/profile" component={Profile} />
-=======
         
->>>>>>> 8e5b20bca62f96e2597777f09e1067422aac47e3
         <Route component={NotFound} />
       </Switch>
       <Footer />
