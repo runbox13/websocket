@@ -1,48 +1,67 @@
-import React from 'react';
-import { Form, FormGroup, Label, Input, Button } from 'reactstrap';
+import React from 'react'
+import { connect } from 'react-redux'
+import { Tab, Tabs, TabList, TabPanel } from 'react-tabs'
+import 'react-tabs/style/react-tabs.css'
 
-const Profile = () => {
-    return (
-        <div className="container main">
-            
-            <div className="card">
-                <div className="card-header">
+
+class Profile extends React.Component {
+    constructor() {
+        super()
+        this.state = { 
+        }
+    }
+
+    render() {
+        return (
+            <div className="container main">
+                <div className="mb-4">
                     <h1>Profile</h1>
+                    <code>username</code>
                 </div>
 
-                <div className="card-body">
-                    <Form>
-                        <FormGroup>
-                            <Label for="email">Email</Label>
-                            <Input type="text" 
-                            name="currentEmail" 
-                            id="currentEmail"
-                            placeholder="liam.tran@student.uts.edu.au"/>
-                        </FormGroup>
+                <Tabs>
+                    <TabList>
+                        <Tab>Created Channels</Tab>
+                        <Tab>Followed Channels</Tab>
+                        <Tab>Bio</Tab>
+                    </TabList>
 
-                        <FormGroup>
-                            <Label for="email">Username</Label>
-                            <Input type="text" 
-                            name="currentUsername" 
-                            id="currentUsername" 
-                            placeholder="liamtran10"/>
-                        </FormGroup>
+                    {
+                        // get data from user to put into these tabs.
+                        // edit profile should affect bio
+                    }
+                     
+                    <TabPanel>
+                        <p>Created Channels</p>
+                    </TabPanel>
 
-                        <FormGroup>
-                            <Label for="password">Password</Label>
-                            <Input type="text" 
-                            name="currentPassword" 
-                            id="currentPassword"
-                            placeholder="advancedsoftwaredesign" />
-                        </FormGroup>
-                                   
-                        <Button color="primary" className="mt-2">Update</Button>
+                    <TabPanel>
+                        <p>Followed Channels</p>
+                    </TabPanel>
 
-                    </Form>
-                </div>
-            </div>
-        </div>
-    );
-};
+                    <TabPanel>
+                        <p>Bio</p>
+                    </TabPanel>
+                </Tabs>
+            </div> 
+        )
+    }
+}
 
-export default Profile;
+const mapStateToProps = state => {
+    return { 
+        api: state.api,
+        user: state.user
+    }
+}
+
+const mapDispatchToProps = dispatch => {
+    return {
+        dispatch
+    }
+}
+
+export default connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(Profile);
