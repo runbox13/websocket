@@ -2,6 +2,9 @@ import React from 'react';
 import { Container, Row, Col, Card } from 'reactstrap';
 import ReactPlayer from 'react-player'
 //import { useSelector } from 'react-redux';
+import {w3cwebsocket as W3CWebSocket} from 'websocket'; 
+
+const client = new W3CWebSocket('ws://127.0.0.1:8080');
 
 function SidebarPlaylist() {
     return(
