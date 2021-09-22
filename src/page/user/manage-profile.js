@@ -36,8 +36,11 @@ class ManageProfile extends React.Component {
                             name="password" 
                             id="password" />
                     </FormGroup>
-                                
+                    
                     <Button color="primary" className="mt-2">Update</Button>
+                    &nbsp;&nbsp;&nbsp;       
+                    <Button color="danger" className="mt-2">Delete</Button>
+                    
                 </Form>
             </div> 
         )
