@@ -3,8 +3,36 @@ import { Container, Row, Col, Card } from 'reactstrap';
 import ReactPlayer from 'react-player'
 //import { useSelector } from 'react-redux';
 import {w3cwebsocket as W3CWebSocket} from 'websocket'; 
+import {connect} from 'react-redux';
 
-const client = new W3CWebSocket('ws://127.0.0.1:8080');
+const socket = new W3CWebSocket('ws://127.0.0.1:8080');
+
+function joinChatroom(userId) {  
+
+    waitForSocketConnection(socket, function() {
+        socket.send(JSON.stringify({
+            type: "message",
+            id: userId,
+        }));
+    
+        console.log("Message sent!");
+    })
+ }  
+
+function waitForSocketConnection(socket, callback){
+    setTimeout(
+        function () {
+            if (socket.readyState === 1) {
+                console.log("Connection is made")
+                if (callback != null){
+                    callback();
+                }
+            } else {
+                console.log("wait for connection...")
+                waitForSocketConnection(socket, callback);
+            }
+        }, 5);
+}
 
 function SidebarPlaylist() {
     return(
@@ -14,10 +42,11 @@ function SidebarPlaylist() {
     );
 }
 
-function SideBarChatbox() {
+function SideBarChatbox(props) {
     return(
         <div className="sideBarChatbox">
             <p>Chat</p>
+            <button onClick={() => joinChatroom(props.user)}>{props.user}</button>
         </div>
     );
 }
@@ -26,10 +55,10 @@ function CenterChatroom() {
     return(
         <div className="centerChatroom">
             <div className="video-wrapper">
-                <ReactPlayer  url='https://www.youtube.com/watch?v=dQw4w9WgXcQ' playing={true} controls={true} width={"100%"} height={"100%"}/>
+                <ReactPlayer  url='' playing={true} controls={true} width={"100%"} height={"100%"}/>
            </div>
            <Card>
-               <Card body>Rick Roll
+               <Card body> Rick Roll
                </Card>
            </Card>
         </div>
@@ -39,15 +68,15 @@ function CenterChatroom() {
 
 class Chatroom extends React.Component {
     
+    componentDidMount() {
+        socket.onopen = () => {
+            console.log("WS connected");
+        };
+    }
 
     constructor() {
         super();
-         this.state = {
-            listeners: []
-         };
-
-         this.state.listeners.push("test2");
-         console.log(this.state.listeners);
+         this.state = {}
     }
 
     render() {
@@ -56,13 +85,13 @@ class Chatroom extends React.Component {
         <Container fluid>
             <Row>
                 <Col>
-                    <SidebarPlaylist/>
+                    <SidebarPlaylist />
                 </Col>
                 <Col xs={8}>
                     <CenterChatroom/>
                 </Col>
                 <Col>
-                    <SideBarChatbox/>
+                    <SideBarChatbox user={this.props.user.id}/>
                 </Col>
             </Row>
         </Container>
@@ -71,4 +100,16 @@ class Chatroom extends React.Component {
 };
 }
 
-export default Chatroom;
+const mapStateToProps = state => {
+  return { 
+      user: state.user
+  }
+}
+
+const mapDispatchToProps = dispatch => {
+    return {
+        dispatch
+    }
+  }
+
+export default connect(mapStateToProps, mapDispatchToProps)(Chatroom);
