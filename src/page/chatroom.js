@@ -1,39 +1,12 @@
 import React from 'react';
 import { Container, Row, Col, Card } from 'reactstrap';
 import ReactPlayer from 'react-player'
-//import { useSelector } from 'react-redux';
 import {w3cwebsocket as W3CWebSocket} from 'websocket'; 
 import {connect} from 'react-redux';
+import axios from 'axios';
+import { useState } from 'react';
 
 const socket = new W3CWebSocket('ws://127.0.0.1:8080');
-
-function joinChatroom(userId) {  
-
-    waitForSocketConnection(socket, function() {
-        socket.send(JSON.stringify({
-            type: "message",
-            messageType: "join",
-            userId: userId,
-        }));
-    
-        console.log("Message sent!");
-    })
- }  
-
-function waitForSocketConnection(socket, callback){
-    setTimeout(
-        function () {
-            if (socket.readyState === 1) {
-                console.log("Connection is made")
-                if (callback != null){
-                    callback();
-                }
-            } else {
-                console.log("wait for connection...")
-                waitForSocketConnection(socket, callback);
-            }
-        }, 5);
-}
 
 function SidebarPlaylist() {
     return(
@@ -44,10 +17,10 @@ function SidebarPlaylist() {
 }
 
 function SideBarChatbox(props) {
+
     return(
         <div className="sideBarChatbox">
             <p>Chat</p>
-            <button onClick={() => joinChatroom(props.user)}>{props.user}</button>
         </div>
     );
 }
@@ -67,18 +40,83 @@ function CenterChatroom() {
 }
 
 
+function waitForSocketConnection(socket, callback) {
+    setTimeout(
+        function () {
+            if (socket.readyState === 1) {
+                console.log("Connection is made")
+                if (callback != null){
+                    callback();
+                }
+            } else {
+                console.log("wait for connection...")
+                waitForSocketConnection(socket, callback);
+            }
+        }, 5);
+}
+
+function joinChatroom(userId) {  
+    waitForSocketConnection(socket, function() {
+        socket.send(JSON.stringify({
+            type: "message",
+            messageType: "join",
+            userId: userId,
+        }));
+    
+        console.log("Message sent!");
+    })
+ }  
+
+ function getUsers(usersByIdInRoom, api) {
+    var usersInRoom = {}
+
+    for(var key in usersByIdInRoom) {
+        axios.get(api + "user/" + usersByIdInRoom[key])
+        .then(payload => {
+            usersInRoom[payload.data.id] =  payload.data;
+        }).catch(error => {console.log(error)});
+     }
+
+     return usersInRoom;
+ }
+
 class Chatroom extends React.Component {
     
     componentDidMount() {
         socket.onopen = () => {
             console.log("WS connected");
         };
+
+        joinChatroom(this.props.user.id);
+        
     }
 
     constructor() {
         super();
-         this.state = {}
+         this.state = {
+             usersInRoom: {dog: {display_name: "dog"}}
+         }
+
+         socket.onmessage = event => {
+            var messageEvent = JSON.parse(event.data);
+            var usersByIdInRoom;
+            if(messageEvent.type === "getList") {
+                
+                usersByIdInRoom = messageEvent.payload;
+                var users = getUsers(usersByIdInRoom, this.props.api);
+                
+                //Set the state of usersInRoom to the object of users in the room sent by the socket
+                this.setState(previousState => {
+                    var newState = Object.assign(previousState);
+                    newState.usersInRoom = users;
+                    return newState;
+                });
+            } else {
+                return;
+            }
+        };
     }
+    
 
     render() {
     return(
@@ -92,7 +130,7 @@ class Chatroom extends React.Component {
                     <CenterChatroom/>
                 </Col>
                 <Col>
-                    <SideBarChatbox user={this.props.user.id}/>
+                    <SideBarChatbox/>
                 </Col>
             </Row>
         </Container>
@@ -103,7 +141,8 @@ class Chatroom extends React.Component {
 
 const mapStateToProps = state => {
   return { 
-      user: state.user
+      user: state.user,
+      api: state.api
   }
 }
 
