@@ -28,7 +28,6 @@ class Header extends React.Component {
   }
 
   handleLogout = () => {
-      console.log("test");
       this.props.dispatch({
         type: 'USER_SESSION', 
         payload: ''
