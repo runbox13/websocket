@@ -12,7 +12,8 @@ function joinChatroom(userId) {
     waitForSocketConnection(socket, function() {
         socket.send(JSON.stringify({
             type: "message",
-            id: userId,
+            messageType: "join",
+            userId: userId,
         }));
     
         console.log("Message sent!");

@@ -18,19 +18,27 @@ function getUserId(request) {
 }
 
 wsServer.on('request', function(request) {
-    var user;
-
     const connection = request.accept(null, request.origin); 
     
     connection.on('message', function(message) {
-            user = JSON.parse(message.utf8Data);
-            console.log("Received message: " + user.id);
-            connections[user.id] = connection; 
+            var Object = JSON.parse(message.utf8Data);
+            console.log(Object.userId);
+            if(Object.messageType === "join") {
+                console.log("Received message from: " + Object.userId);
+                connections[Object.userId] = {
+                    connection: connection,
+                    userId: Object.userId
+                }; 
+                console.log(connections[Object.userId].userId + " connected");
+                
+                for(key in connections) {
+                    console.log(connections[key].userId);
+                    console.log("Sent message to: " + connections[key].userId);
+                }
+            }
+            
 
-        for(key in connections) {
-            connections[key].sendUTF(message.utf8Data);
-            console.log("Sent message to: " + connections[key].id);
-        }
+        
     })
 
 });
