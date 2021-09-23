@@ -27,6 +27,14 @@ class Header extends React.Component {
     this.handleChange = this.handleChange.bind(this)
   }
 
+  handleLogout = () => {
+      console.log("test");
+      this.props.dispatch({
+        type: 'USER_SESSION', 
+        payload: ''
+      })
+  }
+
   handleChange() { this.setState({ isOpen: !this.state.isOpen }) }
 
   onDismiss() { this.setState({ logoutAlert: false }) }
@@ -77,7 +85,7 @@ class Header extends React.Component {
                         <DropdownItem divider />
                         <DropdownItem>
                           <NavItem>
-                            <a href="/?logout" className="nav-link">Logout</a>
+                            <a href="/?logout" className="nav-link" onClick={this.handleLogout}>Logout</a>
                           </NavItem>
                         </DropdownItem>
                       </DropdownMenu>
