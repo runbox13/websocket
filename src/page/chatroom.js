@@ -4,7 +4,6 @@ import ReactPlayer from 'react-player'
 import {w3cwebsocket as W3CWebSocket} from 'websocket'; 
 import {connect} from 'react-redux';
 import axios from 'axios';
-import { useState } from 'react';
 
 const socket = new W3CWebSocket('ws://127.0.0.1:8080');
 
@@ -17,12 +16,24 @@ function SidebarPlaylist() {
 }
 
 function SideBarChatbox(props) {
+    
+        return (<div className="sideBarChatbox">
+            <ul>
+        <UsersList usersInRoom={props.state.usersInRoom}></UsersList>
+        </ul>
+    </div>)
+}
 
-    return(
-        <div className="sideBarChatbox">
-            <p>Chat</p>
-        </div>
-    );
+function UsersList(props) {
+
+    var array = [];
+
+    for(var key in props.usersInRoom) {
+        array.push(<li>{props.usersInRoom[key].display_name}</li>);
+    }
+    
+    return array;
+
 }
 
 function CenterChatroom() {
@@ -67,18 +78,6 @@ function joinChatroom(userId) {
     })
  }  
 
- function getUsers(usersByIdInRoom, api) {
-    var usersInRoom = {}
-
-    for(var key in usersByIdInRoom) {
-        axios.get(api + "user/" + usersByIdInRoom[key])
-        .then(payload => {
-            usersInRoom[payload.data.id] =  payload.data;
-        }).catch(error => {console.log(error)});
-     }
-
-     return usersInRoom;
- }
 
 class Chatroom extends React.Component {
     
@@ -94,29 +93,29 @@ class Chatroom extends React.Component {
     constructor() {
         super();
          this.state = {
-             usersInRoom: {dog: {display_name: "dog"}}
+             usersInRoom: {}
          }
 
          socket.onmessage = event => {
             var messageEvent = JSON.parse(event.data);
             var usersByIdInRoom;
             if(messageEvent.type === "getList") {
-                
                 usersByIdInRoom = messageEvent.payload;
-                var users = getUsers(usersByIdInRoom, this.props.api);
-                
-                //Set the state of usersInRoom to the object of users in the room sent by the socket
-                this.setState(previousState => {
-                    var newState = Object.assign(previousState);
-                    newState.usersInRoom = users;
-                    return newState;
-                });
-            } else {
-                return;
+                    
+                    for(var key in usersByIdInRoom) {
+                        axios.get(this.props.api + "user/" + usersByIdInRoom[key])
+                        .then(payload => {
+                            this.setState(prevState => {
+                                var newState = Object.assign(prevState);
+                                newState.usersInRoom[payload.data.id] = payload.data;
+                                return newState;
+                            })
+                        }).catch(error => {console.log(error)});
+                    }                
             }
         };
+
     }
-    
 
     render() {
     return(
@@ -124,13 +123,13 @@ class Chatroom extends React.Component {
         <Container fluid>
             <Row>
                 <Col>
-                    <SidebarPlaylist />
+                    <SidebarPlaylist/>
                 </Col>
                 <Col xs={8}>
                     <CenterChatroom/>
                 </Col>
                 <Col>
-                    <SideBarChatbox/>
+                    <SideBarChatbox state={this.state}/>
                 </Col>
             </Row>
         </Container>
