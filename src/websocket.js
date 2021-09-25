@@ -9,7 +9,8 @@ const wsServer = new webSocketServer({
     httpServer: server
 });
 
-const connections = {};
+const connections = {
+};
 
 console.log("Server running");
 
@@ -21,23 +22,37 @@ wsServer.on('request', function(request) {
     const connection = request.accept(null, request.origin); 
     
     connection.on('message', function(message) {
-            var Object = JSON.parse(message.utf8Data);
-            if(Object.messageType === "join") {
-                var listOfIds = [];
-                console.log("Received message from: " + Object.userId);
-                connections[Object.userId] = {
-                    connection: connection,
-                    userId: Object.userId
-                }; 
-
-                console.log(connections[Object.userId].userId + " connected");
-
-                for(key in connections) {
-                    listOfIds.push(connections[key].userId);
+            var payload = JSON.parse(message.utf8Data);
+            var room = JSON.parse(payload.room);
+            
+            if(payload.messageType === "join") {
+                
+                //assume connection exists
+                if(!connections.hasOwnProperty([room.id]))
+                connections[room.id] = {
+                    users: {},
+                    room: room
                 }
 
-                for(key in connections) {
-                    connections[key].connection.sendUTF(JSON.stringify(
+                connections[room.id].users[payload.userId] = {
+                    connection: connection,
+                    userId: payload.userId
+                }
+
+                var listOfIds = [];
+                console.log("User: " + payload.userId + " joined chatroom: " + room.id);
+
+                console.log(connections[room.id].users[payload.userId].userId + " connected to " + 
+                connections[room.id].room.id);
+
+                for(key in connections[room.id].users) {
+                    listOfIds.push(connections[room.id].users[key].userId);
+                    console.log(connections[room.id].users[key].userId);
+                    console.log("te");
+                }
+
+                for(key in connections[room.id].users) {
+                    connections[room.id].users[key].connection.sendUTF(JSON.stringify(
                         {
                             type: "getList",
                             payload: listOfIds

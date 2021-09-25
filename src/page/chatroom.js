@@ -1,9 +1,10 @@
 import React from 'react';
-import { Container, Row, Col, Card } from 'reactstrap';
+import { Container, Row, Col, Card, Navbar, NavbarBrand } from 'reactstrap';
 import ReactPlayer from 'react-player'
 import {w3cwebsocket as W3CWebSocket} from 'websocket'; 
 import {connect} from 'react-redux';
 import axios from 'axios';
+
 
 const socket = new W3CWebSocket('ws://127.0.0.1:8080');
 
@@ -17,9 +18,11 @@ function SidebarPlaylist() {
 
 function SideBarChatbox(props) {
     
-        return (<div className="sideBarChatbox">
-            <ul>
-        <UsersList usersInRoom={props.state.usersInRoom}></UsersList>
+        return (
+        <div className="sideBarChatbox">
+            <p>Chatbox</p>
+        <ul>
+            <UsersList usersInRoom={props.state.usersInRoom}></UsersList>
         </ul>
     </div>)
 }
@@ -40,7 +43,7 @@ function CenterChatroom() {
     return(
         <div className="centerChatroom">
             <div className="video-wrapper">
-                <ReactPlayer  url='' playing={true} controls={true} width={"100%"} height={"100%"}/>
+                <ReactPlayer  url='https://www.youtube.com/watch?v=_tV5LEBDs7w' playing={true} controls={true} width={"100%"} height={"100%"}/>
            </div>
            <Card>
                <Card body> Rick Roll
@@ -66,12 +69,15 @@ function waitForSocketConnection(socket, callback) {
         }, 5);
 }
 
-function joinChatroom(userId) {  
+function joinChatroom(userId, room) {  
+    room = JSON.stringify(room);
+
     waitForSocketConnection(socket, function() {
         socket.send(JSON.stringify({
             type: "message",
             messageType: "join",
             userId: userId,
+            room: room
         }));
     
         console.log("Message sent!");
@@ -86,14 +92,24 @@ class Chatroom extends React.Component {
             console.log("WS connected");
         };
 
-        joinChatroom(this.props.user.id);
-        
+        var roomId = (window.location.href).split("?id=")[1];
+
+        axios.get(this.props.api + "room/" + roomId)
+        .then(payload => {
+            this.setState(prevState => {
+                var newState = Object.assign(prevState);
+                newState.room = payload.data;
+                return newState;
+            })     
+            joinChatroom(this.props.user.id, this.state.room);
+        }).catch(error => {console.log(error)});
     }
 
     constructor() {
         super();
          this.state = {
-             usersInRoom: {}
+             usersInRoom: {},
+             room: ''
          }
 
          socket.onmessage = event => {
@@ -121,6 +137,9 @@ class Chatroom extends React.Component {
     return(
         <>
         <Container fluid>
+            <Navbar>
+                   <NavbarBrand>{this.state.room.name}</NavbarBrand>
+            </Navbar>
             <Row>
                 <Col>
                     <SidebarPlaylist/>
