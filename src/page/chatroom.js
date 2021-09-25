@@ -32,7 +32,7 @@ function UsersList(props) {
     var array = [];
 
     for(var key in props.usersInRoom) {
-        array.push(<li>{props.usersInRoom[key].display_name}</li>);
+        array.push(<li id={key}>{props.usersInRoom[key].display_name}</li>);
     }
     
     return array;
@@ -105,6 +105,10 @@ class Chatroom extends React.Component {
         }).catch(error => {console.log(error)});
     }
 
+    componentWillUnmount() {
+        socket.close();
+    }
+
     constructor() {
         super();
          this.state = {
@@ -112,9 +116,14 @@ class Chatroom extends React.Component {
              room: ''
          }
 
-         socket.onmessage = event => {
+        socket.onclose = event => {
+            
+        };
+
+        socket.onmessage = event => {
             var messageEvent = JSON.parse(event.data);
             var usersByIdInRoom;
+            console.log(messageEvent.payload);
             if(messageEvent.type === "getList") {
                 usersByIdInRoom = messageEvent.payload;
                     
@@ -123,15 +132,24 @@ class Chatroom extends React.Component {
                         .then(payload => {
                             this.setState(prevState => {
                                 var newState = Object.assign(prevState);
-                                newState.usersInRoom[payload.data.id] = payload.data;
+                                if(messageEvent.action == "ADD") {
+                                    console.log(messageEvent.action);
+                                    newState.usersInRoom[payload.data.id] = payload.data;
+                                }
+                                if(messageEvent.action == "DELETE") {
+                                    console.log("DELETE");
+                                    newState.usersInRoom[payload.data.id] = payload.data;
+                                    delete newState.usersInRoom[messageEvent.userId];
+                                }
                                 return newState;
                             })
                         }).catch(error => {console.log(error)});
                     }                
-            }
-        };
+            }        
+    };
+  }
 
-    }
+  
 
     render() {
     return(

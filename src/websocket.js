@@ -45,21 +45,41 @@ wsServer.on('request', function(request) {
                 console.log(connections[room.id].users[payload.userId].userId + " connected to " + 
                 connections[room.id].room.id);
 
-                for(key in connections[room.id].users) {
-                    listOfIds.push(connections[room.id].users[key].userId);
-                    console.log(connections[room.id].users[key].userId);
-                    console.log("te");
-                }
+                
 
-                for(key in connections[room.id].users) {
-                    connections[room.id].users[key].connection.sendUTF(JSON.stringify(
-                        {
-                            type: "getList",
-                            payload: listOfIds
-                        }))
-                    console.log(listOfIds);
+
+                var sendList = (action) => {
+                    listOfIds = [];
+                    for(key in connections[room.id].users) {
+                        listOfIds.push(connections[room.id].users[key].userId);
+                        console.log(connections[room.id].users[key].userId);
+                        console.log("te");
+                    }
+
+                    for(key in connections[room.id].users) {
+                        connections[room.id].users[key].connection.sendUTF(JSON.stringify(
+                            {
+                                type: "getList",
+                                payload: listOfIds,
+                                action: action,
+                                userId: payload.userId
+                            }))
+                        console.log(listOfIds);
+                    }
                 }
+                sendList("ADD");
+
+                connection.on('close', message => {
+                    console.log(connections);
+                    delete connections[room.id].users[payload.userId];
+                    console.log(connections);
+                    sendList("DELETE");
+                });
+                
+            
             }
+            
+            
     })
 
 });
