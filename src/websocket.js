@@ -14,9 +14,6 @@ const connections = {
 
 console.log("Server running");
 
-function getUserId(request) {
-    
-}
 
 wsServer.on('request', function(request) {
     const connection = request.accept(null, request.origin); 
@@ -24,59 +21,61 @@ wsServer.on('request', function(request) {
     connection.on('message', function(message) {
             var payload = JSON.parse(message.utf8Data);
             var room = JSON.parse(payload.room);
+            var user = payload.user;
             
+            if(payload.messageType === "queue") {
+                connections[room.id].queue.push(payload.payload)
+            }
+
             if(payload.messageType === "join") {
                 
                 //assume connection exists
                 if(!connections.hasOwnProperty([room.id]))
                 connections[room.id] = {
                     users: {},
-                    room: room
+                    room: room,
+                    dj: "",
+                    queue: []
                 }
 
-                connections[room.id].users[payload.userId] = {
+                connections[room.id].users[user.id] = {
                     connection: connection,
-                    userId: payload.userId
+                    user: user
                 }
 
-                var listOfIds = [];
-                console.log("User: " + payload.userId + " joined chatroom: " + room.id);
+                console.log("User: " + user.display_name + " joined chatroom: " + room.name);
 
-                console.log(connections[room.id].users[payload.userId].userId + " connected to " + 
+                console.log(connections[room.id].users[user.id].id + " connected to " + 
                 connections[room.id].room.id);
 
-                
-
-
                 var sendList = (action) => {
-                    listOfIds = [];
+                    var users = {};
+
                     for(key in connections[room.id].users) {
-                        listOfIds.push(connections[room.id].users[key].userId);
-                        console.log(connections[room.id].users[key].userId);
-                        console.log("te");
+                        users[connections[room.id].users[key].user.id] = connections[room.id].users[key].user;
                     }
 
                     for(key in connections[room.id].users) {
                         connections[room.id].users[key].connection.sendUTF(JSON.stringify(
                             {
                                 type: "getList",
-                                payload: listOfIds,
+                                payload: users,
                                 action: action,
-                                userId: payload.userId
                             }))
-                        console.log(listOfIds);
                     }
                 }
                 sendList("ADD");
 
                 connection.on('close', message => {
+                    delete connections[room.id].users[payload.user.id];
+                    if(Object.keys(connections[room.id].users).length == 0) {
+                        delete connections[room.id];
+                    }
+                    else sendList("DELETE");
                     console.log(connections);
-                    delete connections[room.id].users[payload.userId];
-                    console.log(connections);
-                    sendList("DELETE");
-                });
+                });     
                 
-            
+                
             }
             
             

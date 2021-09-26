@@ -1,5 +1,5 @@
 import React from 'react';
-import { Container, Row, Col, Card, Navbar, NavbarBrand } from 'reactstrap';
+import { Container, Row, Col, Card, Navbar, NavbarBrand, Button } from 'reactstrap';
 import ReactPlayer from 'react-player'
 import {w3cwebsocket as W3CWebSocket} from 'websocket'; 
 import {connect} from 'react-redux';
@@ -22,7 +22,7 @@ function SideBarChatbox(props) {
         <div className="sideBarChatbox">
             <p>Chatbox</p>
         <ul>
-            <UsersList usersInRoom={props.state.usersInRoom}></UsersList>
+            <UsersList users={props.state.users}></UsersList>
         </ul>
     </div>)
 }
@@ -31,8 +31,8 @@ function UsersList(props) {
 
     var array = [];
 
-    for(var key in props.usersInRoom) {
-        array.push(<li id={key}>{props.usersInRoom[key].display_name}</li>);
+    for(var key in props.users) {
+        array.push(<li id={key}>{props.users[key].display_name}</li>);
     }
     
     return array;
@@ -69,18 +69,18 @@ function waitForSocketConnection(socket, callback) {
         }, 5);
 }
 
-function joinChatroom(userId, room) {  
+function joinChatroom(user, room) {  
     room = JSON.stringify(room);
 
     waitForSocketConnection(socket, function() {
         socket.send(JSON.stringify({
             type: "message",
             messageType: "join",
-            userId: userId,
+            user: user,
             room: room
         }));
     
-        console.log("Message sent!");
+        console.log("Request sent!");
     })
  }  
 
@@ -101,7 +101,7 @@ class Chatroom extends React.Component {
                 newState.room = payload.data;
                 return newState;
             })     
-            joinChatroom(this.props.user.id, this.state.room);
+            joinChatroom(this.props.user, this.state.room);
         }).catch(error => {console.log(error)});
     }
 
@@ -112,8 +112,9 @@ class Chatroom extends React.Component {
     constructor() {
         super();
          this.state = {
-             usersInRoom: {},
-             room: ''
+             users: {},
+             room: {},
+             queue: {}
          }
 
         socket.onclose = event => {
@@ -122,32 +123,58 @@ class Chatroom extends React.Component {
 
         socket.onmessage = event => {
             var messageEvent = JSON.parse(event.data);
-            var usersByIdInRoom;
-            console.log(messageEvent.payload);
+            var users;
             if(messageEvent.type === "getList") {
-                usersByIdInRoom = messageEvent.payload;
+                users = messageEvent.payload;
                     
-                    for(var key in usersByIdInRoom) {
-                        axios.get(this.props.api + "user/" + usersByIdInRoom[key])
-                        .then(payload => {
+                if(messageEvent.action == "ADD") {
+                    this.setState(prevState => {
+                        var newState = prevState;
+                        newState.users = users;
+                        return newState;
+                    })
+                }
+                
+                if(messageEvent.action == "DELETE") {
+                    this.setState(prevState => {
+                        var newState = prevState;
+                        newState.users = users;                 
+                        return newState;
+                    })
+                }
+            } 
+            
+            if(messageEvent.type === "getQueue") {
+                var queueIds = messageEvent.payload;
+                for(var key in queueIds) {
+                    axios.get(this.props.api + "user/" + queueIds[key])
+                    .then(payload => {
+                        if(messageEvent.action == "ADD") {
                             this.setState(prevState => {
                                 var newState = Object.assign(prevState);
-                                if(messageEvent.action == "ADD") {
-                                    console.log(messageEvent.action);
-                                    newState.usersInRoom[payload.data.id] = payload.data;
-                                }
-                                if(messageEvent.action == "DELETE") {
-                                    console.log("DELETE");
-                                    newState.usersInRoom[payload.data.id] = payload.data;
-                                    delete newState.usersInRoom[messageEvent.userId];
-                                }
-                                return newState;
+                                newState.queue[payload.data.id] = payload.data;
+                            });
+                        }
+                        if(messageEvent.action == "DELETE") {
+                            this.setState(prevState => {
+                                var newState = Object.assign(prevState);
+                                delete newState.queue[payload.data.id];                 
                             })
-                        }).catch(error => {console.log(error)});
-                    }                
-            }        
+                        }
+                        
+                    }).catch(error => {console.log(error)});
+                }
+            }
     };
   }
+
+    queueDj = () => {
+        socket.send(JSON.stringify({
+            type: "message",
+            messageType: "queue",
+            payload: this.props.user.id
+        }));
+    }
 
   
 
@@ -157,6 +184,7 @@ class Chatroom extends React.Component {
         <Container fluid>
             <Navbar>
                    <NavbarBrand>{this.state.room.name}</NavbarBrand>
+                   <Button onClick={this.queueDj}>Queue up for DJ</Button>
             </Navbar>
             <Row>
                 <Col>
