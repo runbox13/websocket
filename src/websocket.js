@@ -20,15 +20,30 @@ wsServer.on('request', function(request) {
     
     connection.on('message', function(message) {
             var payload = JSON.parse(message.utf8Data);
-            var room = JSON.parse(payload.room);
-            var user = payload.user;
             
             if(payload.messageType === "queue") {
-                connections[room.id].queue.push(payload.payload)
+                if(payload.action === "DELETE") {
+                    var index = connections[payload.roomId].queue.indexOf(payload.user);
+                    connections[payload.roomId].queue.splice(index, 1);
+                } else {
+                    connections[payload.roomId].queue.push(payload.payload);
+                }
+                for(var key in connections[payload.roomId].users) {
+                    connections[payload.roomId].users[key].connection.sendUTF(JSON.stringify({
+                        type: "getQueue",
+                        action: "ADD",
+                        payload: connections[payload.roomId].queue
+                    }));
+                }
+                
+                console.log(connections[payload.roomId].queue);
+                console.log(payload.roomId);
             }
 
             if(payload.messageType === "join") {
-                
+                var room = payload.room;
+                var user = payload.user;
+
                 //assume connection exists
                 if(!connections.hasOwnProperty([room.id]))
                 connections[room.id] = {
@@ -45,7 +60,7 @@ wsServer.on('request', function(request) {
 
                 console.log("User: " + user.display_name + " joined chatroom: " + room.name);
 
-                console.log(connections[room.id].users[user.id].id + " connected to " + 
+                console.log(connections[room.id].users[user.id].user.id + " connected to " + 
                 connections[room.id].room.id);
 
                 var sendList = (action) => {

@@ -43,7 +43,7 @@ function CenterChatroom() {
     return(
         <div className="centerChatroom">
             <div className="video-wrapper">
-                <ReactPlayer  url='https://www.youtube.com/watch?v=_tV5LEBDs7w' playing={true} controls={true} width={"100%"} height={"100%"}/>
+                <ReactPlayer  url='' playing={true} controls={true} width={"100%"} height={"100%"}/>
            </div>
            <Card>
                <Card body> Rick Roll
@@ -70,8 +70,6 @@ function waitForSocketConnection(socket, callback) {
 }
 
 function joinChatroom(user, room) {  
-    room = JSON.stringify(room);
-
     waitForSocketConnection(socket, function() {
         socket.send(JSON.stringify({
             type: "message",
@@ -114,7 +112,8 @@ class Chatroom extends React.Component {
          this.state = {
              users: {},
              room: {},
-             queue: {}
+             queue: {},
+             isQueued: false
          }
 
         socket.onclose = event => {
@@ -122,6 +121,8 @@ class Chatroom extends React.Component {
         };
 
         socket.onmessage = event => {
+            console.log("received");
+
             var messageEvent = JSON.parse(event.data);
             var users;
             if(messageEvent.type === "getList") {
@@ -144,26 +145,14 @@ class Chatroom extends React.Component {
                 }
             } 
             
-            if(messageEvent.type === "getQueue") {
-                var queueIds = messageEvent.payload;
-                for(var key in queueIds) {
-                    axios.get(this.props.api + "user/" + queueIds[key])
-                    .then(payload => {
-                        if(messageEvent.action == "ADD") {
-                            this.setState(prevState => {
-                                var newState = Object.assign(prevState);
-                                newState.queue[payload.data.id] = payload.data;
-                            });
-                        }
-                        if(messageEvent.action == "DELETE") {
-                            this.setState(prevState => {
-                                var newState = Object.assign(prevState);
-                                delete newState.queue[payload.data.id];                 
-                            })
-                        }
-                        
-                    }).catch(error => {console.log(error)});
-                }
+            if(messageEvent.type == "getQueue") {
+                console.log("queue");
+                var queue = messageEvent.payload;
+                this.setState(prevState => {
+                    var newState = prevState;
+                    newState.queue = queue;
+                    return newState;
+                });
             }
     };
   }
@@ -172,8 +161,22 @@ class Chatroom extends React.Component {
         socket.send(JSON.stringify({
             type: "message",
             messageType: "queue",
-            payload: this.props.user.id
+            action: "ADD",
+            payload: this.props.user,
+            roomId: this.state.room.id
         }));
+        this.setState({isQueued: true});
+    }
+
+    deQueue = () => {
+        socket.send(JSON.stringify({
+            type: "message",
+            messageType: "queue",
+            action: "DELETE",
+            payload: this.props.user,
+            roomId: this.state.room.id
+        }));
+        this.setState({isQueued: false});
     }
 
   
@@ -184,7 +187,7 @@ class Chatroom extends React.Component {
         <Container fluid>
             <Navbar>
                    <NavbarBrand>{this.state.room.name}</NavbarBrand>
-                   <Button onClick={this.queueDj}>Queue up for DJ</Button>
+                   <Button onClick={this.state.isQueued ? this.deQueue : this.queueDj}> {this.state.isQueued ? 'Dequeue' : 'Queue up for DJ'}</Button>
             </Navbar>
             <Row>
                 <Col>
