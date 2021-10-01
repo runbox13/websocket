@@ -18,7 +18,7 @@ import 'bootstrap/dist/css/bootstrap.min.css'
 import Header from './partial/header'
 import Footer from './partial/footer'
 
-// pages
+// pages  
 import App from './App.js'
 import Lobby from "./page/lobby"
 import Login from './page/login'
@@ -26,6 +26,7 @@ import NotFound from "./page/404"
 import Register from './page/register'
 import Profile from './page/profile'
 import Playlist from './page/playlist'
+import PlaylistAdd from './page/playlist-add'
 
 // attach state to window object for debugging
 window.store = store
@@ -41,6 +42,7 @@ ReactDOM.render(
         <Route path="/login" component={Login} />
         <Route path="/register" component={Register} />
         <Route path="/playlist" component={Playlist} />
+        <Route path="/playlist-add" component={PlaylistAdd} />
         <Route component={NotFound} />
       </Switch>
       <Footer />

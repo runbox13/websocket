@@ -1,5 +1,6 @@
-import React from 'react'
-import { connect } from 'react-redux'
+import React from 'react';
+import { Link } from 'react-router-dom'
+import { connect } from 'react-redux';
 
 class Playlist extends React.Component {
     constructor() {
@@ -20,6 +21,7 @@ class Playlist extends React.Component {
                         <div class="fw-bold">Every Summertime</div>
                         Niki
                         </div>
+                        <button type="button" class="btn btn-outline-secondary mr-1">Edit</button>
                         <button type="button" class="btn btn-danger">Delete</button>
                     </li>
                     <li class="list-group-item d-flex justify-content-between align-items-start">
@@ -27,6 +29,7 @@ class Playlist extends React.Component {
                         <div class="fw-bold">What is love?</div>
                         Twice
                         </div>
+                        <button type="button" class="btn btn-outline-secondary">Edit</button>
                         <button type="button" class="btn btn-danger">Delete</button>
                     </li>
                     <li class="list-group-item d-flex justify-content-between align-items-start">
@@ -34,13 +37,16 @@ class Playlist extends React.Component {
                         <div class="fw-bold">Act up</div>
                         Rich Brian
                         </div>
+                        <button type="button" class="btn btn-outline-secondary">Edit</button>
                         <button type="button" class="btn btn-danger">Delete</button>
                     </li>
                 </ol>
                 <br></br>
-                <button type="button" class="btn btn-primary">Add</button>
-                <button type="button" class="btn btn-secondary">Edit</button>
-                <button type="button" class="btn btn-danger">Delete</button>
+                <Link to ="/playlist-add">
+                    <button type="button" class="btn btn-primary">Add song</button>
+                </Link>
+                <button type="button" class="btn btn-secondary">Edit playlist title</button>
+                <button type="button" class="btn btn-danger">Delete playlist</button>
             </div>
         )
     }
