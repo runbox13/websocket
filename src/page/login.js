@@ -28,7 +28,7 @@ class Login extends React.Component {
     handleSubmit(event) {
 
         axios
-            .post(this.props.api + '/login', {
+            .post(this.props.api + 'login', {
                 email: this.state.email,
                 password: this.state.password
             })

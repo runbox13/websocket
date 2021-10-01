@@ -14,21 +14,21 @@ class PlaylistAdd extends React.Component {
             <div className="container main">
                 <h1>Add to Playlist</h1>
                 <form>
-                    <div class="form-group">
+                    <div className="form-group">
                         <label>Song Title</label>
-                        <input class="form-control" placeholder="Enter song title"/>
+                        <input className="form-control" placeholder="Enter song title"/>
                     </div>
-                    <div class="form-group">
+                    <div className="form-group">
                         <label>Artist</label>
-                        <input class="form-control" placeholder="Enter artist"/>
+                        <input className="form-control" placeholder="Enter artist"/>
                     </div>
-                    <div class="form-group">
+                    <div className="form-group">
                         <label>Link</label>
-                        <input class="form-control" placeholder="Enter link"/>
+                        <input className="form-control" placeholder="Enter link"/>
                     </div>
-                    <button type="submit" class="btn btn-primary">Add</button>
+                    <button type="submit" className="btn btn-primary">Add</button>
                     <Link to ="/playlist">
-                        <button type="submit" class="btn btn-danger">Cancel</button>
+                        <button type="submit" className="btn btn-danger">Cancel</button>
                     </Link>
                 </form>
             </div>
