@@ -16,7 +16,9 @@
     "react-tabs": "^3.2.2",
     "reactstrap": "^8.9.0",
     "redux": "^4.1.1",
-    "web-vitals": "^1.1.2"
+    "uuidv4": "^6.2.12",
+    "web-vitals": "^1.1.2",
+    "yup": "^0.32.9"
   },
   "scripts": {
     "start": "react-scripts start",
