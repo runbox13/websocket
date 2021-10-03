@@ -24,7 +24,8 @@ class ManageProfile extends React.Component {
             avatar: null,
             formErrors: { email: '' },
             emailValid: true,
-            passwordValid: true
+            passwordValid: true,
+            displaynameValid: true
         }
 
         this.handleReset = this.handleReset.bind(this)
@@ -113,15 +114,20 @@ class ManageProfile extends React.Component {
         let fieldValidationErrors = this.state.formErrors;
         let emailValid = this.state.emailValid;
         let passwordValid = this.state.passwordValid;
+        let displaynameValid = this.state.displaynameValid;
 
         switch (fieldName) {
             case 'email':
                 emailValid = value.match(/^([\w.%+-]+)@([\w-]+\.)+([\w]{2,})$/i);
                 fieldValidationErrors.email = emailValid ? '' : ' is invalid';
                 break;
+            case 'display_name':
+                displaynameValid = value.length >= 5;
+                fieldValidationErrors.display_name = displaynameValid ? '' : ' is too short, minimum 5 letters.';
+                break;
             case 'password':
-                passwordValid = value.length >= 6;
-                fieldValidationErrors.password = passwordValid ? '' : ' is too short, minimum 6 letters.';
+                passwordValid = value.length >= 5;
+                fieldValidationErrors.password = passwordValid ? '' : ' is too short, minimum 5 letters.';
                 break;
             default:
                 break;
@@ -133,7 +139,7 @@ class ManageProfile extends React.Component {
     }
 
     validateForm() {
-        this.setState({ formValid: this.state.emailValid && this.state.passwordValid });
+        this.setState({ formValid: this.state.emailValid && this.state.passwordValid && this.state.displaynameValid});
     }
 
     handleChange(event) {
