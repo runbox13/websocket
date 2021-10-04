@@ -72,7 +72,7 @@ class PlaylistAdd extends React.Component {
     render() {
         return (
             <div className="container main">
-                <h1>Add to Playlist</h1>
+                <h1>Add Song</h1>
                 <form onSubmit={this.handleSubmit}>
                     <div className="form-group">
                         <label>Song Title</label>

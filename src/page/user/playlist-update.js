@@ -76,7 +76,7 @@ class PlaylistUpdate extends React.Component {
     render() {
         return (
             <div className="container main">
-                <h1>Edit Playlist</h1>
+                <h1>Edit Song</h1>
                 <form onSubmit={this.handleSubmit}>
                     <div className="form-group">
                         <label>Song Title</label>
