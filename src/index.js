@@ -32,6 +32,7 @@ import UpdateRoom from './page/user/update-room'
 import ManageProfile from './page/user/manage-profile'
 import ManagePlaylist from './page/user/manage-playlist'
 import PlaylistAdd from './page/user/playlist-add'
+import PlaylistUpdate from './page/user/playlist-update'
 
 // attach state to window object for debugging
 window.store = store
@@ -51,7 +52,8 @@ ReactDOM.render(
         <Route exact path="/manage-rooms/create" component={CreateRoom} />
         <Route exact path="/manage-rooms/update" component={UpdateRoom} />
         <Route exact path="/manage-playlist" component={ManagePlaylist} />
-        <Route path="/playlist-add" component={PlaylistAdd} />
+        <Route exact path="/manage-playlist/add" component={PlaylistAdd} />
+        <Route exact path="/manage-playlist/update" component={PlaylistUpdate} />
         
         <Route path="/login" component={Login} />
         <Route path="/register" component={Register} />
