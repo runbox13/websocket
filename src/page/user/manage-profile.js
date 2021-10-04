@@ -5,7 +5,8 @@ import {
     FormGroup,
     Label,
     Input,
-    Button
+    Button,
+    Alert
 } from 'reactstrap';
 import axios from 'axios';
 import { FormErrors } from '../../FormErrors';
@@ -117,6 +118,7 @@ class ManageProfile extends React.Component {
             bio: this.state.bio
         })
             .then(() => {
+                alert("Profile updated!")
                 this.props.history.push('/manage-profile')
             }).catch(error => {
                 alert(error)
@@ -162,7 +164,7 @@ class ManageProfile extends React.Component {
             axios.delete(this.props.api + 'user/' + this.props.user.id)
                 .then((response) => {
                     console.log(response)
-                    this
+                    this.props.history.push('/')
                 });
         }
     }
