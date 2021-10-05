@@ -5,7 +5,8 @@ import {
     FormGroup,
     Label,
     Input,
-    Button
+    Button,
+    Alert
 } from 'reactstrap';
 import axios from 'axios';
 import { FormErrors } from '../../FormErrors';
@@ -24,13 +25,16 @@ class ManageProfile extends React.Component {
             formErrors: { email: '' },
             emailValid: true,
             displaynameValid: true,
-            bioValid: true
+            bioValid: true,
+            profileUpdateAlert: false,
+            resetAlert: false
         }
         this.handleChange = this.handleChange.bind(this)
         this.handleReset = this.handleReset.bind(this)
         this.handleUpdate = this.handleUpdate.bind(this)
         this.handleDelete = this.handleDelete.bind(this)
-
+        this.dismissProfileUpdate = this.dismissProfileUpdate.bind(this)
+        this.dismissReset = this.dismissReset.bind(this)
         this.handleFileSelect = this.handleFileSelect.bind(this)
     }
 
@@ -103,6 +107,7 @@ class ManageProfile extends React.Component {
     handleReset() {
         if (window.confirm("Are you sure you want to reset all changes?")) {
             this.fetchUser();
+            this.setState({ resetAlert: !this.state.resetAlert })
         }
     }
 
@@ -115,23 +120,25 @@ class ManageProfile extends React.Component {
         })
             .then((response) => {
 
-                // dispatch USER_SESSION action to save user data to redux store
+                //dispatch USER_SESSION action to save user data to redux store
                 this.props.dispatch({
                     type: 'USER_SESSION',
                     payload: response.data.user
                 })
-                
+
                 // reload component
                 this.props.history.push('/manage-profile')
-                
+
                 // confirm to user profile details are updated..
+                this.setState({ profileUpdateAlert: !this.state.profileUpdateAlert })
+
             }).catch(error => {
                 alert(error)
                 console.log(error)
             })
         e.preventDefault();
     }
-    
+
     handleDelete() {
         if (window.confirm("Are you sure you want to delete your profile?")) {
             axios.delete(this.props.api + 'user/' + this.props.user.id)
@@ -142,15 +149,20 @@ class ManageProfile extends React.Component {
         }
     }
 
+    dismissProfileUpdate() { this.setState({ profileUpdateAlert: !this.state.profileUpdateAlert }) }
+    dismissReset() { this.setState({ resetAlert: !this.state.resetAlert }) }
+
+    //handleAlert() { this.setState({ isOpen: !this.state.isOpen }) }
+
     render() {
         return (
             <div className="container main manage-profile">
 
                 <h1 className="mb-4">Manage Profile</h1>
 
-                <div>
-                    <FormErrors formErrors={this.state.formErrors} />
-                </div>
+                <div><FormErrors formErrors={this.state.formErrors} /></div>
+                <Alert color="success" isOpen={this.state.profileUpdateAlert} toggle={this.dismissProfileUpdate}>Profile updated.</Alert>
+                <Alert color="warning" isOpen={this.state.resetAlert} toggle={this.dismissReset}>Profile reset.</Alert>
 
                 <Form onSubmit={this.handleUpdate}>
                     <FormGroup>
