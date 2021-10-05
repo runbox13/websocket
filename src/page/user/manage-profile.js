@@ -152,8 +152,6 @@ class ManageProfile extends React.Component {
     dismissProfileUpdate() { this.setState({ profileUpdateAlert: !this.state.profileUpdateAlert }) }
     dismissReset() { this.setState({ resetAlert: !this.state.resetAlert }) }
 
-    //handleAlert() { this.setState({ isOpen: !this.state.isOpen }) }
-
     render() {
         return (
             <div className="container main manage-profile">
