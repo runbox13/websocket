@@ -1,5 +1,5 @@
-import React, {useState} from 'react';
-import { Container, Row, Col, Card, Navbar, NavbarBrand, Button } from 'reactstrap';
+import React, { useState } from 'react';
+import { Container, Row, Col, Card, Navbar, NavbarBrand, Button, CardTitle, ListGroup, ListGroupItem, CardBody } from 'reactstrap';
 import ReactPlayer from 'react-player'
 import { w3cwebsocket as W3CWebSocket } from 'websocket';
 import { connect } from 'react-redux';
@@ -37,16 +37,16 @@ function SidebarPlaylist(props) {
 
 
     if (tracks != null) {
-        listItems = tracks.map((t) => <li key={t.id} onClick={() => sendTrack(t)}> {t.artist}: {t.title}</li>);
+        listItems = tracks.map((t) => <ListGroupItem key={t.id} onClick={() => sendTrack(t)}> {t.artist}: {t.title}</ListGroupItem>);
     }
 
     return (
-        <div className="sideBarPlaylist">
-            <p>Playlists</p>
-            <ul>
+        <Card className="sideBarPlaylist">
+            <CardTitle className="text-center">Playlist</CardTitle>
+            <ListGroup>
                 {listItems}
-            </ul>
-        </div>
+            </ListGroup>
+        </Card>
     );
 }
 
@@ -60,19 +60,34 @@ function SideBarChatbox(props) {
 
 
     return (
-        <div className="sideBarChatbox">
-            <p>Chatbox</p>
+        <Card className="sideBarChatbox">
+            <CardTitle>Chatroom</CardTitle>
             <ul id='usersList'>
                 {array}
             </ul>
-        </div>)
+        </Card>)
 }
 
 function CenterChatroom(props) {
-    var isDj = false;
+    var [time, setTime] = useState(0);
+    var songURL;
 
-    var setProgress = (progress) => {
-        console.log(progress.playedSeconds);
+    if (props.songPlaying != null) {
+        songURL = props.songPlaying.url + "&t=" + time;
+    }
+
+    var updateTime = (progress) => {
+        if (progress.playedSeconds < props.time - 3 || progress.playedSeconds > props.time + 3) {
+            console.log(progress.playedSeconds + " " + time);
+            setTime(props.time);
+        }
+    }
+
+    var getTime = (progress) => {
+        if (props.isDj) {
+            props.getTimeCallback(parseInt(progress.playedSeconds));
+        } else
+            updateTime(progress);
     }
 
     var djPause = () => {
@@ -84,27 +99,26 @@ function CenterChatroom(props) {
         props.djPlayCallback();
     }
 
-    var checkIsDj = () => {
-        console.log("Check");
-        if(props.dj !== null) {
-            if(props.dj.id === props.user.id) {
-                isDj = true;
-            }
-        }
+    var nextSong = () => {
+        props.nextSongCallback();
     }
 
-    checkIsDj();
 
     return (
         <div className="centerChatroom">
-            <div className="video-wrapper">
-                <ReactPlayer onProgress={progress => {setProgress(progress)}} url={props.songPlaying != "" ? props.songPlaying.url : ""} playing={!props.isPaused} 
-                controls={isDj ? true : false} width={"100%"} height={"100%"} onPause={isDj ? djPause : ""} onPlay={isDj ? djPlay : ""}/>
-            </div>
             <h5>Current DJ - {props.dj != null ? props.dj.display_name : ""}</h5>
+            {props.isDj && props.songPlaying != "" ? <Button onClick={nextSong}>Next Song</Button> : ""}
+
+            {!props.isDj && !props.isQueued? <Button onClick={props.queueCallback}>Queue Up for DJ</Button> : ""}
+            {!props.isDj && props.isQueued? <Button onClick={props.deQueueCallback}>Dequeue</Button> : ""}
+            {props.isDj ? <Button onClick={props.jumpOffDjCallback}>Jump Off DJ</Button> : ""}
+
+            <div className="video-wrapper">
+                <ReactPlayer onEnded={nextSong} onProgress={progress => { getTime(progress) }} url={props.songPlaying != "" ? songURL : ""} playing={!props.isPaused}
+                    controls="true" width={"100%"} height={"100%"} onPause={props.isDj ? djPause : ""} onPlay={props.isDj ? djPlay : ""} />
+            </div>
             <Card>
-                <Card body> 
-                </Card>
+                <CardTitle>{props.songPlaying.artist} - {props.songPlaying.title}</CardTitle>
             </Card>
         </div>
     );
@@ -172,9 +186,10 @@ class Chatroom extends React.Component {
             queue: [],
             isQueued: false,
             dj: null,
-            isDJ: false,
-            songPlaying: null,
-            isPaused: false
+            isDj: false,
+            songQueue: [],
+            isPaused: false,
+            time: 0
         }
 
         socket.onclose = event => {
@@ -192,10 +207,10 @@ class Chatroom extends React.Component {
                 this.setState(prevState => { return { dj: messageEvent.payload } });
                 //If this user is the DJ, set the booleans
                 if (this.state.dj != null && this.state.dj.id === this.props.user.id) {
-                    this.setState({ isDJ: true });
+                    this.setState({ isDj: true });
                     this.setState({ isQueued: false });
                 } else {
-                    this.setState({ isDJ: false });
+                    this.setState({ isDj: false });
                 }
 
             }
@@ -245,16 +260,24 @@ class Chatroom extends React.Component {
                 if (this.state.queue.length === 0) this.setState({ isQueued: false });
             }
 
-            if (messageEvent.type === "setTrack") {
-                this.setState({songPlaying: messageEvent.songPlaying});
+            if (messageEvent.type === "getSongQueue") {
+                this.setState({ songQueue: messageEvent.songQueue });
             }
 
-            if(messageEvent.type === "djPause") {
-                this.setState({isPaused: messageEvent.isPaused});
+            if (messageEvent.type === "djPause") {
+                this.setState({ isPaused: messageEvent.isPaused });
             }
 
-            if(messageEvent.type === "djPlay") {
-                this.setState({isPaused: messageEvent.isPaused});
+            if (messageEvent.type === "djPlay") {
+                this.setState({ isPaused: messageEvent.isPaused });
+            }
+
+            if (messageEvent.type === "getTime") {
+                this.setState({ time: messageEvent.time })
+            }
+
+            if (messageEvent.type === "nextSong") {
+                this.setState({ songQueue: messageEvent.songQueue })
             }
 
         };
@@ -294,7 +317,7 @@ class Chatroom extends React.Component {
         socket.send(JSON.stringify({
             type: "message",
             messageType: "setTrack",
-            songPlaying: track,
+            track: track,
             roomId: this.state.room.id
         }));
     }
@@ -315,23 +338,39 @@ class Chatroom extends React.Component {
         }));
     }
 
+    getTimeCallback = (time) => {
+        socket.send(JSON.stringify({
+            type: "message",
+            messageType: "getTime",
+            roomId: this.state.room.id,
+            time: time
+        }));
+    }
+
+    nextSongCallback = () => {
+        socket.send(JSON.stringify({
+            type: "message",
+            messageType: "nextSong",
+            roomId: this.state.room.id,
+        }));
+    }
+
     render() {
         return (
             <>
                 <Container fluid>
                     <Navbar>
                         <NavbarBrand>{this.state.room.name}</NavbarBrand>
-                        {!this.state.isDJ ? <Button onClick={this.state.isQueued ? this.deQueue : this.queueDj}> {this.state.isQueued ? 'Dequeue' : 'Queue up for DJ'}</Button>
-                            : <Button onClick={this.jumpOffDj}>Jump off</Button>}
                     </Navbar>
                     <Row>
                         <Col>
-                            <SidebarPlaylist dj={this.state.dj} user={this.props.user} parentCallback={this.setTrackCallback}/>
+                            <SidebarPlaylist dj={this.state.dj} user={this.props.user} parentCallback={this.setTrackCallback} />
                         </Col>
                         <Col xs={8}>
-                            <CenterChatroom djPlayCallback={this.djPlayCallback} djPauseCallback={this.djPauseCallback} 
-                            isPaused={this.state.isPaused} dj={this.state.dj} user={this.props.user} 
-                            songPlaying={this.state.songPlaying != null ? this.state.songPlaying : ""}/>
+                            <CenterChatroom deQueueCallback={this.deQueue} queueCallback={this.queueDj} jumpOffDjCallback={this.jumpOffDj} isQueued={this.state.isQueued} songQueue={this.state.songQueue} nextSongCallback={this.nextSongCallback}
+                             isDj={this.state.isDj} time={this.state.time} getTimeCallback={this.getTimeCallback} djPlayCallback={this.djPlayCallback} djPauseCallback={this.djPauseCallback}
+                                isPaused={this.state.isPaused} dj={this.state.dj} user={this.props.user}
+                                songPlaying={this.state.songQueue.length != 0 ? this.state.songQueue[0] : ""} />
                         </Col>
                         <Col>
                             <SideBarChatbox state={this.state} />

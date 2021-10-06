@@ -99,7 +99,8 @@ wsServer.on('request', function (request) {
                     dj: null,
                     //Array of user objects to use queue pop/push functionalities
                     queue: [],
-                    songPlaying: ""
+                    songPlaying: "",
+                    songQueue: []
                 }
 
             connections[room.id].users[user.id] = {
@@ -174,11 +175,22 @@ wsServer.on('request', function (request) {
 
         if (payload.messageType === "setTrack") {
             var room = connections[payload.roomId];
-            room.songPlaying = payload.songPlaying;
+            room.songQueue.push(payload.track);
             for (var key in room.users) {
                 room.users[key].connection.sendUTF(JSON.stringify({
-                    type: "setTrack",
-                    songPlaying: payload.songPlaying
+                    type: "getSongQueue",
+                    songQueue: room.songQueue,
+                }));
+            }
+        }
+
+        if(payload.messageType === "nextSong") {
+            var room = connections[payload.roomId];
+            room.songQueue.shift();
+            for (var key in room.users) {
+                room.users[key].connection.sendUTF(JSON.stringify({
+                    type: "nextSong",
+                    songQueue: room.songQueue,
                 }));
             }
         }
@@ -203,6 +215,15 @@ wsServer.on('request', function (request) {
             }
         }
 
+        if(payload.messageType === "getTime") {
+            var room = connections[payload.roomId];
+            for(var key in room.users) {
+                room.users[key].connection.sendUTF(JSON.stringify({
+                    type: "getTime",
+                    time: payload.time
+                }));
+            }
+        }
 
     })
 
