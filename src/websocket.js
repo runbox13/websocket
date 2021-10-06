@@ -20,40 +20,47 @@ console.log("Server running");
 wsServer.on('request', function (request) {
     const connection = request.accept(null, request.origin);
 
+    //Set a DJ from the queue
+    var setDJ = (room) => {
+        room.dj = room.queue.shift();
+
+        for (var key in room.users) {
+            room.users[key].connection.sendUTF(JSON.stringify({
+                type: "setDj",
+                payload: room.dj
+            }));
+        }
+    }
+
+    var jumpOff = (room) => {
+        setDJ(room);
+
+        //Send every user in room the new queue list
+        for (var key in room.users) {
+            room.users[key].connection.sendUTF(JSON.stringify({
+                type: "getQueue",
+                payload: room.queue
+            }));
+        }
+    }
+
     connection.on('message', function (message) {
         var payload = JSON.parse(message.utf8Data);
-        //Set a DJ from the queue
-        var setDJ = (room, type) => {
-            room.dj = room.queue.pop();
-
-            for (var key in room.users) {
-                room.users[key].connection.sendUTF(JSON.stringify({
-                    type: "setDj",
-                    payload: room.dj
-                }));
-            }
-        }
 
         //If the DJ jumps off, set the next DJ
         if (payload.messageType === "jumpOff") {
             var room = connections[payload.roomId];
-            setDJ(room);
 
-            //Send every user in room the new queue list
-            for (var key in room.users) {
-                room.users[key].connection.sendUTF(JSON.stringify({
-                    type: "getQueue",
-                    payload: room.queue
-                }));
-            }
+            jumpOff(room);
         }
+
 
         //Queue - Add, delete
         if (payload.messageType === "queue") {
             var room = connections[payload.roomId];
             //Delete user from array
             if (payload.action === "DELETE") {
-                var index = room.queue.indexOf(payload.user);
+                var index = room.queue.map(e => {return e.id}).indexOf(payload.user.id);
                 room.queue.splice(index, 1);
             } else { //Add user to queue array if user isn't already the dj
                 if (payload.user !== room.dj) {
@@ -63,7 +70,7 @@ wsServer.on('request', function (request) {
                             room.queue.push(payload.user);
                         }
                     }
-                    else {// add user to queue if the DJ doesn't match
+                    else {// add user as DJ if there is no current DJ
                         room.queue.push(payload.user);
                         setDJ(room);
                     }
@@ -108,15 +115,19 @@ wsServer.on('request', function (request) {
             var sendList = (action) => {
                 var users = {};
 
+                //Create object of users in room
                 for (key in connections[room.id].users) {
                     users[connections[room.id].users[key].user.id] = connections[room.id].users[key].user;
                 }
 
+                //Send object of users in room to clients
                 for (key in connections[room.id].users) {
                     connections[room.id].users[key].connection.sendUTF(JSON.stringify(
                         {
                             type: "getList",
                             payload: users,
+                            queue: connections[room.id].queue,
+                            dj: connections[room.id].dj, 
                             action: action,
                         }))
                 }
@@ -125,13 +136,33 @@ wsServer.on('request', function (request) {
             //When user joins, send all users the list of users
             sendList("ADD");
 
+            //Delete connection in room and send a new list of users to clients
             connection.on('close', message => {
+                var roomConnection = connections[room.id];
+
                 delete connections[room.id].users[payload.user.id];
+                if (roomConnection.dj != null) {
+                    if (roomConnection.dj.id == payload.user.id) {
+                        console.log("setting dj");
+                        setDJ(roomConnection);
+                    }
+                }
+
+                if (roomConnection.queue != null) {
+                    for (var key in roomConnection.queue) {
+                        if (roomConnection.queue[key].id == payload.user.id) {
+                            var index = roomConnection.queue.map(e => {return e.id}).indexOf(payload.user.id);
+                            roomConnection.queue.splice(index, 1);
+                            break;
+                        }
+                    }
+                }
+
+                //If the room is empty, delete the room connection instance
                 if (Object.keys(connections[room.id].users).length == 0) {
                     delete connections[room.id];
                 }
                 else sendList("DELETE");
-                console.log(connections);
             });
 
 

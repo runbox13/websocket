@@ -8,10 +8,11 @@ import axios from 'axios';
 
 const socket = new W3CWebSocket('ws://127.0.0.1:8080');
 
-function SidebarPlaylist() {
+function SidebarPlaylist(props) {
     return (
         <div className="sideBarPlaylist">
             <p>Playlists</p>
+
         </div>
     );
 }
@@ -39,12 +40,13 @@ function UsersList(props) {
 
 }
 
-function CenterChatroom() {
+function CenterChatroom(props) {
     return (
         <div className="centerChatroom">
             <div className="video-wrapper">
                 <ReactPlayer url='' playing={true} controls={true} width={"100%"} height={"100%"} />
             </div>
+            <h5>Current DJ - {props.dj != null ? props.dj.display_name : ""}</h5>
             <Card>
                 <Card body> Rick Roll
                 </Card>
@@ -119,7 +121,6 @@ class Chatroom extends React.Component {
         }
 
         socket.onclose = event => {
-
         };
 
         socket.onmessage = event => {
@@ -149,6 +150,8 @@ class Chatroom extends React.Component {
                     this.setState(prevState => {
                         var newState = prevState;
                         newState.users = users;
+                        newState.dj = messageEvent.dj;
+                        newState.queue = messageEvent.queue;
                         return newState;
                     })
                 }
@@ -157,6 +160,8 @@ class Chatroom extends React.Component {
                     this.setState(prevState => {
                         var newState = prevState;
                         newState.users = users;
+                        newState.dj = messageEvent.dj;
+                        newState.queue = messageEvent.queue;
                         return newState;
                     })
                 }
@@ -172,7 +177,10 @@ class Chatroom extends React.Component {
                 });
                 //If queue array contains a user with the same id, set boolean
                 for (var key in this.state.queue) {
-                    if (this.props.user.id == this.state.queue[key].id) this.setState({ isQueued: true });
+                    if (this.props.user.id == this.state.queue[key].id) {
+                        this.setState({ isQueued: true });
+                        break;
+                    }
                     else this.setState({ isQueued: false });
                 }
 
@@ -222,10 +230,10 @@ class Chatroom extends React.Component {
                     </Navbar>
                     <Row>
                         <Col>
-                            <SidebarPlaylist />
+                            <SidebarPlaylist dj={this.state.dj} user={this.props.user}/>
                         </Col>
                         <Col xs={8}>
-                            <CenterChatroom />
+                            <CenterChatroom dj={this.state.dj}/>
                         </Col>
                         <Col>
                             <SideBarChatbox state={this.state} />
