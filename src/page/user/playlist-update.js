@@ -8,25 +8,25 @@ class PlaylistUpdate extends React.Component {
         super()
         this.state = { // Initially pass null values into state
             id: null,
-            song_title: '',
-            artist: '',
-            link: '',
+            song_title: 'What is Love?',
+            artist: 'Twice',
+            link: 'https://www.youtube.com/watch?v=i0p1bmr0EmE',
             //isLoaded: false
         }
 
-        this.handleChange = this.handleChange.bind(this)
-        this.handleSubmit = this.handleSubmit.bind(this)
+        this.handleChange = this.handleChange.bind(this) // Update handler
+        this.handleSubmit = this.handleSubmit.bind(this) // Submit handler
 
     }
 
     componentDidMount() {
         let params = new URLSearchParams(window.location.search)
-        this.setState({id: params.get('id')})
+        this.setState({id: params.get('id')}) // Loads state in with the chosen track's ID
 
         axios
-            .get(this.props.api + 'song/' + params.get('id'))
+            .get(this.props.api + 'song/' + params.get('id')) // Search database for track with the chosen ID
             .then((response) => {
-                this.setState({
+                this.setState({ // Populate state with chosen track data
                     //isLoaded: true,
                     song_title: response.data.song_title,
                     artist: response.data.artist,
@@ -38,7 +38,7 @@ class PlaylistUpdate extends React.Component {
             })
     }
 
-    handleChange(event) {
+    handleChange(event) { // Handles data handling in JSX for altered fields
         const target = event.target
         const value = target.value
         const name = target.name
@@ -50,14 +50,16 @@ class PlaylistUpdate extends React.Component {
 
     handleSubmit(event) {
         axios
-            .put(this.props.api + 'song/' + this.state.id, {
+            .put(this.props.api + 'song/' + this.state.id, { // Overwrites current database row for track with new data
                 song_title: this.state.song_title,
                 artist: this.state.artist,
                 link: this.state.link,
             })
             .then(() => {
-                // redirect back to manage playlist page
+                // Redirect back to manage playlist page
                 this.props.history.push('/manage-playlist')
+
+            // Catch and output errors in browser and console
             }).catch(error => {
                 alert(error)
                 console.log(error)
@@ -71,6 +73,7 @@ class PlaylistUpdate extends React.Component {
             <div className="container main">
                 <h1>Edit Song</h1>
                 <form onSubmit={this.handleSubmit}>
+
                     <div className="form-group">
                         <label>Song Title</label>
                         <input 
@@ -80,7 +83,7 @@ class PlaylistUpdate extends React.Component {
                             value={this.state.song_title} 
                             onChange={this.handleChange} 
                             required />
-                    </div>
+                    </div>            
                     <div className="form-group">
                         <label>Artist</label>
                         <input 
@@ -103,11 +106,8 @@ class PlaylistUpdate extends React.Component {
                     </div>
 
                     <button type="submit" className="btn btn-primary">Update</button>
-                    <button 
-                        className="btn btn-danger"
-                        onClick={() => this.props.history.push('/manage-playlist')}>
-                            Cancel
-                    </button>
+                    <button className="btn btn-danger" // Redirects back to manage playlist on press
+                        onClick={() => this.props.history.push('/manage-playlist')}> Cancel </button>
                 </form>
             </div>
         )
@@ -117,7 +117,7 @@ class PlaylistUpdate extends React.Component {
 const mapStateToProps = state => {
     return { 
         api: state.api,
-        user: state.user
+        user: state.user // Load user into state
     }
 }
 
