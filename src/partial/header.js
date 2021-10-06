@@ -75,6 +75,9 @@ class Header extends React.Component {
                           <NavLink to="/manage-profile" className="nav-link">Profile</NavLink>
                         </DropdownItem>
                         <DropdownItem>
+                          <NavLink to="/manage-playlist" className="nav-link">Playlist</NavLink>
+                        </DropdownItem>
+                        <DropdownItem>
                           <NavLink to="/manage-rooms" className="nav-link">Rooms</NavLink>
                         </DropdownItem>
                         <DropdownItem divider />
