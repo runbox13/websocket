@@ -6,9 +6,10 @@ import {
   Switch
 } from 'react-router-dom'
 import { Provider } from 'react-redux'
+import { PersistGate } from 'redux-persist/es/integration/react'
 
 // redux store
-import store from './store/index'
+import {store, persistor} from './store/index'
 
 // css
 import './index.css'
@@ -25,6 +26,7 @@ import Login from './page/login'
 import NotFound from "./page/404"
 import Register from './page/register'
 import Profile from './page/profile'
+import Chatroom from './page/chatroom'
 import ManageProfile from './page/user/manage-profile'
 import ManageRoom from './page/user/manage-room'
 import CreateRoom from './page/user/create-room'
@@ -35,6 +37,7 @@ window.store = store
 
 ReactDOM.render(
   <Provider store={store}>
+    <PersistGate loading={"Loading... previous state"} persistor={persistor}>
     <Router>
       <Header />
       <Switch>
@@ -48,14 +51,15 @@ ReactDOM.render(
         <Route exact path="/manage-rooms/create" component={CreateRoom} />
         <Route exact path="/manage-rooms/update" component={UpdateRoom} />
 
-        
         <Route path="/login" component={Login} />
-        <Route path="/register" component={Register} />
+        <Route path="/register" component={Register} />        
+        <Route path="/chatroom" component={Chatroom} />
         
         <Route component={NotFound} />
       </Switch>
       <Footer />
     </Router>
+    </PersistGate>
   </Provider>,
   document.getElementById('root')
   );

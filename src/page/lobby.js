@@ -1,12 +1,28 @@
-import React from 'react';
-import { connect } from 'react-redux';
-import './lobby.css';
-import axios from 'axios';
+
 
 class Lobby extends React.Component {
+    componentDidMount() {
+        this.getRooms();
+    }
+
     constructor() {
         super()
-        this.state = {}
+        this.state = {
+            rooms: ''
+        }
+    }
+
+    getRooms = () => {
+        axios.get("http://localhost:8000/" + 'room')
+        .then(data => {
+            this.setState( {
+                rooms: data.data
+            })
+            console.log(this.state[0]);
+            console.log(this.state[0].name);
+        }).catch(error => {
+            console.log(error);
+        });
     }
 
     render() {
@@ -21,8 +37,7 @@ class Lobby extends React.Component {
                         
                     </code>
                 </p>
-                
-                <div>{Chatroom()}</div>
+
             </div>
         );
     }
@@ -97,7 +112,6 @@ const mapDispatchToProps = dispatch => {
     return {
         dispatch
     }
-};
 
 export default connect(
     mapStateToProps,
