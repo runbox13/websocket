@@ -29,6 +29,7 @@ import ManageProfile from './page/user/manage-profile'
 import ManageRoom from './page/user/manage-room'
 import CreateRoom from './page/user/create-room'
 import UpdateRoom from './page/user/update-room'
+import ResetPassword from './page/user/reset-password'
 
 // attach state to window object for debugging
 window.store = store
@@ -47,6 +48,7 @@ ReactDOM.render(
         <Route exact path="/manage-rooms" component={ManageRoom} />
         <Route exact path="/manage-rooms/create" component={CreateRoom} />
         <Route exact path="/manage-rooms/update" component={UpdateRoom} />
+        <Route exact path="/reset-password" component={ResetPassword} />
 
         
         <Route path="/login" component={Login} />

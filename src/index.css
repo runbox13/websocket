@@ -77,3 +77,7 @@ table.manage-rooms .btn {
 .code-link:hover {
   text-decoration: underline;
 }
+
+.manage-profile #bio {
+  min-height: 130px;
+}
