@@ -121,7 +121,6 @@ class ManageProfile extends React.Component {
         if (window.confirm("Are you sure you want to reset all changes?")) {
             this.fetchUser();
             this.setState({ resetAlert: !this.state.resetAlert })
-            this.setState({ formValid: this.state.formValid })
         }
     }
 
@@ -192,7 +191,7 @@ class ManageProfile extends React.Component {
                         <Input type="text"
                             name="email"
                             id="email"
-                            defaultValue={this.state.email}
+                            value={this.state.email || ""}
                             onChange={this.handleChange}
                             required />
                     </FormGroup>
@@ -202,7 +201,7 @@ class ManageProfile extends React.Component {
                         <Input type="text"
                             name="display_name"
                             id="display_name"
-                            defaultValue={this.state.display_name}
+                            value={this.state.display_name || ""}
                             onChange={this.handleChange}
                             required />
                     </FormGroup>
@@ -212,7 +211,7 @@ class ManageProfile extends React.Component {
                         <Input type="textarea"
                             name="bio"
                             id="bio"
-                            defaultValue={this.state.bio}
+                            value={this.state.bio || ""}
                             onChange={this.handleChange}
                             required />
                     </FormGroup>
