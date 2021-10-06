@@ -172,7 +172,7 @@ class ManageProfile extends React.Component {
         return (
             <div className="container main manage-profile">
 
-                <h1 className="mb-4">Manage Profile</h1>
+                <h1 className="mb-4" data-testid="manageProfileHeader">Manage Profile</h1>
 
                 {/* Invalid alerts */}
                 <div><FormErrors formErrors={this.state.formErrors} /></div>
@@ -192,7 +192,7 @@ class ManageProfile extends React.Component {
                         <Input type="text"
                             name="email"
                             id="email"
-                            value={this.state.email}
+                            defaultValue={this.state.email}
                             onChange={this.handleChange}
                             required />
                     </FormGroup>
@@ -202,7 +202,7 @@ class ManageProfile extends React.Component {
                         <Input type="text"
                             name="display_name"
                             id="display_name"
-                            value={this.state.display_name}
+                            defaultValue={this.state.display_name}
                             onChange={this.handleChange}
                             required />
                     </FormGroup>
@@ -212,7 +212,7 @@ class ManageProfile extends React.Component {
                         <Input type="textarea"
                             name="bio"
                             id="bio"
-                            value={this.state.bio}
+                            defaultValue={this.state.bio}
                             onChange={this.handleChange}
                             required />
                     </FormGroup>
