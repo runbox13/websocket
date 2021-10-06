@@ -2,9 +2,11 @@
 
 This repository contains the front end react application which uses the [we-music-api](https://github.com/peefeeyatko/we-music-api) backend service.
 
-## Getting Started with Create React App
+## Getting Started
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+1. `git clone https://github.com/peefeeyatko/we-music-client.git`
+2. `npm install`
+3. `npm start`
 
 ## Available Scripts
 

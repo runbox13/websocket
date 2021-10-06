@@ -81,3 +81,6 @@ table.manage-rooms .btn {
 .btn {
   margin: 5px;
 }
+.manage-profile #bio {
+  min-height: 130px;
+}
