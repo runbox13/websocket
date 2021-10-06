@@ -2,51 +2,117 @@ import React from 'react'
 import { connect } from 'react-redux'
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs'
 import 'react-tabs/style/react-tabs.css'
+import axios from 'axios';
+import { Card, Button, CardText, CardTitle, CardBody } from 'reactstrap'; 
+import Avatar from 'react-avatar';
+
+
+function PlaceHolder(props){
+    var cards = [];
+
+    for (var i = 0; i < props.createdRooms.length; ++i){
+        cards.push(
+            <Card>
+                <CardBody>
+                    <CardTitle> {props.createdRooms[i].name}</CardTitle>
+                    <CardText>{props.createdRooms[i].description}</CardText>
+                    <Button variant="primary" href={"http://localhost:3000/" + "chatroom?id=" + props.createdRooms[i].id}>Go to Chatroom</Button>
+                </CardBody>
+            </Card>
+        );
+    }
+    return (cards);
+}
+
 
 
 class Profile extends React.Component {
     constructor() {
         super()
-        this.state = { 
+        this.state = {         
+            users: [] ,
+            createdRooms: []
+                
+
         }
     }
+
+
+           
+
+        componentDidMount() {
+        var id = window.location.href.split('=').pop()
+          
+        
+
+         axios
+         .get(this.props.api + "/user/" + id)
+         .then (res => {
+             const data = res.data;
+             console.log(data)
+            this.setState({users: data});
+         })
+        
+         axios
+         .get(this.props.api + "room/created-by/" + id)
+         .then(res => {
+             const data = res.data;
+             console.log(data)
+             this.setState(previous => {
+                var newState = previous;
+                newState.createdRooms.push(data); 
+                return newState});
+         })
+        
+        }
+
+    
+    
+
+        
+
+    
 
     render() {
         return (
             <div className="container main">
                 <div className="mb-4">
-                    <h1>Profile</h1>
-                    <code>username</code>
+                    
+                
+                    <img src={this.state.users.avatar} alt={this.state.users.display_name} width = "100" height = "100" /> 
+                     <h1> {this.state.users.display_name}</h1>           
+                     
                 </div>
 
                 <Tabs>
                     <TabList>
                         <Tab>Created Channels</Tab>
-                        <Tab>Followed Channels</Tab>
-                        <Tab>Bio</Tab>
+                        <Tab> Bio </Tab>
                     </TabList>
 
-                    {
-                        // get data from user to put into these tabs.
-                        // edit profile should affect bio
-                    }
+                    
                      
                     <TabPanel>
-                        <p>Created Channels</p>
+                        
+                    <PlaceHolder api={this.props.api} createdRooms={this.state.createdRooms}>  </PlaceHolder>
+
                     </TabPanel>
 
-                    <TabPanel>
-                        <p>Followed Channels</p>
-                    </TabPanel>
+                    
 
                     <TabPanel>
-                        <p>Bio</p>
+                        { <p> {this.state.users.bio} </p> }
+                       
+                        
+                        
                     </TabPanel>
                 </Tabs>
             </div> 
         )
     }
 }
+
+
 
 const mapStateToProps = state => {
     return { 
