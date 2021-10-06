@@ -1,14 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import api from "../../api/playlist.js"
+//import api from "../../api/playlist.js"
 import axios from 'axios';
-import { 
-    Form, 
-    FormGroup, 
-    Label, 
-    Input, 
-    Button
-} from 'reactstrap'
 
 class PlaylistUpdate extends React.Component {
     constructor() {
