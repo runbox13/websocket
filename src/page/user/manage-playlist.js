@@ -28,7 +28,7 @@ class ManagePlaylist extends React.Component {
     }
 
     componentDidMount() {
-        axios.get(this.props.api + 'song/' + this.props.user.id)
+        axios.get(this.props.api + 'song/' + id)
             .then((response) => {
                 this.setState({
                     isLoaded: true,
@@ -58,7 +58,7 @@ class ManagePlaylist extends React.Component {
 
     handleEdit(songId) {
         //let path = '/manage-playlist/update?id=' + songId
-        let path = '/manage-playlist/update'
+        let path = '/manage-playlist/update' // Temporary path
         this.props.history.push(path)
     }
 
@@ -87,7 +87,6 @@ class ManagePlaylist extends React.Component {
                 <h1>Manage Playlist</h1>
                 <br></br>
                 <h2>Playlist: Sample</h2>
-
                 <div class="align-middle">
                 <table class="table table-striped" class="table table-responsive">
                     <thead>
@@ -99,7 +98,6 @@ class ManagePlaylist extends React.Component {
                         <th scope="col-auto">Options</th>
                         </tr>
                     </thead>
-                    
                     <tbody>
                     {this.state.playlist.map((playlist, i) => (
                         <tr className="align-middle" key={playlist.id}>
@@ -108,7 +106,7 @@ class ManagePlaylist extends React.Component {
                             <td className="align-middle">{playlist.artist}</td>
                             <td className="align-middle">{playlist.link}</td>
                             <td className="align-middle" className="text-center">
-                                <button type="button" className="btn btn-outline-secondary" 
+                                <button type="button" className="btn btn-secondary" 
                                     onClick={() => this.handleEdit(playlist.id)}>Edit</button>
                                 <button type="button" className="btn btn-danger" 
                                     onClick={() => this.handleDelete(playlist.id, i)}>Delete</button>
