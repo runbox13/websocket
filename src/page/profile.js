@@ -4,14 +4,16 @@ import { Tab, Tabs, TabList, TabPanel } from 'react-tabs'
 import 'react-tabs/style/react-tabs.css'
 import axios from 'axios';
 import { Card, Button, CardText, CardTitle, CardBody } from 'reactstrap'; 
-import Avatar from 'react-avatar';
+
 
 
 function PlaceHolder(props){
     var cards = [];
-
+    console.log(props.createdRooms);
     for (var i = 0; i < props.createdRooms.length; ++i){
+        
         cards.push(
+            
             <Card>
                 <CardBody>
                     <CardTitle> {props.createdRooms[i].name}</CardTitle>
@@ -57,11 +59,13 @@ class Profile extends React.Component {
          .get(this.props.api + "room/created-by/" + id)
          .then(res => {
              const data = res.data;
-             console.log(data)
-             this.setState(previous => {
-                var newState = previous;
-                newState.createdRooms.push(data); 
-                return newState});
+             //console.log(data)
+             this.setState({createdRooms: data});
+                //console.log(data);
+                // (previous => { 
+                // var newState = previous;
+                // newState.createdRooms.push(data); 
+                // return newState});
          })
         
         }
@@ -96,6 +100,7 @@ class Profile extends React.Component {
                         
                     <PlaceHolder api={this.props.api} createdRooms={this.state.createdRooms}>  </PlaceHolder>
 
+                     
                     </TabPanel>
 
                     
