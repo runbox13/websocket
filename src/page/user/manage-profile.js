@@ -20,22 +20,29 @@ class ManageProfile extends React.Component {
             id: null,
             email: '',
             display_name: '',
+            password: '',
             bio: '',
             avatar: null,
-            formErrors: { email: '' },
+
+            formErrors: { email: '', display: '', bio: '' },
             emailValid: true,
             displaynameValid: true,
             bioValid: true,
+
             profileUpdateAlert: false,
-            resetAlert: false
+            resetAlert: false,
         }
+
         this.handleChange = this.handleChange.bind(this)
+
         this.handleReset = this.handleReset.bind(this)
         this.handleUpdate = this.handleUpdate.bind(this)
         this.handleDelete = this.handleDelete.bind(this)
+        this.handleFileSelect = this.handleFileSelect.bind(this)
+
         this.dismissProfileUpdate = this.dismissProfileUpdate.bind(this)
         this.dismissReset = this.dismissReset.bind(this)
-        this.handleFileSelect = this.handleFileSelect.bind(this)
+
     }
 
     componentDidMount() {
@@ -48,6 +55,7 @@ class ManageProfile extends React.Component {
         this.setState({
             email: this.props.user.email,
             display_name: this.props.user.display_name,
+            password: this.props.user.password,
             bio: this.props.user.bio,
             avatar: this.props.user.avatar
         })
@@ -63,15 +71,18 @@ class ManageProfile extends React.Component {
         switch (fieldName) {
             case 'email':
                 emailValid = value.match(/^([\w.%+-]+)@([\w-]+\.)+([\w]{2,})$/i);
-                fieldValidationErrors.email = emailValid ? '' : ' is invalid';
+                fieldValidationErrors.email = emailValid ? '' : ' is invalid.';
+                this.setState({ emailInvalidAlert: !this.state.emailInvalidAlert })
                 break;
             case 'display_name':
                 displaynameValid = value.length >= 5;
                 fieldValidationErrors.display_name = displaynameValid ? '' : ' is too short, minimum 5 letters.';
+                this.setState({ nameInvalidAlert: !this.state.nameInvalidAlert })
                 break;
             case 'bio':
                 bioValid = value.length >= 20;
-                fieldValidationErrors.bio = bioValid ? '' : ' is too short, minimum 250 letters.';
+                fieldValidationErrors.bio = bioValid ? '' : ' is too short, minimum 20 letters.';
+                this.setState({ bioInvalidAlert: !this.state.bioInvalidAlert })
                 break;
             default:
                 break;
@@ -79,6 +90,8 @@ class ManageProfile extends React.Component {
         this.setState({
             formErrors: fieldValidationErrors,
             emailValid: emailValid,
+            displaynameValid: displaynameValid,
+            bioValid: bioValid
         }, this.validateForm);
     }
 
@@ -108,6 +121,7 @@ class ManageProfile extends React.Component {
         if (window.confirm("Are you sure you want to reset all changes?")) {
             this.fetchUser();
             this.setState({ resetAlert: !this.state.resetAlert })
+            this.setState({ formValid: this.state.formValid })
         }
     }
 
@@ -115,15 +129,18 @@ class ManageProfile extends React.Component {
         axios.put(this.props.api + 'user/' + this.props.user.id, {
             email: this.state.email,
             display_name: this.state.display_name,
+            password: this.props.user.password,
             bio: this.state.bio,
             avatar: this.state.avatar
         })
             .then((response) => {
 
+                //console.log(response.data)
+
                 //dispatch USER_SESSION action to save user data to redux store
                 this.props.dispatch({
                     type: 'USER_SESSION',
-                    payload: response.data.user
+                    payload: response.data
                 })
 
                 // reload component
@@ -158,9 +175,17 @@ class ManageProfile extends React.Component {
 
                 <h1 className="mb-4">Manage Profile</h1>
 
+                {/* Invalid alerts */}
                 <div><FormErrors formErrors={this.state.formErrors} /></div>
-                <Alert color="success" isOpen={this.state.profileUpdateAlert} toggle={this.dismissProfileUpdate}>Profile updated.</Alert>
-                <Alert color="warning" isOpen={this.state.resetAlert} toggle={this.dismissReset}>Profile reset.</Alert>
+
+                {/* Profile alerts */}
+                <Alert color="success"
+                    isOpen={this.state.profileUpdateAlert}
+                    toggle={this.dismissProfileUpdate}>Profile updated.</Alert>
+
+                <Alert color="warning"
+                    isOpen={this.state.resetAlert}
+                    toggle={this.dismissReset}>Profile reset.</Alert>
 
                 <Form onSubmit={this.handleUpdate}>
                     <FormGroup>
