@@ -31,14 +31,13 @@ function SidebarPlaylist(props) {
         }
     }
 
-    var sendTrack = (url) => {
-        console.log(url);
-        props.parentCallback(url);
+    var sendTrack = (track) => {
+        props.parentCallback(track);
     }
 
 
     if (tracks != null) {
-        listItems = tracks.map((t) => <li key={t.id} onClick={() => sendTrack(t.url)}> {t.artist}: {t.title}</li>);
+        listItems = tracks.map((t) => <li key={t.id} onClick={() => sendTrack(t)}> {t.artist}: {t.title}</li>);
     }
 
     return (
@@ -70,14 +69,22 @@ function SideBarChatbox(props) {
 }
 
 function CenterChatroom(props) {
+
+    var isUserDj = null;
+
+    if(props.dj !== null) {
+        if(props.dj.id === props.user.id) isUserDj = true;
+    }
+
     return (
         <div className="centerChatroom">
             <div className="video-wrapper">
-                <ReactPlayer url={props.songPlaying != null ? props.songPlaying : ""} playing={true} controls={true} width={"100%"} height={"100%"} />
+                <ReactPlayer onProgress={progress => {setProgress(progress.playedSeconds)}} url={props.songPlaying != "" ? props.songPlaying.url : ""} playing={true} 
+                controls={isUSerDj ? true : false} width={"100%"} height={"100%"} />
             </div>
             <h5>Current DJ - {props.dj != null ? props.dj.display_name : ""}</h5>
             <Card>
-                <Card body> Rick Roll
+                <Card body> 
                 </Card>
             </Card>
         </div>
@@ -147,7 +154,7 @@ class Chatroom extends React.Component {
             isQueued: false,
             dj: [],
             isDJ: false,
-            songPlaying: ""
+            songPlaying: null
         }
 
         socket.onclose = event => {
@@ -219,7 +226,7 @@ class Chatroom extends React.Component {
             }
 
             if (messageEvent.type === "setTrack") {
-                this.setState({songPlaying: messageEvent.url});
+                this.setState({songPlaying: messageEvent.songPlaying});
             }
         };
     }
@@ -253,11 +260,12 @@ class Chatroom extends React.Component {
         }));
     }
 
-    setTrackCallback = (url) => {
+    setTrackCallback = (track) => {
+        console.log(track);
         socket.send(JSON.stringify({
             type: "message",
             messageType: "setTrack",
-            url: url,
+            songPlaying: track,
             roomId: this.state.room.id
         }));
     }
@@ -276,7 +284,7 @@ class Chatroom extends React.Component {
                             <SidebarPlaylist dj={this.state.dj} user={this.props.user} parentCallback={this.setTrackCallback}/>
                         </Col>
                         <Col xs={8}>
-                            <CenterChatroom dj={this.state.dj} songPlaying={this.state.songPlaying}/>
+                            <CenterChatroom dj={this.state.dj} user={this.state.user} songPlaying={this.state.songPlaying != null ? this.state.songPlaying : ""}/>
                         </Col>
                         <Col>
                             <SideBarChatbox state={this.state} />

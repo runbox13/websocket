@@ -136,7 +136,7 @@ wsServer.on('request', function (request) {
 
             connection.sendUTF(JSON.stringify({
                 type: "setTrack",
-                url: connections[room.id].songPlaying
+                songPlaying: connections[room.id].songPlaying
             }));
 
             //When user joins, send all users the list of users
@@ -174,11 +174,11 @@ wsServer.on('request', function (request) {
 
         if (payload.messageType === "setTrack") {
             var room = connections[payload.roomId]
-            room.songPlaying = payload.url;
+            room.songPlaying = payload.songPlaying;
             for (var key in room.users) {
                 room.users[key].connection.sendUTF(JSON.stringify({
                     type: "setTrack",
-                    url: payload.url
+                    songPlaying: payload.songPlaying
                 }));
             }
         }
