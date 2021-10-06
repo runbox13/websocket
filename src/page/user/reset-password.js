@@ -1,4 +1,4 @@
-import axios from 'axios'
+//import axios from 'axios'
 import React from 'react'
 import { connect } from 'react-redux'
 import { Form, FormGroup, Label, Input, Button, Alert } from 'reactstrap'
@@ -9,13 +9,7 @@ class ResetPassword extends React.Component {
         super()
         this.state = {
 
-            id: null,
-            email: '',
-            display_name: '',
-            password:'',
-            bio: '',
-            avatar: null,
-
+            userPassword: 'aaaaa',
             currPassword: '',
             newPassword: '',
             confirmPassword: '',
@@ -65,7 +59,11 @@ class ResetPassword extends React.Component {
 
     // onChange functions for user input in password fields.
     inputCurrentPassword = (event) => {
-        this.setState({ currPassword: event.target.value });
+        const target = event.target
+        const value = target.value
+        const name = target.name
+
+        this.setState({ [name]: value })
     }
 
     inputNewPassword = (event) => {
@@ -90,8 +88,8 @@ class ResetPassword extends React.Component {
 
     // Reset password button handler.
     submitReset(event) {
-        const { currPassword, newPassword, confirmPassword } = this.state;
-        const passwordExists = currPassword === this.props.user.password;
+        const { newPassword, confirmPassword } = this.state;
+        const passwordExists = this.state.currPassword === this.state.userPassword;
         const matches = newPassword === confirmPassword;
 
         if (passwordExists) {
@@ -99,31 +97,9 @@ class ResetPassword extends React.Component {
             // If the new password matches the confirmed password, fetch user data via id
             // and update password.
             if (matches) {
-                axios.put(this.props.api + 'user/' + this.props.user.id, {
-                    email: this.props.user.email,
-                    display_name: this.props.user.display_name,
-                    password: this.state.confirmPassword,
-                    bio: this.props.user.bio,
-                    avatar: this.props.user.avatar
-
-                }).then((response) => {
-
-                    //dispatch USER_SESSION action to save user data to redux store
-                    this.props.dispatch({
-                        type: 'USER_SESSION',
-                        payload: response.data
-                    })
-
-                    // reload component
                     this.props.history.push('/reset-password')
-
                     // alert to user that password has been reset.
                     this.setState({ resetSuccessAlert: !this.state.resetSuccessAlert })
-
-                }).catch(error => {
-                    alert(error)
-                    console.log(error)
-                })
 
             } else {
                 // alert to user that passwords do not match.
@@ -171,6 +147,7 @@ class ResetPassword extends React.Component {
                             name="currPassword"
                             id="currPassword"
                             placeholder="Enter current password."
+                            value={this.state.currPassword}
                             onChange={this.inputCurrentPassword} />
                     </FormGroup>
 

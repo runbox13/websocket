@@ -129,7 +129,6 @@ class ManageProfile extends React.Component {
         axios.put(this.props.api + 'user/' + this.props.user.id, {
             email: this.state.email,
             display_name: this.state.display_name,
-            password: this.props.user.password,
             bio: this.state.bio,
             avatar: this.state.avatar
         })
@@ -140,7 +139,7 @@ class ManageProfile extends React.Component {
                 //dispatch USER_SESSION action to save user data to redux store
                 this.props.dispatch({
                     type: 'USER_SESSION',
-                    payload: response.data
+                    payload: response.data.user
                 })
 
                 // reload component
