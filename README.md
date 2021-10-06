@@ -1,4 +1,4 @@
-# ASD 41026 - Project
+# ASD 41026 - Project `feature/playlist-management`
 
 This repository contains the front end react application which uses the [we-music-api](https://github.com/peefeeyatko/we-music-api) backend service.
 
