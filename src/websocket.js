@@ -60,7 +60,7 @@ wsServer.on('request', function (request) {
             var room = connections[payload.roomId];
             //Delete user from array
             if (payload.action === "DELETE") {
-                var index = room.queue.map(e => {return e.id}).indexOf(payload.user.id);
+                var index = room.queue.map(e => { return e.id }).indexOf(payload.user.id);
                 room.queue.splice(index, 1);
             } else { //Add user to queue array if user isn't already the dj
                 if (payload.user !== room.dj) {
@@ -98,7 +98,8 @@ wsServer.on('request', function (request) {
                     room: room,
                     dj: null,
                     //Array of user objects to use queue pop/push functionalities
-                    queue: []
+                    queue: [],
+                    songPlaying: ""
                 }
 
             connections[room.id].users[user.id] = {
@@ -120,18 +121,23 @@ wsServer.on('request', function (request) {
                     users[connections[room.id].users[key].user.id] = connections[room.id].users[key].user;
                 }
 
-                //Send object of users in room to clients
+                //Send instantiating object of room to clients
                 for (key in connections[room.id].users) {
                     connections[room.id].users[key].connection.sendUTF(JSON.stringify(
                         {
-                            type: "getList",
+                            type: "getRoom",
                             payload: users,
                             queue: connections[room.id].queue,
-                            dj: connections[room.id].dj, 
+                            dj: connections[room.id].dj,
                             action: action,
                         }))
                 }
             }
+
+            connection.sendUTF(JSON.stringify({
+                type: "setTrack",
+                url: connections[room.id].songPlaying
+            }));
 
             //When user joins, send all users the list of users
             sendList("ADD");
@@ -151,7 +157,7 @@ wsServer.on('request', function (request) {
                 if (roomConnection.queue != null) {
                     for (var key in roomConnection.queue) {
                         if (roomConnection.queue[key].id == payload.user.id) {
-                            var index = roomConnection.queue.map(e => {return e.id}).indexOf(payload.user.id);
+                            var index = roomConnection.queue.map(e => { return e.id }).indexOf(payload.user.id);
                             roomConnection.queue.splice(index, 1);
                             break;
                         }
@@ -164,8 +170,17 @@ wsServer.on('request', function (request) {
                 }
                 else sendList("DELETE");
             });
+        }
 
-
+        if (payload.messageType === "setTrack") {
+            var room = connections[payload.roomId]
+            room.songPlaying = payload.url;
+            for (var key in room.users) {
+                room.users[key].connection.sendUTF(JSON.stringify({
+                    type: "setTrack",
+                    url: payload.url
+                }));
+            }
         }
 
 

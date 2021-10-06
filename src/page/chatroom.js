@@ -4,47 +4,76 @@ import ReactPlayer from 'react-player'
 import { w3cwebsocket as W3CWebSocket } from 'websocket';
 import { connect } from 'react-redux';
 import axios from 'axios';
+import '../App.css';
 
 
 const socket = new W3CWebSocket('ws://127.0.0.1:8080');
 
 function SidebarPlaylist(props) {
+    var tracks = [];
+    var listItems;
+
+    if (props.dj != null) {
+        if (props.dj.id === props.user.id) {
+            tracks.push({
+                id: "0",
+                title: "get you the moon",
+                artist: "Kina",
+                url: "https://www.youtube.com/watch?v=WTsmIbNku5g"
+            });
+
+            tracks.push({
+                id: "2",
+                title: "when i met u",
+                artist: "hateful",
+                url: "https://www.youtube.com/watch?v=30JOhWFkLro"
+            });
+        }
+    }
+
+    var sendTrack = (url) => {
+        console.log(url);
+        props.parentCallback(url);
+    }
+
+
+    if (tracks != null) {
+        listItems = tracks.map((t) => <li key={t.id} onClick={() => sendTrack(t.url)}> {t.artist}: {t.title}</li>);
+    }
+
     return (
         <div className="sideBarPlaylist">
             <p>Playlists</p>
-
+            <ul>
+                {listItems}
+            </ul>
         </div>
     );
 }
 
 function SideBarChatbox(props) {
+    var array = [];
+
+    for (var key in props.state.users) {
+        array.push(<li key={key}>{props.state.users[key].display_name}</li>);
+    }
+
+
 
     return (
         <div className="sideBarChatbox">
             <p>Chatbox</p>
-            <ul>
-                <UsersList users={props.state.users}></UsersList>
+            <ul id='usersList'>
+                {array}
             </ul>
         </div>)
-}
-
-function UsersList(props) {
-
-    var array = [];
-
-    for (var key in props.users) {
-        array.push(<li id={key}>{props.users[key].display_name}</li>);
-    }
-
-    return array;
-
 }
 
 function CenterChatroom(props) {
     return (
         <div className="centerChatroom">
             <div className="video-wrapper">
-                <ReactPlayer url='' playing={true} controls={true} width={"100%"} height={"100%"} />
+                <ReactPlayer url={props.songPlaying != null ? props.songPlaying : ""} playing={true} controls={true} width={"100%"} height={"100%"} />
             </div>
             <h5>Current DJ - {props.dj != null ? props.dj.display_name : ""}</h5>
             <Card>
@@ -117,7 +146,8 @@ class Chatroom extends React.Component {
             queue: [],
             isQueued: false,
             dj: [],
-            isDJ: false
+            isDJ: false,
+            songPlaying: ""
         }
 
         socket.onclose = event => {
@@ -130,7 +160,7 @@ class Chatroom extends React.Component {
             var users;
 
             //Set the DJ state
-            if (messageEvent.type == "setDj") {
+            if (messageEvent.type === "setDj") {
                 //Set DJ state from websocket data
                 this.setState(prevState => { return { dj: messageEvent.payload } });
                 //If this user is the DJ, set the booleans
@@ -143,10 +173,10 @@ class Chatroom extends React.Component {
 
             }
 
-            if (messageEvent.type === "getList") {
+            if (messageEvent.type === "getRoom") {
                 users = messageEvent.payload;
 
-                if (messageEvent.action == "ADD") {
+                if (messageEvent.action === "ADD") {
                     this.setState(prevState => {
                         var newState = prevState;
                         newState.users = users;
@@ -156,7 +186,7 @@ class Chatroom extends React.Component {
                     })
                 }
 
-                if (messageEvent.action == "DELETE") {
+                if (messageEvent.action === "DELETE") {
                     this.setState(prevState => {
                         var newState = prevState;
                         newState.users = users;
@@ -168,7 +198,7 @@ class Chatroom extends React.Component {
             }
 
             //Receive queue, update state
-            if (messageEvent.type == "getQueue") {
+            if (messageEvent.type === "getQueue") {
                 var queue = messageEvent.payload;
                 this.setState(prevState => {
                     var newState = prevState;
@@ -177,7 +207,7 @@ class Chatroom extends React.Component {
                 });
                 //If queue array contains a user with the same id, set boolean
                 for (var key in this.state.queue) {
-                    if (this.props.user.id == this.state.queue[key].id) {
+                    if (this.props.user.id === this.state.queue[key].id) {
                         this.setState({ isQueued: true });
                         break;
                     }
@@ -186,6 +216,10 @@ class Chatroom extends React.Component {
 
                 //If the queue array is empty, set boolean
                 if (this.state.queue.length === 0) this.setState({ isQueued: false });
+            }
+
+            if (messageEvent.type === "setTrack") {
+                this.setState({songPlaying: messageEvent.url});
             }
         };
     }
@@ -219,6 +253,15 @@ class Chatroom extends React.Component {
         }));
     }
 
+    setTrackCallback = (url) => {
+        socket.send(JSON.stringify({
+            type: "message",
+            messageType: "setTrack",
+            url: url,
+            roomId: this.state.room.id
+        }));
+    }
+
     render() {
         return (
             <>
@@ -230,10 +273,10 @@ class Chatroom extends React.Component {
                     </Navbar>
                     <Row>
                         <Col>
-                            <SidebarPlaylist dj={this.state.dj} user={this.props.user}/>
+                            <SidebarPlaylist dj={this.state.dj} user={this.props.user} parentCallback={this.setTrackCallback}/>
                         </Col>
                         <Col xs={8}>
-                            <CenterChatroom dj={this.state.dj}/>
+                            <CenterChatroom dj={this.state.dj} songPlaying={this.state.songPlaying}/>
                         </Col>
                         <Col>
                             <SideBarChatbox state={this.state} />
