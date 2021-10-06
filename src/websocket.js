@@ -173,12 +173,32 @@ wsServer.on('request', function (request) {
         }
 
         if (payload.messageType === "setTrack") {
-            var room = connections[payload.roomId]
+            var room = connections[payload.roomId];
             room.songPlaying = payload.songPlaying;
             for (var key in room.users) {
                 room.users[key].connection.sendUTF(JSON.stringify({
                     type: "setTrack",
                     songPlaying: payload.songPlaying
+                }));
+            }
+        }
+
+        if(payload.messageType === "djPause") {
+            var room = connections[payload.roomId];
+            for(var key in room.users) {
+                room.users[key].connection.sendUTF(JSON.stringify({
+                    type: "djPause",
+                    isPaused: true
+                }))
+            }
+        }
+
+        if(payload.messageType === "djPlay") {
+            var room = connections[payload.roomId];
+            for(var key in room.users) {
+                room.users[key].connection.sendUTF(JSON.stringify({
+                    type: "djPlay",
+                    isPaused: false
                 }));
             }
         }
