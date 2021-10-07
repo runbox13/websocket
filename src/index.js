@@ -6,9 +6,10 @@ import {
   Switch
 } from 'react-router-dom'
 import { Provider } from 'react-redux'
+import { PersistGate } from 'redux-persist/es/integration/react'
 
 // redux store
-import store from './store/index'
+import {store, persistor} from './store/index'
 
 // css
 import './index.css'
@@ -25,7 +26,6 @@ import Login from './page/login'
 import NotFound from "./page/404"
 import Register from './page/register'
 import Profile from './page/profile'
-
 import ManageRoom from './page/user/manage-room'
 import CreateRoom from './page/user/create-room'
 import UpdateRoom from './page/user/update-room'
@@ -40,6 +40,7 @@ window.store = store
 
 ReactDOM.render(
   <Provider store={store}>
+    <PersistGate loading={"Loading... previous state"} persistor={persistor}>
     <Router>
       <Header />
       <Switch>
@@ -57,7 +58,6 @@ ReactDOM.render(
         <Route exact path="/manage-playlist/update" component={PlaylistUpdate} />
         <Route exact path="/reset-password" component={ResetPassword} />
 
-        
         <Route path="/login" component={Login} />
         <Route path="/register" component={Register} />
 
@@ -65,6 +65,7 @@ ReactDOM.render(
       </Switch>
       <Footer />
     </Router>
+    </PersistGate>
   </Provider>,
   document.getElementById('root')
-);
+  );
