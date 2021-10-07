@@ -3,19 +3,19 @@ import { connect } from 'react-redux'
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs'
 import 'react-tabs/style/react-tabs.css'
 import axios from 'axios';
-import { Card, Button, CardText, CardTitle, CardBody } from 'reactstrap'; 
+import { Card, Button, CardText, CardTitle, CardBody } from 'reactstrap';
 
 
 
-function PlaceHolder(props){
+function PlaceHolder(props) {
     var cards = [];
 
-    
-    for (var i = 0; i < props.createdRooms.length; ++i){
-    
-   
+
+    for (var i = 0; i < props.createdRooms.length; ++i) {
+
+
         cards.push(
-            
+
             <Card>
                 <CardBody>
                     <CardTitle> {props.createdRooms[i].name}</CardTitle>
@@ -33,62 +33,65 @@ function PlaceHolder(props){
 class Profile extends React.Component {
     constructor() {
         super()
-        this.state = {         
-            users: [] ,
+        this.state = {
+            users: [],
             createdRooms: []
-                
+
 
         }
     }
 
 
-           
 
-        componentDidMount() {
+
+    componentDidMount() {
         var id = window.location.href.split('=').pop()
-          
-        
 
-         axios
-         .get(this.props.api + "user/" + id)
-         .then (res => {
-             const data = res.data;
-            
-            this.setState({users: data});
-         })
-        
-         axios
-         .get(this.props.api + "room/created-by/" + id)
-         .then(res => {
-             const data = res.data;
 
-             this.setState({createdRooms: data});
-                //console.log(data);
-                // (previous => { 
-                // var newState = previous;
-                // newState.createdRooms.push(data); 
-                // return newState});
 
-         })
-        
-        }
+        axios
+            .get(this.props.api + "user/" + id)
+            .then(res => {
 
-    
-    
+                const data = res.data;
 
-        
+                this.setState({ users: data });
 
-    
+                axios
+                    .get(this.props.api + "room/created-by/" + id)
+                    .then(res => {
+                        const data = res.data;
+
+                        this.setState({ createdRooms: data });
+                        //console.log(data);
+                        // (previous => { 
+                        // var newState = previous;
+                        // newState.createdRooms.push(data); 
+                        // return newState});
+
+                    }).catch(e => console.log(e))
+            }).catch(e => console.log(e))
+
+
+
+    }
+
+
+
+
+
+
+
 
     render() {
         return (
             <div className="container main">
                 <div className="mb-4">
-                    
-                
-                    <img src={this.state.users.avatar} alt={this.state.users.display_name} width = "100" height = "100" /> 
-                     <h1> {this.state.users.display_name}</h1>           
-                     
+
+
+                    <img src={this.state.users.avatar} alt={this.state.users.display_name} width="100" height="100" />
+                    <h1> {this.state.users.display_name}</h1>
+
                 </div>
 
                 <Tabs>
@@ -97,25 +100,25 @@ class Profile extends React.Component {
                         <Tab> Bio </Tab>
                     </TabList>
 
-                    
-                     
-                    <TabPanel>
-                        
-                    <PlaceHolder api={this.props.api} createdRooms={this.state.createdRooms}>  </PlaceHolder>
 
-                     
+
+                    <TabPanel>
+
+                        <PlaceHolder api={this.props.api} createdRooms={this.state.createdRooms}>  </PlaceHolder>
+
+
                     </TabPanel>
 
-                    
+
 
                     <TabPanel>
-                        { <p> {this.state.users.bio} </p> }
-                       
-                        
-                        
+                        {<p> {this.state.users.bio} </p>}
+
+
+
                     </TabPanel>
                 </Tabs>
-            </div> 
+            </div>
         )
     }
 }
@@ -123,7 +126,7 @@ class Profile extends React.Component {
 
 
 const mapStateToProps = state => {
-    return { 
+    return {
         api: state.api,
         user: state.user
     }
