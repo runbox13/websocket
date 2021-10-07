@@ -36,24 +36,6 @@ form .form-group {
   text-align: center;
 }
 
-.sideBarPlaylist, .sideBarChatbox {
-  height: calc(100vh - 100px);
-  background:rgba(218, 218, 218, 0.911);
-}
-
-.sideBarChatbox, .sideBarPlaylist > p {
-  text-align: center;
-  font-weight: bold;
-}
-
-.video-wrapper {
-  height: 100%;
-}
-
-.centerChatroom {
-  height: calc(100vh - 200px);
-}
-
 .alert.home-alert {
   margin-bottom: 0;
 }

@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
-import { Container, Row, Col, Card, Navbar, NavbarBrand, Button, CardTitle, ListGroup, ListGroupItem, CardBody } from 'reactstrap';
+import { Container, Row, Col, Card, Navbar, NavbarBrand, Button, CardTitle, ListGroup, ListGroupItem, CardBody, NavItem } from 'reactstrap';
 import ReactPlayer from 'react-player'
 import { w3cwebsocket as W3CWebSocket } from 'websocket';
 import { connect } from 'react-redux';
 import axios from 'axios';
-import '../App.css';
+import './chatroom.css';
+import { NavLink } from 'react-router-dom';
 
 
 const socket = new W3CWebSocket('ws://127.0.0.1:8080');
@@ -12,6 +13,8 @@ const socket = new W3CWebSocket('ws://127.0.0.1:8080');
 function SidebarPlaylist(props) {
     var tracks = [];
     var listItems;
+    var songQueue = [];
+    
 
     if (props.dj != null) {
         if (props.dj.id === props.user.id) {
@@ -37,16 +40,34 @@ function SidebarPlaylist(props) {
 
 
     if (tracks != null) {
-        listItems = tracks.map((t) => <ListGroupItem key={t.id} onClick={() => sendTrack(t)}> {t.artist}: {t.title}</ListGroupItem>);
+        listItems = tracks.map((t) => <ListGroupItem action className="rounded-0" key={t.id} onClick={() => sendTrack(t)}> {t.artist}: {t.title}</ListGroupItem>);
     }
 
+    if (props.songQueue.length > 1) {
+            var tempQueue = [...props.songQueue];
+            if(props.songPlaying.queueId === tempQueue[0].queueId){
+                tempQueue.splice(0, 1);
+            }
+            songQueue = tempQueue.map((t) => <ListGroupItem className="rounded-0" key={t.queueId}> {t.artist}: {t.title}</ListGroupItem>);
+            console.log("yes");
+        
+    } else songQueue = [];
+
     return (
-        <Card className="sideBarPlaylist">
-            <CardTitle className="text-center">Playlist</CardTitle>
+        <>
+        <div id="leftSideBar" className="sideBarCards">
+            <div className="sideBarTitle">Playlist</div>
             <ListGroup>
                 {listItems}
             </ListGroup>
-        </Card>
+        </div>
+        <div id="queueSideBar" className="sideBarCards">
+            <div className="sideBarTitle">Queue</div>
+            <ListGroup>
+                {songQueue}
+            </ListGroup>
+        </div>
+        </>
     );
 }
 
@@ -54,18 +75,16 @@ function SideBarChatbox(props) {
     var array = [];
 
     for (var key in props.state.users) {
-        array.push(<li key={key}>{props.state.users[key].display_name}</li>);
+        array.push(<ListGroupItem className="rounded-0" key={key}>{props.state.users[key].display_name}</ListGroupItem>);
     }
 
-
-
     return (
-        <Card className="sideBarChatbox">
-            <CardTitle>Chatroom</CardTitle>
-            <ul id='usersList'>
+        <div id="rightSideBar" className="sideBarCards">
+            <div className="sideBarTitle">Chatroom</div>
+            <ListGroup className="rounded-0" id='usersList'>
                 {array}
-            </ul>
-        </Card>)
+            </ListGroup>
+        </div>)
 }
 
 function CenterChatroom(props) {
@@ -106,20 +125,15 @@ function CenterChatroom(props) {
 
     return (
         <div className="centerChatroom">
-            <h5>Current DJ - {props.dj != null ? props.dj.display_name : ""}</h5>
-            {props.isDj && props.songPlaying != "" ? <Button onClick={nextSong}>Next Song</Button> : ""}
-
-            {!props.isDj && !props.isQueued? <Button onClick={props.queueCallback}>Queue Up for DJ</Button> : ""}
-            {!props.isDj && props.isQueued? <Button onClick={props.deQueueCallback}>Dequeue</Button> : ""}
-            {props.isDj ? <Button onClick={props.jumpOffDjCallback}>Jump Off DJ</Button> : ""}
 
             <div className="video-wrapper">
-                <ReactPlayer onEnded={nextSong} onProgress={progress => { getTime(progress) }} url={props.songPlaying != "" ? songURL : ""} playing={!props.isPaused}
-                    controls="true" width={"100%"} height={"100%"} onPause={props.isDj ? djPause : ""} onPlay={props.isDj ? djPlay : ""} />
+                <ReactPlayer onEnded={nextSong} onProgress={progress => { getTime(progress) }} url={props.songPlaying != "" ? props.isDj ? props.songPlaying.url + "&t=" + initialDjTime : songURL : ""} playing={!props.isPaused}
+                    controls={true} width={"100%"} height={"100%"} onPause={props.isDj ? djPause : null} onPlay={props.isDj ? djPlay : null} />
             </div>
-            <Card>
-                <CardTitle>{props.songPlaying.artist} - {props.songPlaying.title}</CardTitle>
-            </Card>
+
+            {props.songPlaying != "" ? <Card id="songCard"><CardTitle id="songTitle"><h5 id="songHeader">{props.songPlaying.artist + " - " + props.songPlaying.title}</h5></CardTitle>
+            {props.isDj != "" ? <Button id="nextSongButton" onClick={props.nextSongCallback}>Next Song</Button> : ""}
+            </Card> : ""}
         </div>
     );
 }
@@ -358,21 +372,24 @@ class Chatroom extends React.Component {
     render() {
         return (
             <>
-                <Container fluid>
-                    <Navbar>
-                        <NavbarBrand>{this.state.room.name}</NavbarBrand>
-                    </Navbar>
+                <Container fluid className="mainContainer">
+                    <div id="topBar">
+                        <div id="topBarTitle"><h5 id="topBarHeader">{this.state.room.name}{this.state.dj ? " | DJ: " + this.state.dj.display_name : ""}</h5></div>
+                            {!this.state.isDj && !this.state.isQueued ? <Button className="topBarButton" onClick={this.queueDj}>Queue Up for DJ</Button> : ""}
+                            {!this.state.isDj && this.state.isQueued ? <Button className="topBarButton" onClick={this.deQueue}>Dequeue</Button> : ""}
+                            {this.state.isDj ? <Button className="topBarButton" onClick={this.jumpOffDj}>Jump Off DJ</Button> : ""}
+                    </div>
                     <Row>
-                        <Col>
-                            <SidebarPlaylist dj={this.state.dj} user={this.props.user} parentCallback={this.setTrackCallback} />
+                        <Col id="leftColumn"className="column" xs="auto">
+                            <SidebarPlaylist songPlaying={this.state.songQueue[0]} songQueue={this.state.songQueue} dj={this.state.dj} user={this.props.user} parentCallback={this.setTrackCallback} />
                         </Col>
-                        <Col xs={8}>
+                        <Col id="midColumn" className="column " xs="auto">
                             <CenterChatroom deQueueCallback={this.deQueue} queueCallback={this.queueDj} jumpOffDjCallback={this.jumpOffDj} isQueued={this.state.isQueued} songQueue={this.state.songQueue} nextSongCallback={this.nextSongCallback}
-                             isDj={this.state.isDj} time={this.state.time} getTimeCallback={this.getTimeCallback} djPlayCallback={this.djPlayCallback} djPauseCallback={this.djPauseCallback}
+                                isDj={this.state.isDj} time={this.state.time} getTimeCallback={this.getTimeCallback} djPlayCallback={this.djPlayCallback} djPauseCallback={this.djPauseCallback}
                                 isPaused={this.state.isPaused} dj={this.state.dj} user={this.props.user}
                                 songPlaying={this.state.songQueue.length != 0 ? this.state.songQueue[0] : ""} />
                         </Col>
-                        <Col>
+                        <Col id="rightColumn" className="column " xs="auto">
                             <SideBarChatbox state={this.state} />
                         </Col>
                     </Row>

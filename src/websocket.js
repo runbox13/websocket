@@ -175,7 +175,11 @@ wsServer.on('request', function (request) {
 
         if (payload.messageType === "setTrack") {
             var room = connections[payload.roomId];
-            room.songQueue.push(payload.track);
+            var track = payload.track;
+            var date = new Date();
+            date.setDate(1);
+            track["queueId"] = date.getTime();
+            room.songQueue.push(track);
             for (var key in room.users) {
                 room.users[key].connection.sendUTF(JSON.stringify({
                     type: "getSongQueue",
