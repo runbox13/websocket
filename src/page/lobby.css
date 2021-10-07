@@ -35,7 +35,7 @@ px) {
   }
 }
 
-.text {
+.lobby .text {
   display: block;
   width: 360px;
   overflow: hidden;
@@ -44,7 +44,7 @@ px) {
   margin: 0px;
 }
 
-.card {
+.lobby .card {
   margin: 10px;
   width: 18rem;
   border: danger;

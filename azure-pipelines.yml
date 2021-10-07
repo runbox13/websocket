@@ -17,7 +17,10 @@ steps:
     versionSpec: '16.x'
   displayName: 'Install Node.js'
 
-- script: |
+- script: 
     npm install
     npm run build
   displayName: 'npm install and build'
+
+- script: npm test -- --watchAll=false
+  displayName: 'Unit tests'

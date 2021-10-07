@@ -20,7 +20,7 @@ function PlaceHolder(props){
                 <CardBody>
                     <CardTitle> {props.createdRooms[i].name}</CardTitle>
                     <CardText>{props.createdRooms[i].description}</CardText>
-                    <Button variant="primary" href={"http://localhost:3000/" + "chatroom?id=" + props.createdRooms[i].id}>Go to Chatroom</Button>
+                    <Button variant="primary" href={"http://localhost:3000/chatroom?id=" + props.createdRooms[i].id}>Go to Chatroom</Button>
                 </CardBody>
             </Card>
         );
@@ -50,7 +50,7 @@ class Profile extends React.Component {
         
 
          axios
-         .get(this.props.api + "/user/" + id)
+         .get(this.props.api + "user/" + id)
          .then (res => {
              const data = res.data;
              console.log(data)

@@ -78,9 +78,10 @@ table.manage-rooms .btn {
   text-decoration: underline;
 }
 
-.btn {
-  margin: 5px;
+.manage-playlist .btn {
+  margin-right: 5px;
 }
+
 .manage-profile #bio {
   min-height: 130px;
 }

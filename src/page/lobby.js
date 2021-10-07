@@ -2,17 +2,17 @@ import React from 'react';
 import { connect } from 'react-redux';
 import './lobby.css';
 import axios from 'axios';
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
-import { Card, Button, CardText, CardTitle, CardBody, CardSubtitle, CardImgOverlay, CardImg} from 'reactstrap';
+import { Card, CardText, CardTitle, CardBody, CardSubtitle, CardImg} from 'reactstrap';
 
 function App() {
   const [rooms, setPost] = React.useState([]);
   const [users, setUsers] = React.useState([]);
-  const api = useSelector(state => state.api);
+  // const api = useSelector(state => state.api);
   const user = useSelector(state => state.user);
   const history = useHistory()
-  const dispatch = useDispatch();
+  // const dispatch = useDispatch();
 
   const [isLoaded, setIsLoaded] = React.useState(false);
 
@@ -73,7 +73,7 @@ const Room = (props) =>{
   const {id,name,description,user_id} = props;
   return(
     
-      <Card  border="danger" style={{ width: '18rem' }}>
+      <Card>
         <a href={"http://localhost:3000/chatroom?id=" + id} >
            <CardImg variant="top" src={pic[id].img} />
                 </a>
@@ -81,6 +81,7 @@ const Room = (props) =>{
                     <CardTitle> 
                     <CardSubtitle className="mb-2 text-muted"><p>Created by, <a className="mb-2 text-muted" href={"http://localhost:3000/profile?id=" + id }>{isLoaded ? users.find(x => x.id === user_id).display_name : ""}</a></p></CardSubtitle>
                     </CardTitle>
+                    <CardSubtitle className="mb-2 text-muted"><p>Created by, <a className="mb-2 text-muted" href={"http://localhost:3000/profile?id=" + id}>{users.find(x => x.id === user_id).display_name}</a></p></CardSubtitle>
                     <CardText>
                         {description}
                     </CardText>
@@ -92,7 +93,7 @@ const Room = (props) =>{
 };
 
   return (
-    <div className="container main">
+    <div className="container main lobby">
                 <h1>Lobby</h1>
                 <p>
                     Hey there, <code

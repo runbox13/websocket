@@ -68,23 +68,24 @@ class ManagePlaylist extends React.Component {
     // Update handler for changing track details 
     handleEdit(songId) {
         //let path = '/manage-playlist/update?id=' + songId
-        let path = '/manage-playlist/update?id=' + this.state.playlist.tracks.id // Temporary path
+        let path = '/manage-playlist/update?id=' + songId // Temporary path
         this.props.history.push(path) // React route for update page
     }
 
     render() {
         return (
-            <div className="container main" >
-                <h1 className="mb-4">Manage Playlist</h1>
-                <h2>{this.state.playlist.title}</h2> 
+            <div className="container main manage-playlist">
+                <h1 className="mb-4" data-testid="mpHeader">Manage Playlist</h1>
+
+                <h2>{this.state.playlist.title}</h2>
                 <p>{this.state.playlist.description}</p>
 
                 <div className="align-middle">
-                <table className="table table-responsive">
+                <table className="table table-responsive" data-testid="playlist_table">
                     <thead>
                         <tr>
                             <th scope="col-auto">#</th>
-                            <th scope="col-auto">Song Title</th>
+                            <th scope="col-auto">Song Title </th>
                             <th scope="col-auto">Artist</th>
                             <th scope="col-auto">Link</th>
                             <th scope="col-auto">Options</th>
