@@ -78,11 +78,7 @@ const Room = (props) =>{
                     <CardTitle> 
                      <b>{name}</b>
                     </CardTitle>
-                    <CardSubtitle className="mb-2 text-muted">
-                      <p>
-                        Created by <code className="code-link" onClick={() => history.push('/profile?id=' + user_id)}>{users[user_id-1].display_name}</code>
-                      </p>
-                    </CardSubtitle>
+                    <CardSubtitle className="mb-2 text-muted"><p>Created by, <a className="mb-2 text-muted" href={"http://localhost:3000/profile?id=" + id}>{users.find(x => x.id === user_id).display_name}</a></p></CardSubtitle>
                     <CardText>
                         {description}
                     </CardText>
