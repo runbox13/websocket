@@ -9,9 +9,11 @@ import { Card, Button, CardText, CardTitle, CardBody } from 'reactstrap';
 
 function PlaceHolder(props){
     var cards = [];
+
     console.log(props.createdRooms);
     for (var i = 0; i < props.createdRooms.length; ++i){
-        
+    
+   
         cards.push(
             
             <Card>
@@ -59,7 +61,7 @@ class Profile extends React.Component {
          .get(this.props.api + "room/created-by/" + id)
          .then(res => {
              const data = res.data;
-             //console.log(data)
+
              this.setState({createdRooms: data});
                 //console.log(data);
                 // (previous => { 
