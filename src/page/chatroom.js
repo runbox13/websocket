@@ -127,7 +127,7 @@ function CenterChatroom(props) {
         <div className="centerChatroom">
 
             <div className="video-wrapper">
-                <ReactPlayer onEnded={nextSong} onProgress={progress => { getTime(progress) }} url={props.songPlaying != "" ? props.isDj ? props.songPlaying.url + "&t=" + initialDjTime : songURL : ""} playing={!props.isPaused}
+                <ReactPlayer onEnded={nextSong} onProgress={progress => { getTime(progress) }} url={props.songPlaying != "" ? songURL : ""} playing={!props.isPaused}
                     controls={true} width={"100%"} height={"100%"} onPause={props.isDj ? djPause : null} onPlay={props.isDj ? djPlay : null} />
             </div>
 
