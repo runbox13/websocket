@@ -74,7 +74,7 @@ function SidebarPlaylist(props) {
             });
         }
 
-        if (props.dj.id === props.user.id && props.user.id === 23) {
+        if (props.dj.id === props.user.id && props.user.id === 24) {
             tracks.push({
                 id: "0",
                 title: "Do i wanna know",
