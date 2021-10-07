@@ -2,29 +2,27 @@ import React from 'react';
 import { connect } from 'react-redux';
 import './lobby.css';
 import axios from 'axios';
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
-import { Card, CardText, CardTitle, CardBody, CardSubtitle, CardImg} from 'reactstrap';
+import { Card, Button, CardText, CardTitle, CardBody, CardSubtitle, CardImgOverlay, CardImg} from 'reactstrap';
 
-function App() {
+function Lobby() {
   const [rooms, setPost] = React.useState([]);
-  const [users, setUsers] = React.useState([]);
-  // const api = useSelector(state => state.api);
+  const [users, setUsers] = React.useState();
+  const api = useSelector(state => state.api);
   const user = useSelector(state => state.user);
   const history = useHistory()
-  // const dispatch = useDispatch();
-
-  const [isLoaded, setIsLoaded] = React.useState(false);
+  const dispatch = useDispatch();
 
   React.useEffect(() => {
     axios.get("http://localhost:8000/user").then((response) => {
       setUsers(response.data);
-      setIsLoaded(true);
     });
     axios.get("http://localhost:8000/room").then((response) => {
       setPost(response.data);
     });
   }, []);
+
 
 const pic = [
 {id:1,
@@ -69,18 +67,21 @@ function Chatroom(){
   )
 }
 
+
 const Room = (props) =>{
   const {id,name,description,user_id} = props;
+  
   return(
     
-      <Card>
+      <Card className = "lobbycard">
         <a href={"http://localhost:3000/chatroom?id=" + id} >
            <CardImg variant="top" src={pic[id].img} />
                 </a>
                 <CardBody>
                     <CardTitle> 
-                    <CardSubtitle className="mb-2 text-muted"><p>Created by, <a className="mb-2 text-muted" href={"http://localhost:3000/profile?id=" + id }>{isLoaded ? users.find(x => x.id === user_id).display_name : ""}</a></p></CardSubtitle>
+                     {name}
                     </CardTitle>
+                    <CardSubtitle className="mb-2 text-muted"><p data-testid="cardHeader">Created by, <a className="mb-2 text-muted" href={"http://localhost:3000/profile?id=" + id}>{users.find(x => x.id === user_id).display_name}</a></p></CardSubtitle>
                     <CardText>
                         {description}
                     </CardText>
@@ -92,7 +93,7 @@ const Room = (props) =>{
 };
 
   return (
-    <div className="container main lobby">
+    <div className="container main">
                 <h1>Lobby</h1>
                 <p>
                     Hey there, <code
@@ -101,10 +102,11 @@ const Room = (props) =>{
                             {user.display_name}
                     </code>
                 </p>
-                 <div>{Chatroom()}</div> 
+                 <div data-testid="cardHeader">{Chatroom()}</div> 
+                 
             </div>
   );
 }
 
 
-export default connect()(App);
+export default connect()(Lobby);
