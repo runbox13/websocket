@@ -81,7 +81,6 @@ const Room = (props) =>{
                     <CardTitle> 
                     <CardSubtitle className="mb-2 text-muted"><p>Created by, <a className="mb-2 text-muted" href={"http://localhost:3000/profile?id=" + id }>{isLoaded ? users.find(x => x.id === user_id).display_name : ""}</a></p></CardSubtitle>
                     </CardTitle>
-                    <CardSubtitle className="mb-2 text-muted"><p>Created by, <a className="mb-2 text-muted" href={"http://localhost:3000/profile?id=" + id}>{users.find(x => x.id === user_id).display_name}</a></p></CardSubtitle>
                     <CardText>
                         {description}
                     </CardText>
