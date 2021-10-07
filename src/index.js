@@ -34,6 +34,7 @@ import ManagePlaylist from './page/user/manage-playlist'
 import PlaylistAdd from './page/user/playlist-add'
 import PlaylistUpdate from './page/user/playlist-update'
 import ResetPassword from './page/user/reset-password'
+import Chatroom from './page/chatroom'
 
 // attach state to window object for debugging
 window.store = store
@@ -57,6 +58,8 @@ ReactDOM.render(
         <Route exact path="/manage-playlist/add" component={PlaylistAdd} />
         <Route exact path="/manage-playlist/update" component={PlaylistUpdate} />
         <Route exact path="/reset-password" component={ResetPassword} />
+        <Route path="/chatroom" component={Chatroom} />
+
 
         <Route path="/login" component={Login} />
         <Route path="/register" component={Register} />

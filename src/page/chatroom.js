@@ -16,7 +16,7 @@ function SidebarPlaylist(props) {
     
 
     if (props.dj != null) {
-        if (props.dj.id === props.user.id && props.user.id === 22) {
+        if (props.dj.id === props.user.id && props.user.id < 15) {
             tracks.push({
                 id: "0",
                 title: "get you the moon",
@@ -74,7 +74,7 @@ function SidebarPlaylist(props) {
             });
         }
 
-        if (props.dj.id === props.user.id && props.user.id === 23) {
+        if (props.dj.id === props.user.id && props.user.id > 15) {
             tracks.push({
                 id: "0",
                 title: "Do i wanna know",

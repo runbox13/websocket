@@ -70,7 +70,7 @@ const Room = (props) =>{
   const {id,name,description,user_id} = props;
   return(
     
-      <Card  border="danger" style={{ width: '18rem' }}>
+      <Card>
         <a href={"http://localhost:3000/chatroom?id=" + id} >
            <CardImg variant="top" src={pic[id].img} />
                 </a>

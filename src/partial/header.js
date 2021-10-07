@@ -95,7 +95,7 @@ class Header extends React.Component {
                         </DropdownItem>
                         <DropdownItem>
                           <NavItem>
-                            <a href="/?logout" className="nav-link">Logout</a>
+                            <a href="/?logout" className="nav-link" onClick={this.handleLogout}>Logout</a>
                           </NavItem>
                         </DropdownItem>
                       </DropdownMenu>
