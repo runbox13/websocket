@@ -38,6 +38,21 @@ function SidebarPlaylist(props) {
         props.parentCallback(track);
     }
 
+    var isNotPlaying = false;
+
+    var isNotAlreadyPlaying = (track) => {
+        if(props.songQueue.length != 0) {
+            console.log("test");
+            if(track.id != props.songPlaying.id){
+                console.log(track.id + " " + props.songPlaying.id);
+                isNotPlaying = true;
+                return;
+            }
+        }
+        console.log("test");
+        isNotPlaying = false;
+    }
+
 
     if (tracks != null) {
         listItems = tracks.map((t) => <ListGroupItem action className="rounded-0" key={t.id} onClick={() => sendTrack(t)}> {t.artist}: {t.title}</ListGroupItem>);
@@ -90,13 +105,15 @@ function SideBarChatbox(props) {
 function CenterChatroom(props) {
     var [time, setTime] = useState(0);
     var songURL;
+    var [djTime, setDjTime] = useState(0);
 
     if (props.songPlaying != null) {
-        songURL = props.songPlaying.url + "&t=" + time;
+        if(!props.isDj) songURL = props.songPlaying.url + "&t=" + time;
+        else songURL = props.songPlaying.url + "&t=" + djTime;
     }
 
     var updateTime = (progress) => {
-        if (progress.playedSeconds < props.time - 3 || progress.playedSeconds > props.time + 3) {
+        if (progress.playedSeconds < props.time - 3 || progress.playedSeconds > props.time + 3 && !props.isDj) {
             console.log(progress.playedSeconds + " " + time);
             setTime(props.time);
         }
@@ -119,7 +136,9 @@ function CenterChatroom(props) {
     }
 
     var nextSong = () => {
-        props.nextSongCallback();
+        if(djTime === 0) setDjTime("");
+        else setDjTime(0);
+        setTimeout(props.nextSongCallback());
     }
 
 
@@ -132,7 +151,7 @@ function CenterChatroom(props) {
             </div>
 
             {props.songPlaying != "" ? <Card id="songCard"><CardTitle id="songTitle"><h5 id="songHeader">{props.songPlaying.artist + " - " + props.songPlaying.title}</h5></CardTitle>
-            {props.isDj != "" ? <Button id="nextSongButton" onClick={props.nextSongCallback}>Next Song</Button> : ""}
+            {props.isDj != "" ? <Button id="nextSongButton" onClick={nextSong}>Next Song</Button> : ""}
             </Card> : ""}
         </div>
     );
@@ -238,6 +257,7 @@ class Chatroom extends React.Component {
                         newState.users = users;
                         newState.dj = messageEvent.dj;
                         newState.queue = messageEvent.queue;
+                        newState.songQueue = messageEvent.songQueue;
                         return newState;
                     })
                 }

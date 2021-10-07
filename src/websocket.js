@@ -14,9 +14,6 @@ const connections = {
 
 console.log("Server running");
 
-
-
-
 wsServer.on('request', function (request) {
     const connection = request.accept(null, request.origin);
 
@@ -130,6 +127,8 @@ wsServer.on('request', function (request) {
                             payload: users,
                             queue: connections[room.id].queue,
                             dj: connections[room.id].dj,
+                            songQueue: connections[room.id].songQueue,
+
                             action: action,
                         }))
                 }
