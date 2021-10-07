@@ -14,9 +14,6 @@ const connections = {
 
 console.log("Server running");
 
-
-
-
 wsServer.on('request', function (request) {
     const connection = request.accept(null, request.origin);
 
@@ -99,7 +96,8 @@ wsServer.on('request', function (request) {
                     dj: null,
                     //Array of user objects to use queue pop/push functionalities
                     queue: [],
-                    songPlaying: ""
+                    songPlaying: "",
+                    songQueue: []
                 }
 
             connections[room.id].users[user.id] = {
@@ -129,6 +127,8 @@ wsServer.on('request', function (request) {
                             payload: users,
                             queue: connections[room.id].queue,
                             dj: connections[room.id].dj,
+                            songQueue: connections[room.id].songQueue,
+
                             action: action,
                         }))
                 }
@@ -136,7 +136,7 @@ wsServer.on('request', function (request) {
 
             connection.sendUTF(JSON.stringify({
                 type: "setTrack",
-                url: connections[room.id].songPlaying
+                songPlaying: connections[room.id].songPlaying
             }));
 
             //When user joins, send all users the list of users
@@ -173,16 +173,60 @@ wsServer.on('request', function (request) {
         }
 
         if (payload.messageType === "setTrack") {
-            var room = connections[payload.roomId]
-            room.songPlaying = payload.url;
+            var room = connections[payload.roomId];
+            var track = payload.track;
+            var date = new Date();
+            date.setDate(1);
+            track["queueId"] = date.getTime();
+            room.songQueue.push(track);
             for (var key in room.users) {
                 room.users[key].connection.sendUTF(JSON.stringify({
-                    type: "setTrack",
-                    url: payload.url
+                    type: "getSongQueue",
+                    songQueue: room.songQueue,
                 }));
             }
         }
 
+        if(payload.messageType === "nextSong") {
+            var room = connections[payload.roomId];
+            room.songQueue.shift();
+            for (var key in room.users) {
+                room.users[key].connection.sendUTF(JSON.stringify({
+                    type: "nextSong",
+                    songQueue: room.songQueue,
+                }));
+            }
+        }
+
+        if(payload.messageType === "djPause") {
+            var room = connections[payload.roomId];
+            for(var key in room.users) {
+                room.users[key].connection.sendUTF(JSON.stringify({
+                    type: "djPause",
+                    isPaused: true
+                }))
+            }
+        }
+
+        if(payload.messageType === "djPlay") {
+            var room = connections[payload.roomId];
+            for(var key in room.users) {
+                room.users[key].connection.sendUTF(JSON.stringify({
+                    type: "djPlay",
+                    isPaused: false
+                }));
+            }
+        }
+
+        if(payload.messageType === "getTime") {
+            var room = connections[payload.roomId];
+            for(var key in room.users) {
+                room.users[key].connection.sendUTF(JSON.stringify({
+                    type: "getTime",
+                    time: payload.time
+                }));
+            }
+        }
 
     })
 

@@ -1,10 +1,10 @@
-import React from 'react';
-import { Container, Row, Col, Card, Navbar, NavbarBrand, Button } from 'reactstrap';
+import React, { useState } from 'react';
+import { Container, Row, Col, Card, Button, CardTitle, ListGroup, ListGroupItem} from 'reactstrap';
 import ReactPlayer from 'react-player'
 import { w3cwebsocket as W3CWebSocket } from 'websocket';
 import { connect } from 'react-redux';
 import axios from 'axios';
-import '../App.css';
+import './chatroom.css';
 
 
 const socket = new W3CWebSocket('ws://127.0.0.1:8080');
@@ -12,9 +12,11 @@ const socket = new W3CWebSocket('ws://127.0.0.1:8080');
 function SidebarPlaylist(props) {
     var tracks = [];
     var listItems;
+    var songQueue = [];
+    
 
     if (props.dj != null) {
-        if (props.dj.id === props.user.id) {
+        if (props.dj.id === props.user.id && props.user.id === 22) {
             tracks.push({
                 id: "0",
                 title: "get you the moon",
@@ -23,31 +25,140 @@ function SidebarPlaylist(props) {
             });
 
             tracks.push({
-                id: "2",
+                id: "1",
                 title: "when i met u",
                 artist: "hateful",
                 url: "https://www.youtube.com/watch?v=30JOhWFkLro"
             });
+            tracks.push({
+                id: "2",
+                title: "3.A.M Study Session",
+                artist: "Lofi Girl",
+                url: "https://www.youtube.com/watch?v=BTYAsjAVa3I"
+            });
+            tracks.push({
+                id: "3",
+                title: "Chill Drive",
+                artist: "chilli music",
+                url: "https://www.youtube.com/watch?v=EIm4HvDgQCM"
+            });
+            tracks.push({
+                id: "4",
+                title: "Last breeze of the evening ",
+                artist: "Dreamy",
+                url: "https://www.youtube.com/watch?v=UMhOGEo8O5A"
+            });
+            tracks.push({
+                id: "5",
+                title: "The answer is in the stars ~ lofi mix",
+                artist: "Dreamy",
+                url: "https://www.youtube.com/watch?v=_DwmKtbVFJ4"
+            });
+            tracks.push({
+                id: "6",
+                title: "Why'd You Only Call Me When You're High?",
+                artist: "Arctic Monkeys",
+                url: "https://www.youtube.com/watch?v=6366dxFf-Os"
+            });
+            tracks.push({
+                id: "7",
+                title: "Knee Socks",
+                artist: "Arctic Monkeys",
+                url: "https://www.youtube.com/watch?v=oTP5bXzfh1c"
+            });
+            tracks.push({
+                id: "8",
+                title: "Mardy Bum",
+                artist: "Arctic Monkeys",
+                url: "https://www.youtube.com/watch?v=dO368WjwyFs"
+            });
+        }
+
+        if (props.dj.id === props.user.id && props.user.id === 23) {
+            tracks.push({
+                id: "0",
+                title: "Do i wanna know",
+                artist: "Arctic Monkeys",
+                url: "https://www.youtube.com/watch?v=bpOSxM0rNPM"
+            });
+
+            tracks.push({
+                id: "1",
+                title: "505",
+                artist: "Arctic Monkeys",
+                url: "https://www.youtube.com/watch?v=qU9mHegkTc4"
+            });
+            tracks.push({
+                id: "2",
+                title: "Why'd You Only Call Me When You're High?",
+                artist: "Arctic Monkeys",
+                url: "https://www.youtube.com/watch?v=6366dxFf-Os"
+            });
+            tracks.push({
+                id: "3",
+                title: "Knee Socks",
+                artist: "Arctic Monkeys",
+                url: "https://www.youtube.com/watch?v=oTP5bXzfh1c"
+            });
+            tracks.push({
+                id: "4",
+                title: "Mardy Bum",
+                artist: "Arctic Monkeys",
+                url: "https://www.youtube.com/watch?v=dO368WjwyFs"
+            });
+            tracks.push({
+                id: "5",
+                title: "Chill Drive",
+                artist: "chilli music",
+                url: "https://www.youtube.com/watch?v=EIm4HvDgQCM"
+            });
+            tracks.push({
+                id: "6",
+                title: "Last breeze of the evening ",
+                artist: "Dreamy",
+                url: "https://www.youtube.com/watch?v=UMhOGEo8O5A"
+            });
+            tracks.push({
+                id: "7",
+                title: "The answer is in the stars ~ lofi mix",
+                artist: "Dreamy",
+                url: "https://www.youtube.com/watch?v=_DwmKtbVFJ4"
+            });
         }
     }
 
-    var sendTrack = (url) => {
-        console.log(url);
-        props.parentCallback(url);
+    var sendTrack = (track) => {
+        props.parentCallback(track);
     }
-
 
     if (tracks != null) {
-        listItems = tracks.map((t) => <li key={t.id} onClick={() => sendTrack(t.url)}> {t.artist}: {t.title}</li>);
+        listItems = tracks.map((t) => <ListGroupItem action className="rounded-0" key={t.id} onClick={() => sendTrack(t)}> {t.artist}: {t.title}</ListGroupItem>);
     }
 
+    if (props.songQueue.length > 1) {
+            var tempQueue = [...props.songQueue];
+            if(props.songPlaying.queueId === tempQueue[0].queueId){
+                tempQueue.splice(0, 1);
+            }
+            songQueue = tempQueue.map((t) => <ListGroupItem className="rounded-0" key={t.queueId}> {t.artist}: {t.title}</ListGroupItem>);
+        
+    } else songQueue = [];
+
     return (
-        <div className="sideBarPlaylist">
-            <p>Playlists</p>
-            <ul>
+        <>
+        <div id="leftSideBar" className="sideBarCards">
+            <div className="sideBarTitle">Playlist</div>
+            <ListGroup>
                 {listItems}
-            </ul>
+            </ListGroup>
         </div>
+        <div id="queueSideBar" className="sideBarCards">
+            <div className="sideBarTitle">Queue</div>
+            <ListGroup>
+                {songQueue}
+            </ListGroup>
+        </div>
+        </>
     );
 }
 
@@ -55,31 +166,71 @@ function SideBarChatbox(props) {
     var array = [];
 
     for (var key in props.state.users) {
-        array.push(<li key={key}>{props.state.users[key].display_name}</li>);
+        array.push(<ListGroupItem className="rounded-0" key={key}>{props.state.users[key].display_name}</ListGroupItem>);
     }
 
-
-
     return (
-        <div className="sideBarChatbox">
-            <p>Chatbox</p>
-            <ul id='usersList'>
+        <div id="rightSideBar" className="sideBarCards">
+            <div className="sideBarTitle">Chatroom</div>
+            <ListGroup className="rounded-0" id='usersList'>
                 {array}
-            </ul>
+            </ListGroup>
         </div>)
 }
 
 function CenterChatroom(props) {
+    var [time, setTime] = useState(0);
+    var songURL;
+    var [djTime, setDjTime] = useState(0);
+
+    if (props.songPlaying != null) {
+        if(!props.isDj) songURL = props.songPlaying.url + "&t=" + time;
+        else songURL = props.songPlaying.url + "&t=" + djTime;
+    }
+
+    var updateTime = (progress) => {
+        if(!props.isDj) {
+            if (progress.playedSeconds < props.time - 3 || progress.playedSeconds > props.time + 3) {
+                console.log(progress.playedSeconds + " " + time);
+                setTime(props.time);
+            }
+        }
+    }
+
+    var getTime = (progress) => {
+        if (props.isDj) {
+            props.getTimeCallback(parseInt(progress.playedSeconds));
+        } else
+            updateTime(progress);
+    }
+
+    var djPause = () => {
+        props.djPauseCallback();
+        console.log("callback");
+    }
+
+    var djPlay = () => {
+        props.djPlayCallback();
+    }
+
+    var nextSong = () => {
+        if(djTime === 0) setDjTime("");
+        else setDjTime(0);
+        setTimeout(props.nextSongCallback());
+    }
+
+
     return (
         <div className="centerChatroom">
+
             <div className="video-wrapper">
-                <ReactPlayer url={props.songPlaying != null ? props.songPlaying : ""} playing={true} controls={true} width={"100%"} height={"100%"} />
+                <ReactPlayer onEnded={nextSong} onProgress={progress => { getTime(progress) }} url={props.songPlaying !== "" ? songURL : ""} playing={!props.isPaused}
+                    controls={true} width={"100%"} height={"100%"} onPause={props.isDj ? djPause : null} onPlay={props.isDj ? djPlay : null} />
             </div>
-            <h5>Current DJ - {props.dj != null ? props.dj.display_name : ""}</h5>
-            <Card>
-                <Card body> Rick Roll
-                </Card>
-            </Card>
+
+            {props.songPlaying !== "" ? <Card id="songCard"><CardTitle id="songTitle"><h5 id="songHeader">{props.songPlaying.artist + " - " + props.songPlaying.title}</h5></CardTitle>
+            {props.isDj ? <Button id="nextSongButton" onClick={nextSong}>Next Song</Button> : ""}
+            </Card> : ""}
         </div>
     );
 }
@@ -145,9 +296,11 @@ class Chatroom extends React.Component {
             room: {},
             queue: [],
             isQueued: false,
-            dj: [],
-            isDJ: false,
-            songPlaying: ""
+            dj: null,
+            isDj: false,
+            songQueue: [],
+            isPaused: false,
+            time: 0
         }
 
         socket.onclose = event => {
@@ -165,10 +318,10 @@ class Chatroom extends React.Component {
                 this.setState(prevState => { return { dj: messageEvent.payload } });
                 //If this user is the DJ, set the booleans
                 if (this.state.dj != null && this.state.dj.id === this.props.user.id) {
-                    this.setState({ isDJ: true });
+                    this.setState({ isDj: true });
                     this.setState({ isQueued: false });
                 } else {
-                    this.setState({ isDJ: false });
+                    this.setState({ isDj: false });
                 }
 
             }
@@ -182,6 +335,7 @@ class Chatroom extends React.Component {
                         newState.users = users;
                         newState.dj = messageEvent.dj;
                         newState.queue = messageEvent.queue;
+                        newState.songQueue = messageEvent.songQueue;
                         return newState;
                     })
                 }
@@ -218,9 +372,26 @@ class Chatroom extends React.Component {
                 if (this.state.queue.length === 0) this.setState({ isQueued: false });
             }
 
-            if (messageEvent.type === "setTrack") {
-                this.setState({songPlaying: messageEvent.url});
+            if (messageEvent.type === "getSongQueue") {
+                this.setState({ songQueue: messageEvent.songQueue });
             }
+
+            if (messageEvent.type === "djPause") {
+                this.setState({ isPaused: messageEvent.isPaused });
+            }
+
+            if (messageEvent.type === "djPlay") {
+                this.setState({ isPaused: messageEvent.isPaused });
+            }
+
+            if (messageEvent.type === "getTime") {
+                this.setState({ time: messageEvent.time })
+            }
+
+            if (messageEvent.type === "nextSong") {
+                this.setState({ songQueue: messageEvent.songQueue })
+            }
+
         };
     }
 
@@ -253,32 +424,70 @@ class Chatroom extends React.Component {
         }));
     }
 
-    setTrackCallback = (url) => {
+    setTrackCallback = (track) => {
+        console.log(track);
         socket.send(JSON.stringify({
             type: "message",
             messageType: "setTrack",
-            url: url,
+            track: track,
             roomId: this.state.room.id
+        }));
+    }
+
+    djPauseCallback = () => {
+        socket.send(JSON.stringify({
+            type: "message",
+            messageType: "djPause",
+            roomId: this.state.room.id
+        }));
+    };
+
+    djPlayCallback = () => {
+        socket.send(JSON.stringify({
+            type: "message",
+            messageType: "djPlay",
+            roomId: this.state.room.id
+        }));
+    }
+
+    getTimeCallback = (time) => {
+        socket.send(JSON.stringify({
+            type: "message",
+            messageType: "getTime",
+            roomId: this.state.room.id,
+            time: time
+        }));
+    }
+
+    nextSongCallback = () => {
+        socket.send(JSON.stringify({
+            type: "message",
+            messageType: "nextSong",
+            roomId: this.state.room.id,
         }));
     }
 
     render() {
         return (
             <>
-                <Container fluid>
-                    <Navbar>
-                        <NavbarBrand>{this.state.room.name}</NavbarBrand>
-                        {!this.state.isDJ ? <Button onClick={this.state.isQueued ? this.deQueue : this.queueDj}> {this.state.isQueued ? 'Dequeue' : 'Queue up for DJ'}</Button>
-                            : <Button onClick={this.jumpOffDj}>Jump off</Button>}
-                    </Navbar>
+                <Container fluid className="mainContainer">
+                    <div id="topBar">
+                        <div id="topBarTitle"><h5 id="topBarHeader">{this.state.room.name}{this.state.dj ? " | DJ: " + this.state.dj.display_name : ""}</h5></div>
+                            {!this.state.isDj && !this.state.isQueued ? <Button className="topBarButton" onClick={this.queueDj}>Queue Up for DJ</Button> : ""}
+                            {!this.state.isDj && this.state.isQueued ? <Button className="topBarButton" onClick={this.deQueue}>Dequeue</Button> : ""}
+                            {this.state.isDj ? <Button className="topBarButton" onClick={this.jumpOffDj}>Jump Off DJ</Button> : ""}
+                    </div>
                     <Row>
-                        <Col>
-                            <SidebarPlaylist dj={this.state.dj} user={this.props.user} parentCallback={this.setTrackCallback}/>
+                        <Col id="leftColumn"className="column" xs="auto">
+                            <SidebarPlaylist songPlaying={this.state.songQueue[0]} songQueue={this.state.songQueue} dj={this.state.dj} user={this.props.user} parentCallback={this.setTrackCallback} />
                         </Col>
-                        <Col xs={8}>
-                            <CenterChatroom dj={this.state.dj} songPlaying={this.state.songPlaying}/>
+                        <Col id="midColumn" className="column " xs="auto">
+                            <CenterChatroom deQueueCallback={this.deQueue} queueCallback={this.queueDj} jumpOffDjCallback={this.jumpOffDj} isQueued={this.state.isQueued} songQueue={this.state.songQueue} nextSongCallback={this.nextSongCallback}
+                                isDj={this.state.isDj} time={this.state.time} getTimeCallback={this.getTimeCallback} djPlayCallback={this.djPlayCallback} djPauseCallback={this.djPauseCallback}
+                                isPaused={this.state.isPaused} dj={this.state.dj} user={this.props.user}
+                                songPlaying={this.state.songQueue.length !== 0 ? this.state.songQueue[0] : ""} />
                         </Col>
-                        <Col>
+                        <Col id="rightColumn" className="column " xs="auto">
                             <SideBarChatbox state={this.state} />
                         </Col>
                     </Row>
