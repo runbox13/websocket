@@ -18,12 +18,14 @@ import { NavLink, Link } from 'react-router-dom';
 class Header extends React.Component {
   constructor() {
     super()
-    this.state = { 
-        isOpen: false,
-        logoutAlert: (window.location.search.indexOf('logout') !== -1)
+    this.state = {
+      isOpen: false,
+      logoutAlert: (window.location.search.indexOf('logout') !== -1),
+      deleteAlert: (window.location.search.indexOf('account-deleted') !== -1)
     }
 
     this.onDismiss = this.onDismiss.bind(this)
+    this.onDelete = this.onDelete.bind(this)
     this.handleChange = this.handleChange.bind(this)
   }
 
@@ -37,6 +39,7 @@ class Header extends React.Component {
   handleChange() { this.setState({ isOpen: !this.state.isOpen }) }
 
   onDismiss() { this.setState({ logoutAlert: false }) }
+  onDelete() { this.setState({ deleteAlert: false }) }
 
   render() {
     return (
@@ -47,19 +50,19 @@ class Header extends React.Component {
             <NavbarToggler onClick={this.handleChange} />
             <Collapse isOpen={this.state.isOpen} navbar>
               <Nav className="mr-auto" navbar>
-                
+
                 <NavItem>
                   <Link to="/" className="nav-link">Home</Link>
                 </NavItem>
 
-                
+
                 {!Object.keys(this.props.user).length && /* not logged in */
                   <>
                     <NavItem>
-                        <NavLink to="/register" className="nav-link">Register</NavLink>
+                      <NavLink to="/register" className="nav-link">Register</NavLink>
                     </NavItem>
                     <NavItem>
-                        <NavLink to="/login" className="nav-link">Login</NavLink>
+                      <NavLink to="/login" className="nav-link">Login</NavLink>
                     </NavItem>
                   </>
                 }
@@ -67,7 +70,7 @@ class Header extends React.Component {
                 {Object.keys(this.props.user).length > 0 && /* logged in */
                   <>
                     <NavItem>
-                        <NavLink to="/lobby" className="nav-link">Lobby</NavLink>
+                      <NavLink to="/lobby" className="nav-link">Lobby</NavLink>
                     </NavItem>
 
                     <UncontrolledDropdown nav inNavbar>
@@ -79,12 +82,20 @@ class Header extends React.Component {
                           <NavLink to="/manage-profile" className="nav-link">Profile</NavLink>
                         </DropdownItem>
                         <DropdownItem>
+                          <NavLink to="/manage-playlist" className="nav-link">Playlist</NavLink>
+                        </DropdownItem>
+                        <DropdownItem>
                           <NavLink to="/manage-rooms" className="nav-link">Rooms</NavLink>
                         </DropdownItem>
                         <DropdownItem divider />
                         <DropdownItem>
                           <NavItem>
-                            <a href="/?logout" className="nav-link" onClick={this.handleLogout}>Logout</a>
+                            <NavLink to="/reset-password" className="nav-link">Reset Password</NavLink>
+                          </NavItem>
+                        </DropdownItem>
+                        <DropdownItem>
+                          <NavItem>
+                            <a href="/?logout" className="nav-link">Logout</a>
                           </NavItem>
                         </DropdownItem>
                       </DropdownMenu>
@@ -100,20 +111,24 @@ class Header extends React.Component {
           Success! You are now logged out
         </Alert>
 
+        <Alert color="danger" className="home-alert" isOpen={this.state.deleteAlert} toggle={this.onDelete}>
+          Success! Your profile has been removed.
+        </Alert>
+
       </div>
     )
   }
 }
 
 const mapStateToProps = state => {
-  return { 
-      user: state.user
+  return {
+    user: state.user
   }
 }
 
 const mapDispatchToProps = dispatch => {
   return {
-      dispatch
+    dispatch
   }
 }
 
