@@ -78,7 +78,6 @@ const Room = (props) =>{
                     <CardTitle> 
                      {name}
                     </CardTitle>
-                    <CardSubtitle className="mb-2 text-muted"><p>Created by, <a className="mb-2 text-muted" href={"http://localhost:3000/profile?id=" + id}>{users[user_id-1].display_name}</a></p></CardSubtitle>
                     <CardText>
                         {description}
                     </CardText>
