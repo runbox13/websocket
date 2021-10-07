@@ -75,16 +75,17 @@ class ManagePlaylist extends React.Component {
     render() {
         return (
             <div className="container main" >
-                <h1 className="mb-4">Manage Playlist</h1>
-                <h2>{this.state.playlist.title}</h2> 
+                <h1 className="mb-4" data-testid="mpHeader">Manage Playlist</h1>
+
+                <h2>{this.state.playlist.title}</h2>
                 <p>{this.state.playlist.description}</p>
 
                 <div className="align-middle">
-                <table className="table table-responsive">
+                <table className="table table-responsive" data-testid="playlist_table">
                     <thead>
                         <tr>
                             <th scope="col-auto">#</th>
-                            <th scope="col-auto">Song Title</th>
+                            <th scope="col-auto">Song Title </th>
                             <th scope="col-auto">Artist</th>
                             <th scope="col-auto">Link</th>
                             <th scope="col-auto">Options</th>
