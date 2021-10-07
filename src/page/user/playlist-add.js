@@ -66,8 +66,8 @@ class PlaylistAdd extends React.Component {
 
     render() {
         return (
-            <div className="container main">
-                <h1>Add Song</h1>
+            <div className="container main manage-playlist">
+                <h1 className="mb-4">Add Song</h1>
                 <form onSubmit={this.handleSubmit}>
                     <div className="form-group">
                         <label>Song Title</label>
