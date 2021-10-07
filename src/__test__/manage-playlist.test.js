@@ -1,9 +1,9 @@
 import React from 'react';
- import ManagePlaylist from '../manage-playlist';
+ import ManagePlaylist from '../page/user/manage-playlist';
  import { render } from '@testing-library/react';
  import '@testing-library/jest-dom/extend-expect';
  import { Provider } from 'react-redux';
- import store from '../../../store/index';
+ import store from '../store/index.js';
 
  const Wrapper = ({ children }) => (
      <Provider store={store}>{children}</Provider>
