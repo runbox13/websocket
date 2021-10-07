@@ -23,7 +23,6 @@ function App() {
     });
     axios.get("http://localhost:8000/room").then((response) => {
       setPost(response.data);
-      setIsLoadedRoom(true);
     });
   }, []);
 
