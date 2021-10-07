@@ -9,7 +9,7 @@ class ManagePlaylist extends React.Component {
             //isLoaded: false,
             playlist: {
                 title: "A sample playlist",
-                description: "Lorem ipsum dolor sit amet..",
+                description: "This is a collection of my favourite songs!",
                 tracks: [
                     {
                         "id": 1,
@@ -33,26 +33,29 @@ class ManagePlaylist extends React.Component {
         axios.get(this.props.api + 'playlist', {
         })
             .then((response) => {
-                console.log(response.data)
+                console.log(response.data) // Output response data in console
                 this.setState({
-                    song_title: response.data.song_title,
+                    // Loads state with all tracks in playlist
+                    song_title: response.data.song_title, 
                     artist: response.data.artist,
                     link: response.data.link,
                 })
             })
+            // Catch and output errors in browser and console
             .catch((error) => {
                 alert(error)
                 console.log(error);
             })
     }
 
+    // Delete handler for deleting a single track from the playlist
     handleDelete(id, index) {
-        if (window.confirm("Are you sure you want to delete this song?")) {
-            axios.delete(this.props.api + 'song/' + id)
+        if (window.confirm("Are you sure you want to delete this song?")) { // Delete validation window
+            axios.delete(this.props.api + 'song/' + id) // Delete song by id
                 .then((response) => {
                     console.log(response)
 
-                    // delete song from local state and refresh component
+                    // Delete song from local state and refresh component
                     let playlist = [...this.state.playlist]
                     playlist.splice(index, 1)
                     this.setState({
@@ -62,10 +65,11 @@ class ManagePlaylist extends React.Component {
         }
     }
 
+    // Update handler for changing track details 
     handleEdit(songId) {
         //let path = '/manage-playlist/update?id=' + songId
-        let path = '/manage-playlist/update' // Temporary path
-        this.props.history.push(path)
+        let path = '/manage-playlist/update?id=' + this.state.playlist.tracks.id // Temporary path
+        this.props.history.push(path) // React route for update page
     }
 
     render() {
@@ -88,16 +92,18 @@ class ManagePlaylist extends React.Component {
                         </tr>
                     </thead>
                     <tbody>
-                    {this.state.playlist.tracks.map((track, i) => (
-                        <tr className="align-middle" key={track.id}>
+                    {this.state.playlist.tracks.map((track, i) => ( // Using a map for outputting the playlist data
+                        <tr className="align-middle" key={track.id}> 
                             <th scope="row">{ i + 1 }</th>
                             <td className="align-middle">{track.song_title}</td>
                             <td className="align-middle">{track.artist}</td>
                             <td className="align-middle">{track.link}</td>
                             <td className="align-middle text-center">
                                 <button type="button" className="btn btn-outline-secondary" 
-                                    onClick={() => this.handleEdit(track.id)}>Edit</button>
+                                    // Edit handler connected to button
+                                    onClick={() => this.handleEdit(track.id)}>Edit</button> 
                                 <button type="button" className="btn btn-danger" 
+                                    // Delete handler connected to button
                                     onClick={() => this.handleDelete(track.id, i)}>Delete</button>
                             </td>
                         </tr>
@@ -106,13 +112,11 @@ class ManagePlaylist extends React.Component {
                 </table>
                 </div>
 
-                <button 
-                    type="button" 
-                    className="btn btn-primary" 
-                    onClick={() => this.props.history.push('/manage-playlist/add')}>
-                        Add song
-                </button>
-                <button type="button" className="btn btn-secondary">Edit playlist title</button>
+                <button type="button" className="btn btn-primary" 
+                    // Add song route 
+                    onClick={() => this.props.history.push('/manage-playlist/add')}> Add song </button>
+                {/* <button type="button" className="btn btn-secondary">Edit playlist title</button>
+                <button type="button" className="btn btn-secondary">Edit description</button> */}
 
             </div>
             
@@ -123,7 +127,7 @@ class ManagePlaylist extends React.Component {
 const mapStateToProps = state => {
     return { 
         api: state.api,
-        user: state.user
+        user: state.user // Load user into state
     }
 }
 

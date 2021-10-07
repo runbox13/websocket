@@ -1,15 +1,23 @@
-import axios from 'axios'
+//import axios from 'axios'
 import React from 'react'
 import { connect } from 'react-redux'
 import { Form, FormGroup, Label, Input, Button, Alert } from 'reactstrap'
+import { FormErrors } from '../../FormErrors';
 
 class ResetPassword extends React.Component {
     constructor() {
         super()
         this.state = {
+
+            userPassword: 'aaaaa',
             currPassword: '',
             newPassword: '',
             confirmPassword: '',
+
+            formErrors: { newPassword: '', confirmPassword: '' },
+            newPassValid: false,
+            confirmPassValid: false,
+
             mismatchPasswordAlert: false,
             incorrectCurrPassAlert: false,
             resetSuccessAlert: false
@@ -20,24 +28,68 @@ class ResetPassword extends React.Component {
         this.dismissIncorrectAlert = this.dismissIncorrectAlert.bind(this)
     }
 
+    validateField(fieldName, value) {
+        let fieldValidationErrors = this.state.formErrors;
+        let newPassValid = this.state.newPassValid;
+        let confirmPassValid = this.state.confirmPassValid;
+
+        switch (fieldName) {
+            case 'newPassword':
+                newPassValid = value.length >= 5;
+                fieldValidationErrors.newPassword = newPassValid ? '' : ' is too short, minimum 5 letters.';
+                break;
+            case 'confirmPassword':
+                confirmPassValid = value.length >= 5;
+                fieldValidationErrors.confirmPassword = confirmPassValid ? '' : ' is too short, minimum 5 letters.';
+                break;
+            default:
+                break;
+        }
+        this.setState({
+            formErrors: fieldValidationErrors,
+            newPassValid: newPassValid,
+            confirmPassValid: confirmPassValid
+        }, this.validateForm);
+    }
+
+    validateForm() {
+        this.setState({ formValid: this.state.newPassValid && this.state.confirmPassValid });
+    }
+
 
     // onChange functions for user input in password fields.
     inputCurrentPassword = (event) => {
-        this.setState({ currPassword: event.target.value });
+        const target = event.target
+        const value = target.value
+        const name = target.name
+
+        this.setState({ [name]: value })
     }
 
     inputNewPassword = (event) => {
-        this.setState({ newPassword: event.target.value });
+        const target = event.target
+        const value = target.value
+        const name = target.name
+
+        this.setState({
+            [name]: value
+        }, () => { this.validateField(name, value) })
     }
 
     inputConfirmedPassword = (event) => {
-        this.setState({ confirmPassword: event.target.value });
+        const target = event.target
+        const value = target.value
+        const name = target.name
+
+        this.setState({
+            [name]: value
+        }, () => { this.validateField(name, value) })
     }
 
     // Reset password button handler.
     submitReset(event) {
-        const { currPassword, newPassword, confirmPassword } = this.state;
-        const passwordExists = currPassword === this.props.user.password;
+        const { newPassword, confirmPassword } = this.state;
+        const passwordExists = this.state.currPassword === this.state.userPassword;
         const matches = newPassword === confirmPassword;
 
         if (passwordExists) {
@@ -45,26 +97,9 @@ class ResetPassword extends React.Component {
             // If the new password matches the confirmed password, fetch user data via id
             // and update password.
             if (matches) {
-                axios.put(this.props.api + 'user/' + this.props.user.id, {
-                    password: this.state.confirmPassword
-                }).then((response) => {
-
-                    //dispatch USER_SESSION action to save user data to redux store
-                    this.props.dispatch({
-                        type: 'USER_SESSION',
-                        payload: response.data.user
-                    })
-
-                    // reload component
                     this.props.history.push('/reset-password')
-
                     // alert to user that password has been reset.
                     this.setState({ resetSuccessAlert: !this.state.resetSuccessAlert })
-
-                }).catch(error => {
-                    alert(error)
-                    console.log(error)
-                })
 
             } else {
                 // alert to user that passwords do not match.
@@ -88,7 +123,9 @@ class ResetPassword extends React.Component {
         return (
             <div className="container main">
 
-                <h1 className="mb-4">Reset Password</h1>
+                <h1 className="mb-4" data-testid="resetPassHeader">Reset Password</h1>
+
+                <div><FormErrors formErrors={this.state.formErrors} /></div>
 
                 <Alert color="success"
                     isOpen={this.state.resetSuccessAlert}
@@ -110,6 +147,7 @@ class ResetPassword extends React.Component {
                             name="currPassword"
                             id="currPassword"
                             placeholder="Enter current password."
+                            value={this.state.currPassword}
                             onChange={this.inputCurrentPassword} />
                     </FormGroup>
 
@@ -119,6 +157,7 @@ class ResetPassword extends React.Component {
                             name="newPassword"
                             id="newPassword"
                             placeholder="Enter new password."
+                            value={this.state.newPassword}
                             onChange={this.inputNewPassword} />
                     </FormGroup>
 
@@ -128,10 +167,16 @@ class ResetPassword extends React.Component {
                             name="confirmPassword"
                             id="confirmPassword"
                             placeholder="Re-enter new password."
+                            value={this.state.confirmPassword}
                             onChange={this.inputConfirmedPassword} />
                     </FormGroup>
 
-                    <Button color="primary" className="mt-2">Reset Password</Button>
+                    {
+                        !this.state.formValid
+                            ? <Button color="primary" className="mt-2" disabled>Reset Password</Button>
+                            : <Button color="primary" className="mt-2">Reset Password</Button>
+                    }
+
                 </Form>
             </div>
         )

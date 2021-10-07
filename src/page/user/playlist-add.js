@@ -13,12 +13,12 @@ class PlaylistAdd extends React.Component {
         }
 
         this.handleAdd = this.handleAdd.bind(this); // Add handler for testing
-        this.handleChange = this.handleChange.bind(this)
-        this.handleSubmit = this.handleSubmit.bind(this)
+        this.handleChange = this.handleChange.bind(this) // Update handler
+        this.handleSubmit = this.handleSubmit.bind(this) // Submit handler
 
     }
 
-    handleChange(event) {
+    handleChange(event) { // Handles data handling in JSX for altered fields
         const target = event.target
         const value = target.value
         const name = target.name
@@ -30,16 +30,18 @@ class PlaylistAdd extends React.Component {
 
     handleSubmit(event) {
         axios
-            .post(this.props.api + 'playlist/store', {
+            .post(this.props.api + 'playlist/store', { // Posts the new track data to the playlist database
                 song_title: this.state.song_title,
                 artist: this.state.artist,
                 link: this.state.link,
             })
-            .then((response) => {
+            .then((response) => { // Updates state with the new track
                 console.log(response.data)
-                // redirect back to manage playlist
+                // Redirect back to manage playlist
                 this.props.history.push('/manage-playlist')
-            }).catch(error => {
+
+            // Catch and output errors in browser and console
+            }).catch(error => { 
                 alert(error)
                 console.log(error)
             })
@@ -101,10 +103,8 @@ class PlaylistAdd extends React.Component {
                             required />
                     </div>
                     <button type="submit" className="btn btn-primary">Add</button>
-                    <button 
-                        className="btn btn-danger"
-                        onClick={() => this.props.history.push('/manage-playlist')}>
-                            Cancel
+                    <button className="btn btn-danger" // On cancel return to manage playlist page
+                        onClick={() => this.props.history.push('/manage-playlist')}> Cancel 
                     </button>
                 </form>
             </div>
@@ -115,7 +115,7 @@ class PlaylistAdd extends React.Component {
 const mapStateToProps = state => {
     return { 
         api: state.api,
-        user: state.user
+        user: state.user // Load user into state
     }
 }
 
