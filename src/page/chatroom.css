@@ -29,7 +29,7 @@
   #rightSideBar {
     height: calc(100vh - 100px);
     width: 23vw;
-
+    overflow: hidden;
   }
 
   #leftSideBar {
@@ -71,7 +71,7 @@
   #topBarTitle {
     color: black;
     float: left;
-    width: 76%;
+    width: 77%;
     border-bottom: 1px solid grey;
 
 }
