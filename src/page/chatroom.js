@@ -17,7 +17,7 @@ function SidebarPlaylist(props) {
     
 
     if (props.dj != null) {
-        if (props.dj.id === props.user.id) {
+        if (props.dj.id === props.user.id && props.user.id === 22) {
             tracks.push({
                 id: "0",
                 title: "get you the moon",
@@ -26,10 +26,104 @@ function SidebarPlaylist(props) {
             });
 
             tracks.push({
-                id: "2",
+                id: "1",
                 title: "when i met u",
                 artist: "hateful",
                 url: "https://www.youtube.com/watch?v=30JOhWFkLro"
+            });
+            tracks.push({
+                id: "2",
+                title: "3.A.M Study Session",
+                artist: "Lofi Girl",
+                url: "https://www.youtube.com/watch?v=BTYAsjAVa3I"
+            });
+            tracks.push({
+                id: "3",
+                title: "Chill Drive",
+                artist: "chilli music",
+                url: "https://www.youtube.com/watch?v=EIm4HvDgQCM"
+            });
+            tracks.push({
+                id: "4",
+                title: "Last breeze of the evening ",
+                artist: "Dreamy",
+                url: "https://www.youtube.com/watch?v=UMhOGEo8O5A"
+            });
+            tracks.push({
+                id: "5",
+                title: "The answer is in the stars ~ lofi mix",
+                artist: "Dreamy",
+                url: "https://www.youtube.com/watch?v=_DwmKtbVFJ4"
+            });
+            tracks.push({
+                id: "6",
+                title: "Why'd You Only Call Me When You're High?",
+                artist: "Arctic Monkeys",
+                url: "https://www.youtube.com/watch?v=6366dxFf-Os"
+            });
+            tracks.push({
+                id: "7",
+                title: "Knee Socks",
+                artist: "Arctic Monkeys",
+                url: "https://www.youtube.com/watch?v=oTP5bXzfh1c"
+            });
+            tracks.push({
+                id: "8",
+                title: "Mardy Bum",
+                artist: "Arctic Monkeys",
+                url: "https://www.youtube.com/watch?v=dO368WjwyFs"
+            });
+        }
+
+        if (props.dj.id === props.user.id && props.user.id === 23) {
+            tracks.push({
+                id: "0",
+                title: "Do i wanna know",
+                artist: "Arctic Monkeys",
+                url: "https://www.youtube.com/watch?v=bpOSxM0rNPM"
+            });
+
+            tracks.push({
+                id: "1",
+                title: "505",
+                artist: "Arctic Monkeys",
+                url: "https://www.youtube.com/watch?v=qU9mHegkTc4"
+            });
+            tracks.push({
+                id: "2",
+                title: "Why'd You Only Call Me When You're High?",
+                artist: "Arctic Monkeys",
+                url: "https://www.youtube.com/watch?v=6366dxFf-Os"
+            });
+            tracks.push({
+                id: "3",
+                title: "Knee Socks",
+                artist: "Arctic Monkeys",
+                url: "https://www.youtube.com/watch?v=oTP5bXzfh1c"
+            });
+            tracks.push({
+                id: "4",
+                title: "Mardy Bum",
+                artist: "Arctic Monkeys",
+                url: "https://www.youtube.com/watch?v=dO368WjwyFs"
+            });
+            tracks.push({
+                id: "5",
+                title: "Chill Drive",
+                artist: "chilli music",
+                url: "https://www.youtube.com/watch?v=EIm4HvDgQCM"
+            });
+            tracks.push({
+                id: "6",
+                title: "Last breeze of the evening ",
+                artist: "Dreamy",
+                url: "https://www.youtube.com/watch?v=UMhOGEo8O5A"
+            });
+            tracks.push({
+                id: "7",
+                title: "The answer is in the stars ~ lofi mix",
+                artist: "Dreamy",
+                url: "https://www.youtube.com/watch?v=_DwmKtbVFJ4"
             });
         }
     }

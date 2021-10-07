@@ -23,6 +23,7 @@
       text-align: center;
       font-weight: bold;
       padding: 0;
+      overflow-y: scroll;
   }
 
   #rightSideBar {
@@ -31,14 +32,15 @@
 
   #leftSideBar {
     height: 50vh;
+    width: 17vw;
   }
 
   #queueSideBar {
     height: calc(50vh - 100px);
+    width: 17vw;
   }
 
   #leftSideBar {
-    width: 17vw;
   }
 
   #rightSideBar {
