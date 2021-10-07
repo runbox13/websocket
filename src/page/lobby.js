@@ -6,9 +6,9 @@ import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
 import { Card, Button, CardText, CardTitle, CardBody, CardSubtitle, CardImgOverlay, CardImg} from 'reactstrap';
 
-function App() {
+function Lobby() {
   const [rooms, setPost] = React.useState([]);
-  const [users, setUsers] = React.useState([]);
+  const [users, setUsers] = React.useState();
   const api = useSelector(state => state.api);
   const user = useSelector(state => state.user);
   const history = useHistory()
@@ -22,6 +22,7 @@ function App() {
       setPost(response.data);
     });
   }, []);
+
 
 const pic = [
 {id:1,
@@ -66,11 +67,13 @@ function Chatroom(){
   )
 }
 
+
 const Room = (props) =>{
   const {id,name,description,user_id} = props;
+  
   return(
     
-      <Card  border="danger" style={{ width: '18rem' }}>
+      <Card className = "lobbycard">
         <a href={"http://localhost:3000/chatroom?id=" + id} >
            <CardImg variant="top" src={pic[id].img} />
                 </a>
@@ -78,7 +81,7 @@ const Room = (props) =>{
                     <CardTitle> 
                      {name}
                     </CardTitle>
-                    <CardSubtitle className="mb-2 text-muted"><p>Created by, <a className="mb-2 text-muted" href={"http://localhost:3000/profile?id=" + id}>{users[user_id-1].display_name}</a></p></CardSubtitle>
+                    <CardSubtitle className="mb-2 text-muted"><p data-testid="cardHeader">Created by, <a className="mb-2 text-muted" href={"http://localhost:3000/profile?id=" + id}>{users.find(x => x.id === user_id).display_name}</a></p></CardSubtitle>
                     <CardText>
                         {description}
                     </CardText>
@@ -99,10 +102,11 @@ const Room = (props) =>{
                             {user.display_name}
                     </code>
                 </p>
-                 <div>{Chatroom()}</div> 
+                 <div data-testid="cardHeader">{Chatroom()}</div> 
+                 
             </div>
   );
 }
 
 
-export default connect()(App);
+export default connect()(Lobby);
