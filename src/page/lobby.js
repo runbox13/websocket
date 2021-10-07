@@ -14,9 +14,12 @@ function App() {
   const history = useHistory()
   // const dispatch = useDispatch();
 
+  const [isLoaded, setIsLoaded] = React.useState(false);
+
   React.useEffect(() => {
     axios.get("http://localhost:8000/user").then((response) => {
       setUsers(response.data);
+      setIsLoaded(true);
     });
     axios.get("http://localhost:8000/room").then((response) => {
       setPost(response.data);
@@ -76,7 +79,7 @@ const Room = (props) =>{
                 </a>
                 <CardBody>
                     <CardTitle> 
-                     <b>{name}</b>
+                    <CardSubtitle className="mb-2 text-muted"><p>Created by, <a className="mb-2 text-muted" href={"http://localhost:3000/profile?id=" + id }>{isLoaded ? users.find(x => x.id === user_id).display_name : ""}</a></p></CardSubtitle>
                     </CardTitle>
                     <CardSubtitle className="mb-2 text-muted"><p>Created by, <a className="mb-2 text-muted" href={"http://localhost:3000/profile?id=" + id}>{users.find(x => x.id === user_id).display_name}</a></p></CardSubtitle>
                     <CardText>

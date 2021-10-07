@@ -146,7 +146,7 @@ function SidebarPlaylist(props) {
 
     return (
         <>
-        <div id="leftSideBar" className="sideBarCards">
+        <div  id="leftSideBar" className="sideBarCards">
             <div className="sideBarTitle">Playlist</div>
             <ListGroup>
                 {listItems}
