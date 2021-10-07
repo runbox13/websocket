@@ -50,7 +50,7 @@ class Profile extends React.Component {
         
 
          axios
-         .get(this.props.api + "/user/" + id)
+         .get(this.props.api + "user/" + id)
          .then (res => {
              const data = res.data;
              console.log(data)
