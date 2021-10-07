@@ -20,7 +20,7 @@ function PlaceHolder(props) {
                     <CardText>
                         {props.rooms[i].description}
                     </CardText>
-                    <Button variant="primary" href={"http://localhost:3000/" + "chatroom?id=" + props.rooms[i].id}>Go to Chatroom</Button>
+                    <Button variant="primary" href={"http://localhost:3000/chatroom?id=" + props.rooms[i].id}>Go to Chatroom</Button>
                 </CardBody>
             </Card>
             );
@@ -44,7 +44,7 @@ class Lobby extends React.Component {
     }
 
     getRooms = () => {
-        axios.get("http://localhost:8000/" + 'room')
+        axios.get("http://localhost:8000/room")
         .then(data => {
             this.setState( {
                 rooms: data.data

@@ -1,11 +1,10 @@
 import React, { useState } from 'react';
-import { Container, Row, Col, Card, Navbar, NavbarBrand, Button, CardTitle, ListGroup, ListGroupItem, CardBody, NavItem } from 'reactstrap';
+import { Container, Row, Col, Card, Button, CardTitle, ListGroup, ListGroupItem} from 'reactstrap';
 import ReactPlayer from 'react-player'
 import { w3cwebsocket as W3CWebSocket } from 'websocket';
 import { connect } from 'react-redux';
 import axios from 'axios';
 import './chatroom.css';
-import { NavLink } from 'react-router-dom';
 
 
 const socket = new W3CWebSocket('ws://127.0.0.1:8080');
@@ -132,22 +131,6 @@ function SidebarPlaylist(props) {
         props.parentCallback(track);
     }
 
-    var isNotPlaying = false;
-
-    var isNotAlreadyPlaying = (track) => {
-        if(props.songQueue.length != 0) {
-            console.log("test");
-            if(track.id != props.songPlaying.id){
-                console.log(track.id + " " + props.songPlaying.id);
-                isNotPlaying = true;
-                return;
-            }
-        }
-        console.log("test");
-        isNotPlaying = false;
-    }
-
-
     if (tracks != null) {
         listItems = tracks.map((t) => <ListGroupItem action className="rounded-0" key={t.id} onClick={() => sendTrack(t)}> {t.artist}: {t.title}</ListGroupItem>);
     }
@@ -158,7 +141,6 @@ function SidebarPlaylist(props) {
                 tempQueue.splice(0, 1);
             }
             songQueue = tempQueue.map((t) => <ListGroupItem className="rounded-0" key={t.queueId}> {t.artist}: {t.title}</ListGroupItem>);
-            console.log("yes");
         
     } else songQueue = [];
 
@@ -207,9 +189,11 @@ function CenterChatroom(props) {
     }
 
     var updateTime = (progress) => {
-        if (progress.playedSeconds < props.time - 3 || progress.playedSeconds > props.time + 3 && !props.isDj) {
-            console.log(progress.playedSeconds + " " + time);
-            setTime(props.time);
+        if(!props.isDj) {
+            if (progress.playedSeconds < props.time - 3 || progress.playedSeconds > props.time + 3) {
+                console.log(progress.playedSeconds + " " + time);
+                setTime(props.time);
+            }
         }
     }
 
@@ -240,12 +224,12 @@ function CenterChatroom(props) {
         <div className="centerChatroom">
 
             <div className="video-wrapper">
-                <ReactPlayer onEnded={nextSong} onProgress={progress => { getTime(progress) }} url={props.songPlaying != "" ? songURL : ""} playing={!props.isPaused}
+                <ReactPlayer onEnded={nextSong} onProgress={progress => { getTime(progress) }} url={props.songPlaying !== "" ? songURL : ""} playing={!props.isPaused}
                     controls={true} width={"100%"} height={"100%"} onPause={props.isDj ? djPause : null} onPlay={props.isDj ? djPlay : null} />
             </div>
 
-            {props.songPlaying != "" ? <Card id="songCard"><CardTitle id="songTitle"><h5 id="songHeader">{props.songPlaying.artist + " - " + props.songPlaying.title}</h5></CardTitle>
-            {props.isDj != "" ? <Button id="nextSongButton" onClick={nextSong}>Next Song</Button> : ""}
+            {props.songPlaying !== "" ? <Card id="songCard"><CardTitle id="songTitle"><h5 id="songHeader">{props.songPlaying.artist + " - " + props.songPlaying.title}</h5></CardTitle>
+            {props.isDj ? <Button id="nextSongButton" onClick={nextSong}>Next Song</Button> : ""}
             </Card> : ""}
         </div>
     );
@@ -501,7 +485,7 @@ class Chatroom extends React.Component {
                             <CenterChatroom deQueueCallback={this.deQueue} queueCallback={this.queueDj} jumpOffDjCallback={this.jumpOffDj} isQueued={this.state.isQueued} songQueue={this.state.songQueue} nextSongCallback={this.nextSongCallback}
                                 isDj={this.state.isDj} time={this.state.time} getTimeCallback={this.getTimeCallback} djPlayCallback={this.djPlayCallback} djPauseCallback={this.djPauseCallback}
                                 isPaused={this.state.isPaused} dj={this.state.dj} user={this.props.user}
-                                songPlaying={this.state.songQueue.length != 0 ? this.state.songQueue[0] : ""} />
+                                songPlaying={this.state.songQueue.length !== 0 ? this.state.songQueue[0] : ""} />
                         </Col>
                         <Col id="rightColumn" className="column " xs="auto">
                             <SideBarChatbox state={this.state} />
