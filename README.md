@@ -2,6 +2,23 @@
 
 This repository contains the front end react application which uses the [we-music-api](https://github.com/peefeeyatko/we-music-api) backend service.
 
+## Project Structure
+Register - Marshall Sutton
+Login - Marshall Sutton
+Logout - Marshall Sutton
+Manage Room - Marshall Sutton
+Lobby - Simon Nguyen
+Like/Dislike DJ Playing - Simon Nguyen
+Delete From Playlist - Reynard Kasim
+Add To Playlist - Reynard Kasim
+Create Playlist - Reynard Kasim
+View User Profile - Natasha Lee
+Manage Avatar - Natasha Lee
+Update Account - Liam Tran
+Remove Account - Liam Tran
+Chatroom - Toan Nguyen
+Chatbox - Toan Nguyen
+
 ## Getting Started
 
 1. `git clone https://github.com/peefeeyatko/we-music-client.git`
