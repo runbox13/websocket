@@ -1,14 +1,14 @@
 body {
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
+    "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
 code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
     monospace;
 }
 
@@ -32,6 +32,56 @@ form .form-group {
   width: 100%;
   height: 50px;
   line-height: 50px;
-  background-color: rgba(0, 0, 0, .03);
+  background-color: rgba(0, 0, 0, 0.03);
   text-align: center;
+}
+
+.alert.home-alert {
+  margin-bottom: 0;
+}
+
+.alert button.close {
+  float: right;
+  color: inherit;
+  margin-right: -30px;
+  cursor: pointer;
+  background-color: transparent;
+  border: 0;
+}
+
+table.manage-rooms .btn {
+  width: 73px;
+  margin-right: 5px;
+}
+
+.spinner-border .sr-only {
+  display: none;
+}
+
+.text-right {
+  text-align: right;
+}
+
+#desc {
+  min-height: 120px;
+}
+
+.mr-10 {
+  margin-right: 10px;
+}
+
+.code-link {
+  cursor: pointer;
+}
+
+.code-link:hover {
+  text-decoration: underline;
+}
+
+.manage-playlist .btn {
+  margin-right: 5px;
+}
+
+.manage-profile #bio {
+  min-height: 130px;
 }

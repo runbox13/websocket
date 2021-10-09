@@ -1,0 +1,113 @@
+
+  .video-wrapper {
+    height: 100%;
+    padding: 0px;
+  }
+  
+  .centerChatroom {
+    height: calc(100vh - 200px);
+    padding: 0;
+    width: 60vw;
+  }
+
+  .sideBarTitle {
+      border: 1px solid rgb(182, 182, 182);
+      background: rgb(202, 202, 202);
+      color: black;
+      padding: 0;
+  }
+
+  .sideBarCards{
+      border: 1px solid grey;
+      background: white;
+      text-align: center;
+      font-weight: bold;
+      padding: 0;
+      overflow-y: scroll;
+  }
+
+  #rightSideBar {
+    height: calc(100vh - 100px);
+    width: 23vw;
+    overflow: hidden;
+  }
+
+  #leftSideBar {
+    height: 50vh;
+    width: 17vw;
+  }
+
+  #queueSideBar {
+    height: calc(50vh - 100px);
+    width: 17vw;
+  }
+
+  .mainContainer{
+      padding: 0px;
+      width: 100%;
+
+  }
+
+  .column {
+      padding: 0;
+      margin-right: auto;
+  }
+
+  .topBar {
+      padding: 0;
+      width: 100vw;
+      min-width: 500px;
+  }
+
+  .topBarButton {
+    width: 23%;
+    float: right;
+    background-color: rgb(0, 0, 223);
+  }
+
+  .topBarButton:hover {
+      background-color: rgb(3, 0, 170);
+  }
+
+  #topBarTitle {
+    color: black;
+    float: left;
+    width: 77%;
+    border-bottom: 1px solid grey;
+
+}
+
+#topBarHeader {
+    padding-left: 15px;
+    padding-top: 5px;
+}
+
+#nextSongButton {
+    width: 150px;
+    float: right;
+    background-color: rgb(0, 0, 223);
+}
+
+#nextSongButton:hover {
+    background-color: rgb(3, 0, 170);
+}
+
+#songTitle{
+    float: left;
+}
+
+#songCard {
+    width: 100%;
+    display: inline-block;
+}
+
+#songHeader {
+    padding-top: 7px;
+    padding-bottom: 0px;
+    padding-left: 10px;
+    margin-bottom: 0px;
+}
+
+.btn {
+  margin: 0;
+}
