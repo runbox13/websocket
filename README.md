@@ -7,6 +7,7 @@ This repository contains the front end react application which uses the [we-musi
 1. `git clone https://github.com/peefeeyatko/we-music-client.git`
 2. `npm install`
 3. `npm start`
+4. `npm run-script start-websocket`
 
 ## Available Scripts
 
@@ -19,6 +20,10 @@ Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
 
 The page will reload if you make edits.\
 You will also see any lint errors in the console.
+
+### `npm run-script start-websocket`
+Starts the websocket server in order to use Chatroom functionalities.
+The server is run on [http://localhost:8080].
 
 ### `npm test`
 
