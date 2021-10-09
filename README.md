@@ -17,7 +17,7 @@ Manage Avatar - Natasha Lee\
 Update Account - Liam Tran\
 Remove Account - Liam Tran\
 Chatroom - Toan Nguyen\
-Chatbox - Toan Nguyen\
+Chatbox - Toan Nguyen
 
 ## Getting Started
 
