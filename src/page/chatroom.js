@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Container, Row, Col, Card, Button, CardTitle, ListGroup, ListGroupItem} from 'reactstrap';
+import { Container, Row, Col, Card, Button, CardTitle, ListGroup, ListGroupItem, Popover, PopoverHeader, PopoverBody, Input, InputGroup, InputGroupAddon, InputGroupText } from 'reactstrap';
 import ReactPlayer from 'react-player'
 import { w3cwebsocket as W3CWebSocket } from 'websocket';
 import { connect } from 'react-redux';
@@ -13,7 +13,7 @@ function SidebarPlaylist(props) {
     var tracks = [];
     var listItems;
     var songQueue = [];
-    
+
 
     if (props.dj != null) {
         if (props.dj.id === props.user.id && props.user.id < 15) {
@@ -136,34 +136,65 @@ function SidebarPlaylist(props) {
     }
 
     if (props.songQueue.length > 1) {
-            var tempQueue = [...props.songQueue];
-            if(props.songPlaying.queueId === tempQueue[0].queueId){
-                tempQueue.splice(0, 1);
-            }
-            songQueue = tempQueue.map((t) => <ListGroupItem className="rounded-0" key={t.queueId}> {t.artist}: {t.title}</ListGroupItem>);
-        
+        var tempQueue = [...props.songQueue];
+        if (props.songPlaying.queueId === tempQueue[0].queueId) {
+            tempQueue.splice(0, 1);
+        }
+        songQueue = tempQueue.map((t) => <ListGroupItem className="rounded-0" key={t.queueId}> {t.artist}: {t.title}</ListGroupItem>);
+
     } else songQueue = [];
 
     return (
         <>
-        <div  id="leftSideBar" className="sideBarCards">
-            <div className="sideBarTitle">Playlist</div>
-            <ListGroup>
-                {listItems}
-            </ListGroup>
-        </div>
-        <div id="queueSideBar" className="sideBarCards">
-            <div className="sideBarTitle">Queue</div>
-            <ListGroup>
-                {songQueue}
-            </ListGroup>
-        </div>
+            <div id="leftSideBar" className="sideBarCards">
+                <div className="sideBarTitle">Playlist</div>
+                <ListGroup>
+                    {listItems}
+                </ListGroup>
+            </div>
+            <div id="queueSideBar" className="sideBarCards">
+                <div className="sideBarTitle">Queue</div>
+                <ListGroup>
+                    {songQueue}
+                </ListGroup>
+            </div>
         </>
+    );
+}
+
+function ChatboxPopover(props) {
+    const [popoverOpen, setPopoverOpen] = useState(false);
+    const togglePopover = () => { setPopoverOpen(!popoverOpen) };
+
+    return (
+        <div>
+            <Button id="popOverButton">View Users in Room</Button>
+            <Popover placement="left" isOpen={popoverOpen} target="popOverButton" toggle={togglePopover}>
+                <PopoverHeader>Users in Room</PopoverHeader>
+                <PopoverBody>
+                    <ListGroup className="rounded-0" id="usersList">
+                        {props.users}
+                    </ListGroup>
+                </PopoverBody>
+            </Popover>
+        </div>
     );
 }
 
 function SideBarChatbox(props) {
     var array = [];
+    const send = () => {
+        var textInput = document.getElementById("textInput");
+        console.log(textInput.value);
+        textInput.value = "";
+    }
+    const sendMessage = (event) => {
+        if(event.type === "keypress") {
+            if(event.key === "Enter") {
+                send();
+            }
+        } else send();
+    }
 
     for (var key in props.state.users) {
         array.push(<ListGroupItem className="rounded-0" key={key}>{props.state.users[key].display_name}</ListGroupItem>);
@@ -171,10 +202,19 @@ function SideBarChatbox(props) {
 
     return (
         <div id="rightSideBar" className="sideBarCards">
-            <div className="sideBarTitle">Chatroom</div>
-            <ListGroup className="rounded-0" id='usersList'>
-                {array}
-            </ListGroup>
+            <div className="sideBarTitle">
+                Chatbox
+            </div>
+            <ChatboxPopover users={array} />
+            <div id="chatbox">
+                Test
+            </div>
+            <InputGroup>
+                <Input placeholder="Send a message" id="textInput" onKeyPress={(key) => sendMessage(key)}/>
+                <InputGroupAddon addonType="append">
+                    <Button id="sendButton" onClick={(event) => sendMessage(event)}>Send</Button>
+                </InputGroupAddon>
+            </InputGroup>
         </div>)
 }
 
@@ -184,12 +224,12 @@ function CenterChatroom(props) {
     var [djTime, setDjTime] = useState(0);
 
     if (props.songPlaying != null) {
-        if(!props.isDj) songURL = props.songPlaying.url + "&t=" + time;
+        if (!props.isDj) songURL = props.songPlaying.url + "&t=" + time;
         else songURL = props.songPlaying.url + "&t=" + djTime;
     }
 
     var updateTime = (progress) => {
-        if(!props.isDj) {
+        if (!props.isDj) {
             if (progress.playedSeconds < props.time - 3 || progress.playedSeconds > props.time + 3) {
                 console.log(progress.playedSeconds + " " + time);
                 setTime(props.time);
@@ -214,7 +254,7 @@ function CenterChatroom(props) {
     }
 
     var nextSong = () => {
-        if(djTime === 0) setDjTime("");
+        if (djTime === 0) setDjTime("");
         else setDjTime(0);
         setTimeout(props.nextSongCallback());
     }
@@ -229,7 +269,7 @@ function CenterChatroom(props) {
             </div>
 
             {props.songPlaying !== "" ? <Card id="songCard"><CardTitle id="songTitle"><h5 id="songHeader">{props.songPlaying.artist + " - " + props.songPlaying.title}</h5></CardTitle>
-            {props.isDj ? <Button id="nextSongButton" onClick={nextSong}>Next Song</Button> : ""}
+                {props.isDj ? <Button id="nextSongButton" onClick={nextSong}>Next Song</Button> : ""}
             </Card> : ""}
         </div>
     );
@@ -473,12 +513,12 @@ class Chatroom extends React.Component {
                 <Container fluid className="mainContainer">
                     <div id="topBar">
                         <div id="topBarTitle"><h5 id="topBarHeader">{this.state.room.name}{this.state.dj ? " | DJ: " + this.state.dj.display_name : ""}</h5></div>
-                            {!this.state.isDj && !this.state.isQueued ? <Button className="topBarButton" onClick={this.queueDj}>Queue Up for DJ</Button> : ""}
-                            {!this.state.isDj && this.state.isQueued ? <Button className="topBarButton" onClick={this.deQueue}>Dequeue</Button> : ""}
-                            {this.state.isDj ? <Button className="topBarButton" onClick={this.jumpOffDj}>Jump Off DJ</Button> : ""}
+                        {!this.state.isDj && !this.state.isQueued ? <Button className="topBarButton" onClick={this.queueDj}>Queue Up for DJ</Button> : ""}
+                        {!this.state.isDj && this.state.isQueued ? <Button className="topBarButton" onClick={this.deQueue}>Dequeue</Button> : ""}
+                        {this.state.isDj ? <Button className="topBarButton" onClick={this.jumpOffDj}>Jump Off DJ</Button> : ""}
                     </div>
                     <Row>
-                        <Col id="leftColumn"className="column" xs="auto">
+                        <Col id="leftColumn" className="column" xs="auto">
                             <SidebarPlaylist songPlaying={this.state.songQueue[0]} songQueue={this.state.songQueue} dj={this.state.dj} user={this.props.user} parentCallback={this.setTrackCallback} />
                         </Col>
                         <Col id="midColumn" className="column " xs="auto">

@@ -111,3 +111,20 @@
 .btn {
   margin: 0;
 }
+
+/* Chatbox */
+
+#popOverButton {
+  width: 100%;
+}
+
+#chatbox {
+  width: auto;
+  height: 80%;
+  margin-left: 10px;
+  margin-right: 10px;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  border: 1px solid black;
+  text-align: left;
+}
