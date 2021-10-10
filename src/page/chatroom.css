@@ -15,13 +15,14 @@
       background: rgb(202, 202, 202);
       color: black;
       padding: 0;
+      font-weight: bold;
+
   }
 
   .sideBarCards{
       border: 1px solid grey;
       background: white;
       text-align: center;
-      font-weight: bold;
       padding: 0;
       overflow-y: scroll;
   }
@@ -127,4 +128,28 @@
   margin-bottom: 10px;
   border: 1px solid black;
   text-align: left;
+  word-break: break-all;
+}
+
+.chatUsername {
+  font-weight: bold;
+}
+
+.chatMessage {
+  font-weight: normal;
+}
+
+#textInput {
+  width: 100%;
+  height: 40px;
+  margin: 10px;
+  resize: none;
+}
+
+#sendButton {
+  margin-left: 10px;
+}
+
+#messageContainer {
+  padding-left: 10px;
 }

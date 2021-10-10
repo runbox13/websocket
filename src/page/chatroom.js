@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Container, Row, Col, Card, Button, CardTitle, ListGroup, ListGroupItem, Popover, PopoverHeader, PopoverBody, Input, InputGroup, InputGroupAddon, InputGroupText } from 'reactstrap';
+import { Container, Row, Col, Card, Button, CardTitle, ListGroup, ListGroupItem, Popover, PopoverHeader, PopoverBody, Input, InputGroup, InputGroupAddon } from 'reactstrap';
 import ReactPlayer from 'react-player'
 import { w3cwebsocket as W3CWebSocket } from 'websocket';
 import { connect } from 'react-redux';
@@ -184,10 +184,14 @@ function ChatboxPopover(props) {
 function SideBarChatbox(props) {
     var usersInRoom = [];
     var chatLog = [];
+
+    const redirectProfile = () => {
+
+    }
     
     if(props.chatLog.length != 0) {
         chatLog = props.chatLog.map(t => 
-             <><span className="chatUsername">{t.user.display_name}: </span>{t.message} <p></p></> 
+             <><a className="chatUsername" to="route" target="_blank" href={"profile?id=" + props.user.id}>{t.user.display_name}: </a><span className="chatMessage">{t.message}</span><br/></> 
         )
         console.log(chatLog);
     }
@@ -208,6 +212,7 @@ function SideBarChatbox(props) {
     const sendMessage = (event) => {
         if(event.type === "keypress") {
             if(event.key === "Enter") {
+                event.preventDefault();
                 send();
             }
         } else send();
@@ -224,10 +229,12 @@ function SideBarChatbox(props) {
             </div>
             <ChatboxPopover usersInRoom={usersInRoom} />
             <div id="chatbox">
+                <div id="messageContainer">
                 {chatLog}
+                </div>
             </div>
             <InputGroup>
-                <Input placeholder="Send a message" id="textInput" onKeyPress={(key) => sendMessage(key)}/>
+                <textarea placeholder="Send a message" id="textInput" onKeyPress={(key) => sendMessage(key)}/>
                 <InputGroupAddon addonType="append">
                     <Button id="sendButton" onClick={(event) => sendMessage(event)}>Send</Button>
                 </InputGroupAddon>
