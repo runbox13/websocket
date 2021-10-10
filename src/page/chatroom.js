@@ -173,7 +173,7 @@ function ChatboxPopover(props) {
                 <PopoverHeader>Users in Room</PopoverHeader>
                 <PopoverBody>
                     <ListGroup className="rounded-0" id="usersList">
-                        {props.users}
+                        {props.usersInRoom}
                     </ListGroup>
                 </PopoverBody>
             </Popover>
@@ -182,11 +182,28 @@ function ChatboxPopover(props) {
 }
 
 function SideBarChatbox(props) {
-    var array = [];
+    var usersInRoom = [];
+    var chatLog = [];
+    
+    if(props.chatLog.length != 0) {
+        chatLog = props.chatLog.map(t => 
+             <><span className="chatUsername">{t.user.display_name}: </span>{t.message} <p></p></> 
+        )
+        console.log(chatLog);
+    }
+
     const send = () => {
         var textInput = document.getElementById("textInput");
+        socket.send(JSON.stringify({
+            type: "message",
+            messageType: "chatMessage",
+            roomId: props.state.room.id,
+            user: props.user,
+            message: textInput.value
+        }));
         console.log(textInput.value);
         textInput.value = "";
+
     }
     const sendMessage = (event) => {
         if(event.type === "keypress") {
@@ -197,7 +214,7 @@ function SideBarChatbox(props) {
     }
 
     for (var key in props.state.users) {
-        array.push(<ListGroupItem className="rounded-0" key={key}>{props.state.users[key].display_name}</ListGroupItem>);
+        usersInRoom.push(<ListGroupItem className="rounded-0" key={key}>{props.state.users[key].display_name}</ListGroupItem>);
     }
 
     return (
@@ -205,9 +222,9 @@ function SideBarChatbox(props) {
             <div className="sideBarTitle">
                 Chatbox
             </div>
-            <ChatboxPopover users={array} />
+            <ChatboxPopover usersInRoom={usersInRoom} />
             <div id="chatbox">
-                Test
+                {chatLog}
             </div>
             <InputGroup>
                 <Input placeholder="Send a message" id="textInput" onKeyPress={(key) => sendMessage(key)}/>
@@ -340,7 +357,8 @@ class Chatroom extends React.Component {
             isDj: false,
             songQueue: [],
             isPaused: false,
-            time: 0
+            time: 0,
+            chatLog: []
         }
 
         socket.onclose = event => {
@@ -376,6 +394,7 @@ class Chatroom extends React.Component {
                         newState.dj = messageEvent.dj;
                         newState.queue = messageEvent.queue;
                         newState.songQueue = messageEvent.songQueue;
+                        newState.chatLog = messageEvent.chatLog;
                         return newState;
                     })
                 }
@@ -430,6 +449,12 @@ class Chatroom extends React.Component {
 
             if (messageEvent.type === "nextSong") {
                 this.setState({ songQueue: messageEvent.songQueue })
+            }
+
+            //Chatbox
+            if(messageEvent.type === "getChatLog") {
+                this.setState({chatLog: messageEvent.chatLog})
+                console.log(this.state.chatLog);
             }
 
         };
@@ -528,7 +553,7 @@ class Chatroom extends React.Component {
                                 songPlaying={this.state.songQueue.length !== 0 ? this.state.songQueue[0] : ""} />
                         </Col>
                         <Col id="rightColumn" className="column " xs="auto">
-                            <SideBarChatbox state={this.state} />
+                            <SideBarChatbox chatLog={this.state.chatLog} user={this.props.user} state={this.state} />
                         </Col>
                     </Row>
                 </Container>
