@@ -1,0 +1,52 @@
+a:hover .box {
+  color: green;
+  background-color: yellow;
+}
+
+.chatroom {
+  color: black;
+  padding: 10px;
+  font-family: Arial;
+  text-align: center;
+}
+
+.flex-container {
+  display: flex;
+  flex-wrap: wrap;
+  text-align: center;
+}
+
+a {
+  color: black;
+  background-color: transparent;
+  text-decoration: none;
+}
+
+.limit {
+  width: 50px;
+  word-wrap: break-word;
+}
+
+@media (max-width: 500
+px) {
+  .flex-item-right,
+  .flex-item-left {
+    flex: 100%;
+  }
+}
+
+.lobby .text {
+  display: block;
+  width: 360px;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  margin: 0px;
+}
+
+.lobbycard {
+  margin: 10px;
+  width: 18rem;
+  border: danger;
+}
+
