@@ -2,30 +2,29 @@ import React from 'react';
 import { connect } from 'react-redux';
 import './lobby.css';
 import axios from 'axios';
-import { useDispatch, useSelector } from "react-redux";
+import { /* useDispatch, */ useSelector } from "react-redux";
 import { Card, CardText, CardTitle, CardBody, CardSubtitle, CardImg } from 'reactstrap';
 
 function Lobby() {
   const [rooms, setPost] = React.useState([]);
   const [users, setUsers] = React.useState();
+
   const api = useSelector(state => state.api);
   const user = useSelector(state => state.user);
-  const dispatch = useDispatch();
+  //const dispatch = useDispatch();
 
   React.useEffect(() => {
-    axios.get("http://localhost:8000/user").then((response) => {
-      setUsers(response.data);
+    
+      axios.get(api+ "user").then((response) => {
+        setUsers(response.data);
 
-      axios.get("http://localhost:8000/room").then((response) => {
+      axios.get(api + "room").then((response) => {
         setPost(response.data);
       }).catch(e => console.log(e));
 
     }).catch(e => console.log(e));
-
-
-  }, []);
-
-
+  }, [api]);
+  
   const pic = [
     {
       id: 1,
@@ -71,7 +70,7 @@ function Lobby() {
 
   function Chatroom() {
     return (
-      <section className='flex-container'>
+      <section className='flex-container' data-testid="cardHeader">
         {rooms.map((room) => {
           return <Room key={room.id} {...room}> </Room>;
         })}
@@ -93,7 +92,7 @@ function Lobby() {
           <CardTitle>
             {name}
           </CardTitle>
-          <CardSubtitle className="mb-2 text-muted"><p data-testid="cardHeader">Created by <a className="mb-2 user-link" href={"/profile?id=" + user_id}>{users.find(x => x.id === user_id).display_name}</a></p></CardSubtitle>
+          <CardSubtitle className="mb-2 text-muted"><p>Created by <a className="mb-2 user-link" href={"/profile?id=" + user_id}>{users.find(x => x.id === user_id).display_name}</a></p></CardSubtitle>
           <CardText>
             {description}
           </CardText>
@@ -114,7 +113,7 @@ function Lobby() {
           {user.display_name}
         </a>
       </p>
-      <div data-testid="cardHeader">{Chatroom()}</div>
+      <div>{Chatroom()}</div>
 
     </div>
   );
