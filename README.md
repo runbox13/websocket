@@ -2,7 +2,7 @@
 
 This repository contains the front end react application which uses the [we-music-api](https://github.com/peefeeyatko/we-music-api) backend service.
 
-## Project Structure
+## Feature Assignment
 Register - Marshall Sutton\
 Login - Marshall Sutton\
 Logout - Marshall Sutton\
