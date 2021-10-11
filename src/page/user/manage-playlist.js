@@ -77,11 +77,11 @@ class ManagePlaylist extends React.Component {
             <div className="container main manage-playlist">
                 <h1 className="mb-4" data-testid="mpHeader">Manage Playlist</h1>
 
-                <h2>{this.state.playlist.title}</h2>
+                <h3>{this.state.playlist.title}</h3>
                 <p>{this.state.playlist.description}</p>
 
                 <div className="align-middle">
-                <table className="table table-responsive" data-testid="playlist_table">
+                <table className="table table-responsive mt-4" data-testid="playlist_table">
                     <thead>
                         <tr>
                             <th scope="col-auto">#</th>
@@ -97,7 +97,7 @@ class ManagePlaylist extends React.Component {
                             <th scope="row">{ i + 1 }</th>
                             <td className="align-middle">{track.song_title}</td>
                             <td className="align-middle">{track.artist}</td>
-                            <td className="align-middle">{track.link}</td>
+                            <td className="align-middle"><a href="{track.link}" target="_blank">{track.link}</a></td>
                             <td className="align-middle text-center">
                                 <button type="button" className="btn btn-outline-secondary" 
                                     // Edit handler connected to button

@@ -146,7 +146,6 @@ class ResetPassword extends React.Component {
                         <Input type="password"
                             name="currPassword"
                             id="currPassword"
-                            placeholder="Enter current password."
                             value={this.state.currPassword}
                             onChange={this.inputCurrentPassword} />
                     </FormGroup>
@@ -156,7 +155,6 @@ class ResetPassword extends React.Component {
                         <Input type="password"
                             name="newPassword"
                             id="newPassword"
-                            placeholder="Enter new password."
                             value={this.state.newPassword}
                             onChange={this.inputNewPassword} />
                     </FormGroup>
@@ -166,7 +164,6 @@ class ResetPassword extends React.Component {
                         <Input type="password"
                             name="confirmPassword"
                             id="confirmPassword"
-                            placeholder="Re-enter new password."
                             value={this.state.confirmPassword}
                             onChange={this.inputConfirmedPassword} />
                     </FormGroup>

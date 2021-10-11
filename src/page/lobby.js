@@ -3,15 +3,13 @@ import { connect } from 'react-redux';
 import './lobby.css';
 import axios from 'axios';
 import { useDispatch, useSelector } from "react-redux";
-import { useHistory } from "react-router-dom";
-import { Card, Button, CardText, CardTitle, CardBody, CardSubtitle, CardImgOverlay, CardImg } from 'reactstrap';
+import { Card, CardText, CardTitle, CardBody, CardSubtitle, CardImg } from 'reactstrap';
 
 function Lobby() {
   const [rooms, setPost] = React.useState([]);
   const [users, setUsers] = React.useState();
   const api = useSelector(state => state.api);
   const user = useSelector(state => state.user);
-  const history = useHistory()
   const dispatch = useDispatch();
 
   React.useEffect(() => {
@@ -88,14 +86,14 @@ function Lobby() {
     return (
 
       <Card className="lobbycard">
-        <a href={"http://localhost:3000/chatroom?id=" + id} >
+        <a href={"/chatroom?id=" + id} >
           <CardImg variant="top" src={pic[id].img} />
         </a>
         <CardBody>
           <CardTitle>
             {name}
           </CardTitle>
-          <CardSubtitle className="mb-2 text-muted"><p data-testid="cardHeader">Created by, <a className="mb-2 text-muted" href={"http://localhost:3000/profile?id=" + id}>{users.find(x => x.id === user_id).display_name}</a></p></CardSubtitle>
+          <CardSubtitle className="mb-2 text-muted"><p data-testid="cardHeader">Created by <a className="mb-2 user-link" href={"/profile?id=" + user_id}>{users.find(x => x.id === user_id).display_name}</a></p></CardSubtitle>
           <CardText>
             {description}
           </CardText>
@@ -107,14 +105,14 @@ function Lobby() {
   };
 
   return (
-    <div className="container main">
+    <div className="container main lobby">
       <h1>Lobby</h1>
       <p>
-        Hey there, <code
-          className="code-link"
-          onClick={() => history.push('/profile?id=' + user.id)}>
+        Hey there, <a
+          className="user-link"
+          href={'/profile?id=' + user.id}>
           {user.display_name}
-        </code>
+        </a>
       </p>
       <div data-testid="cardHeader">{Chatroom()}</div>
 
