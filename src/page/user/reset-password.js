@@ -1,16 +1,15 @@
 //import axios from 'axios'
 import React from 'react'
 import { connect } from 'react-redux'
+import axios from 'axios'
 import { Form, FormGroup, Label, Input, Button, Alert } from 'reactstrap'
-import { FormErrors } from '../../FormErrors';
+import { FormErrors } from '../../FormErrors'
 
 class ResetPassword extends React.Component {
     constructor() {
         super()
         this.state = {
-
-            userPassword: 'aaaaa',
-            currPassword: '',
+            password: '',
             newPassword: '',
             confirmPassword: '',
 
@@ -22,10 +21,10 @@ class ResetPassword extends React.Component {
             incorrectCurrPassAlert: false,
             resetSuccessAlert: false
         }
+
         this.submitReset = this.submitReset.bind(this);
         this.dismissSuccessAlert = this.dismissSuccessAlert.bind(this)
         this.dismissMismatchAlert = this.dismissMismatchAlert.bind(this)
-        this.dismissIncorrectAlert = this.dismissIncorrectAlert.bind(this)
     }
 
     validateField(fieldName, value) {
@@ -45,6 +44,7 @@ class ResetPassword extends React.Component {
             default:
                 break;
         }
+
         this.setState({
             formErrors: fieldValidationErrors,
             newPassValid: newPassValid,
@@ -55,7 +55,6 @@ class ResetPassword extends React.Component {
     validateForm() {
         this.setState({ formValid: this.state.newPassValid && this.state.confirmPassValid });
     }
-
 
     // onChange functions for user input in password fields.
     inputCurrentPassword = (event) => {
@@ -88,36 +87,44 @@ class ResetPassword extends React.Component {
 
     // Reset password button handler.
     submitReset(event) {
-        const { newPassword, confirmPassword } = this.state;
-        const passwordExists = this.state.currPassword === this.state.userPassword;
+        const { newPassword, confirmPassword } = this.state;    
         const matches = newPassword === confirmPassword;
 
-        if (passwordExists) {
-
-            // If the new password matches the confirmed password, fetch user data via id
-            // and update password.
-            if (matches) {
-                    this.props.history.push('/reset-password')
-                    // alert to user that password has been reset.
-                    this.setState({ resetSuccessAlert: !this.state.resetSuccessAlert })
-
-            } else {
-                // alert to user that passwords do not match.
-                this.setState({ mismatchPasswordAlert: !this.state.mismatchPasswordAlert })
-            }
-
+        // If the new password matches the confirmed password, fetch user data via id
+        // and update password.
+        if (matches) {
+            this.postResetPassword()
         } else {
-            // alert to user that inputted current password is incorrect.
-            this.setState({ incorrectCurrPassAlert: !this.state.incorrectCurrPassAlert })
+            // alert to user that passwords do not match.
+            this.setState({ mismatchPasswordAlert: !this.state.mismatchPasswordAlert })
         }
 
         event.preventDefault();
     }
 
+    postResetPassword() {
+        axios
+            .post(this.props.api + 'user/password-reset', {
+                user_id: this.props.user.id,
+                password: this.state.password,
+                new: this.state.newPassword
+            })
+            .then((res) => {
+                console.log(res)
+
+                this.props.history.push('/reset-password')
+
+                // alert to user that password has been reset
+                this.setState({ resetSuccessAlert: !this.state.resetSuccessAlert })
+            }).catch(error => {
+                alert(error)
+                console.log(error)
+            })
+    }
+
     // dismiss functions to close alerts.
     dismissSuccessAlert() { this.setState({ resetSuccessAlert: !this.state.resetSuccessAlert }) }
     dismissMismatchAlert() { this.setState({ mismatchPasswordAlert: !this.state.mismatchPasswordAlert }) }
-    dismissIncorrectAlert() { this.setState({ incorrectCurrPassAlert: !this.state.incorrectCurrPassAlert }) }
 
     render() {
         return (
@@ -135,18 +142,13 @@ class ResetPassword extends React.Component {
                     isOpen={this.state.mismatchPasswordAlert}
                     toggle={this.dismissMismatchAlert}>Passwords do not match.</Alert>
 
-                <Alert color="danger"
-                    isOpen={this.state.incorrectCurrPassAlert}
-                    toggle={this.dismissIncorrectAlert}>Current password incorrect.</Alert>
-
-
                 <Form onSubmit={this.submitReset}>
                     <FormGroup>
                         <Label for="currPassword">Current Password:</Label>
                         <Input type="password"
-                            name="currPassword"
-                            id="currPassword"
-                            value={this.state.currPassword}
+                            name="password"
+                            id="password"
+                            value={this.state.password}
                             onChange={this.inputCurrentPassword} />
                     </FormGroup>
 
