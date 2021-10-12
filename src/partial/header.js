@@ -30,10 +30,7 @@ class Header extends React.Component {
   }
 
   handleLogout = () => {
-      this.props.dispatch({
-        type: 'USER_SESSION', 
-        payload: ''
-      })
+      this.props.dispatch({type: 'USER_SESSION', payload: ''})
   }
 
   handleChange() { this.setState({ isOpen: !this.state.isOpen }) }
@@ -112,7 +109,7 @@ class Header extends React.Component {
         </Alert>
 
         <Alert color="danger" className="home-alert" isOpen={this.state.deleteAlert} toggle={this.onDelete}>
-          Success! Your profile has been removed.
+          Success! Your profile has been deleted.
         </Alert>
 
       </div>

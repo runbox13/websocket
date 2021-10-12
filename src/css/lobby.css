@@ -27,8 +27,7 @@ a {
   word-wrap: break-word;
 }
 
-@media (max-width: 500
-px) {
+@media (max-width: 500px) {
   .flex-item-right,
   .flex-item-left {
     flex: 100%;
@@ -47,6 +46,9 @@ px) {
 .lobbycard {
   margin: 10px;
   width: 18rem;
-  border: danger;
+}
+
+.lobbycard .card-body {
+  padding: 1.5rem 1rem 2rem 1rem;
 }
 

@@ -12,7 +12,7 @@ import { PersistGate } from 'redux-persist/es/integration/react'
 import {store, persistor} from './store/index'
 
 // css
-import './index.css'
+import './css/index.css'
 import 'bootstrap/dist/css/bootstrap.min.css'
 
 // partials
@@ -46,9 +46,10 @@ ReactDOM.render(
       <Header />
       <Switch>
         <Route exact path="/" component={App} />
+
         <Route path="/lobby" component={Lobby} />
-        
         <Route path="/profile" component={Profile} />
+        <Route path="/chatroom" component={Chatroom} />
 
         <Route exact path="/manage-profile" component={ManageProfile} />
         <Route exact path="/manage-rooms" component={ManageRoom} />
@@ -58,8 +59,6 @@ ReactDOM.render(
         <Route exact path="/manage-playlist/add" component={PlaylistAdd} />
         <Route exact path="/manage-playlist/update" component={PlaylistUpdate} />
         <Route exact path="/reset-password" component={ResetPassword} />
-        <Route path="/chatroom" component={Chatroom} />
-
 
         <Route path="/login" component={Login} />
         <Route path="/register" component={Register} />
@@ -71,4 +70,4 @@ ReactDOM.render(
     </PersistGate>
   </Provider>,
   document.getElementById('root')
-  );
+);

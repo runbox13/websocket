@@ -3,7 +3,7 @@ import React from 'react'
 import { connect } from 'react-redux'
 import axios from 'axios'
 import { Form, FormGroup, Label, Input, Button, Alert } from 'reactstrap'
-import { FormErrors } from '../../FormErrors'
+import { FormErrors } from '../../helper/error-alert'
 
 class ResetPassword extends React.Component {
     constructor() {

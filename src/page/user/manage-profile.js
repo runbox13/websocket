@@ -9,7 +9,7 @@ import {
     Alert
 } from 'reactstrap';
 import axios from 'axios';
-import { FormErrors } from '../../FormErrors';
+import { FormErrors } from '../../helper/error-alert';
 
 
 class ManageProfile extends React.Component {
@@ -157,8 +157,9 @@ class ManageProfile extends React.Component {
     handleDelete() {
         if (window.confirm("Are you sure you want to delete your profile?")) {
             axios.delete(this.props.api + 'user/' + this.props.user.id)
-                .then((response) => {
-                    console.log(response)
+                .then(() => {
+                    // destroy user object in redux and redirect to home page
+                    this.props.dispatch({type: 'USER_SESSION', payload: ''})
                     window.location.href = '/?account-deleted'
                 });
         }
