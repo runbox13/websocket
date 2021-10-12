@@ -6,8 +6,8 @@ class ManagePlaylist extends React.Component {
     constructor() {
         super()
         this.state = { 
-            //isLoaded: false,
             playlist: {
+                id: null,
                 name: '',
                 description: '',
                 tracks: []
@@ -21,6 +21,7 @@ class ManagePlaylist extends React.Component {
             .get(this.props.api + 'playlist/created-by/' + this.props.user.id)
             .then((res) => {
                 let playlist = {}
+                playlist.id = res.data.playlist.id
                 playlist.name = res.data.playlist.name
                 playlist.description = res.data.playlist.description
 
@@ -39,20 +40,27 @@ class ManagePlaylist extends React.Component {
     }
 
     // Delete handler for deleting a single track from the playlist
-    handleDelete(id) {
+    handleDelete(index, id) {
         if (window.confirm("Are you sure you want to delete this song?")) { // Delete validation window
             axios.delete(this.props.api + 'track/' + id) // Delete song by id
-                .then((response) => {
-                    console.log(response)
-                    // reload the page/component here
-                });
+                .then(() => {
+                    // delete track from local state and refresh component
+                    let tracks = [...this.state.playlist.tracks]
+                    tracks.splice(index, 1)
+
+                    let updatedPlaylist = this.state.playlist
+                    updatedPlaylist.tracks = tracks
+
+                    this.setState({
+                        playlist: updatedPlaylist
+                    })
+                })
         }
     }
 
     // Update handler for changing track details 
-    handleEdit(songId) {
-        //let path = '/manage-playlist/update?id=' + songId
-        let path = '/manage-playlist/update?id=' + songId // Temporary path
+    handleEdit(id) {
+        let path = '/manage-playlist/update?id=' + id // Temporary path
         this.props.history.push(path) // React route for update page
     }
 
@@ -88,7 +96,7 @@ class ManagePlaylist extends React.Component {
                                     onClick={() => this.handleEdit(track.id)}>Edit</button> 
                                 <button type="button" className="btn btn-danger" 
                                     // Delete handler connected to button
-                                    onClick={() => this.handleDelete(track.id)}>Delete</button>
+                                    onClick={() => this.handleDelete(i, track.id)}>Delete</button>
                             </td>
                         </tr>
                     ))}
@@ -97,11 +105,10 @@ class ManagePlaylist extends React.Component {
                 </div>
 
                 <button type="button" className="btn btn-primary" 
-                    // Add song route 
-                    onClick={() => this.props.history.push('/manage-playlist/add')}> Add song </button>
-                {/* <button type="button" className="btn btn-secondary">Edit playlist title</button>
-                <button type="button" className="btn btn-secondary">Edit description</button> */}
-
+                    onClick={() => this.props.history.push('/manage-playlist/add?pid=' + this.state.playlist.id)}
+                >
+                    Add track
+                </button>
             </div>
             
         )

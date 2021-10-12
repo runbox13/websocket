@@ -1,21 +1,25 @@
-import React from 'react';
-import { connect } from 'react-redux';
-//import api from "../../api/playlist.js"
-import axios from 'axios';
+import React from 'react'
+import { connect } from 'react-redux'
+import axios from 'axios'
 
 class PlaylistAdd extends React.Component {
     constructor() {
         super()
         this.state = { // Initially pass null values into state
-            song_title: '',
+            title: '',
             artist: '',
-            link: ''
+            url: '',
+            playlist_id: null
         }
 
-        this.handleAdd = this.handleAdd.bind(this); // Add handler for testing
         this.handleChange = this.handleChange.bind(this) // Update handler
         this.handleSubmit = this.handleSubmit.bind(this) // Submit handler
+    }
 
+    componentDidMount() {
+        // get playlist ID from the query string
+        let params = new URLSearchParams(window.location.search)
+        this.setState({playlist_id: params.get('pid')})
     }
 
     handleChange(event) { // Handles data handling in JSX for altered fields
@@ -30,10 +34,11 @@ class PlaylistAdd extends React.Component {
 
     handleSubmit(event) {
         axios
-            .post(this.props.api + 'playlist/store', { // Posts the new track data to the playlist database
-                song_title: this.state.song_title,
+            .post(this.props.api + 'track/store', { // Posts the new track data to the playlist database
+                title: this.state.title,
                 artist: this.state.artist,
-                link: this.state.link,
+                url: this.state.url,
+                playlist_id: this.state.playlist_id
             })
             .then((response) => { // Updates state with the new track
                 console.log(response.data)
@@ -45,46 +50,31 @@ class PlaylistAdd extends React.Component {
                 alert(error)
                 console.log(error)
             })
-        event.preventDefault()
-    }
 
-    // Testing add function with local mock database
-    handleAdd(event) {
-        axios.put('http://localhost:5000/playlist', {
-            song_title: this.state.song_title,
-            artist: this.state.artist,
-            link: this.state.link,
-        })
-            .then(() => {
-                this.props.history.push('/manage-playlist')
-            }).catch(error => {
-                alert(error)
-                console.log(error)
-            })
-        event.preventDefault();
+        event.preventDefault()
     }
 
     render() {
         return (
             <div className="container main manage-playlist">
-                <h1 className="mb-4">Add Song</h1>
+
+                <h1 className="mb-4">Add Track</h1>
+                
                 <form onSubmit={this.handleSubmit}>
                     <div className="form-group">
-                        <label>Song Title</label>
+                        <label>Title</label>
                         <input 
                             className="form-control" 
-                            placeholder="Enter song title"
-                            id="song_title"
-                            name="song_title"
-                            value={this.state.song_title} 
+                            id="title"
+                            name="title"
+                            value={this.state.title} 
                             onChange={this.handleChange} 
                             required />
                     </div>
                     <div className="form-group">
                         <label>Artist</label>
                         <input 
-                            className="form-control" 
-                            placeholder="Enter artist"
+                            className="form-control"
                             id="artist"
                             name="artist"
                             value={this.state.artist} 
@@ -92,18 +82,17 @@ class PlaylistAdd extends React.Component {
                             required />
                     </div>
                     <div className="form-group">
-                        <label>Link</label>
+                        <label>URL</label>
                         <input 
                             className="form-control" 
-                            placeholder="Enter link"
-                            id="link"
-                            name="link"
-                            value={this.state.link} 
+                            id="url"
+                            name="url"
+                            value={this.state.url} 
                             onChange={this.handleChange} 
                             required />
                     </div>
                     <button type="submit" className="btn btn-primary">Add</button>
-                    <button className="btn btn-danger" // On cancel return to manage playlist page
+                    <button className="btn btn-secondary" // On cancel return to manage playlist page
                         onClick={() => this.props.history.push('/manage-playlist')}> Cancel 
                     </button>
                 </form>

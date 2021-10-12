@@ -1,6 +1,5 @@
 import React from 'react';
 import { connect } from 'react-redux';
-//import api from "../../api/playlist.js"
 import axios from 'axios';
 
 class PlaylistUpdate extends React.Component {
@@ -8,15 +7,13 @@ class PlaylistUpdate extends React.Component {
         super()
         this.state = { // Initially pass null values into state
             id: null,
-            song_title: 'What is Love?',
-            artist: 'Twice',
-            link: 'https://www.youtube.com/watch?v=i0p1bmr0EmE',
-            //isLoaded: false
+            title: '',
+            artist: '',
+            url: ''
         }
 
         this.handleChange = this.handleChange.bind(this) // Update handler
         this.handleSubmit = this.handleSubmit.bind(this) // Submit handler
-
     }
 
     componentDidMount() {
@@ -24,13 +21,13 @@ class PlaylistUpdate extends React.Component {
         this.setState({id: params.get('id')}) // Loads state in with the chosen track's ID
 
         axios
-            .get(this.props.api + 'song/' + params.get('id')) // Search database for track with the chosen ID
+            .get(this.props.api + 'track/' + params.get('id')) // Search database for track with the chosen ID
             .then((response) => {
                 this.setState({ // Populate state with chosen track data
                     //isLoaded: true,
-                    song_title: response.data.song_title,
+                    title: response.data.title,
                     artist: response.data.artist,
-                    link: response.data.link,
+                    url: response.data.url
                 })
             }).catch(error => {
                 alert(error)
@@ -50,20 +47,18 @@ class PlaylistUpdate extends React.Component {
 
     handleSubmit(event) {
         axios
-            .put(this.props.api + 'song/' + this.state.id, { // Overwrites current database row for track with new data
-                song_title: this.state.song_title,
-                artist: this.state.artist,
-                link: this.state.link,
-            })
-            .then(() => {
-                // Redirect back to manage playlist page
-                this.props.history.push('/manage-playlist')
-
-            // Catch and output errors in browser and console
-            }).catch(error => {
-                alert(error)
-                console.log(error)
-            })
+        .put(this.props.api + 'track/' + this.state.id, {
+            title: this.state.title,
+            artist: this.state.artist,
+            url: this.state.url
+        })
+        .then(() => {
+            // redirect back to manage rooms page
+            this.props.history.push('/manage-playlist')
+        }).catch(error => {
+            alert(error)
+            console.log(error)
+        })
 
         event.preventDefault()
     }
@@ -71,16 +66,18 @@ class PlaylistUpdate extends React.Component {
     render() {
         return (
             <div className="container main manage-playlist">
-                <h1 className="mb-4">Edit Song</h1>
+
+                <h1 className="mb-4">Edit Track</h1>
+                
                 <form onSubmit={this.handleSubmit}>
 
                     <div className="form-group">
-                        <label>Song Title</label>
+                        <label>Title</label>
                         <input 
                             className="form-control" 
-                            id="song_title"
-                            name="song_title"
-                            value={this.state.song_title} 
+                            id="title"
+                            name="title"
+                            value={this.state.title} 
                             onChange={this.handleChange} 
                             required />
                     </div>            
@@ -95,19 +92,19 @@ class PlaylistUpdate extends React.Component {
                             required />
                     </div>
                     <div className="form-group">
-                        <label>Link</label>
+                        <label>URL</label>
                         <input 
                             className="form-control" 
-                            id="link"
-                            name="link"
-                            value={this.state.link} 
+                            id="url"
+                            name="url"
+                            value={this.state.url} 
                             onChange={this.handleChange} 
                             required />
                     </div>
 
                     <button type="submit" className="btn btn-primary">Update</button>
-                    <button className="btn btn-danger" // Redirects back to manage playlist on press
-                        onClick={() => this.props.history.push('/manage-playlist')}> Cancel </button>
+                    <button className="btn btn-secondary" // Redirects back to manage playlist on press
+                        onClick={() => this.props.history.push('/manage-playlist')}>Cancel</button>
                 </form>
             </div>
         )

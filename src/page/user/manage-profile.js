@@ -226,7 +226,7 @@ class ManageProfile extends React.Component {
                     </FormGroup>
 
                     <FormGroup>
-                        <img src={this.state.avatar} width="200" height="200" alt="" />
+                        <img src={this.state.avatar} width="150" height="150" alt="" />
                     </FormGroup>
 
 
