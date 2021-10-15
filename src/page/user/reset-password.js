@@ -108,6 +108,10 @@ class ResetPassword extends React.Component {
                 user_id: this.props.user.id,
                 password: this.state.password,
                 new: this.state.newPassword
+            }, {
+                headers: {
+                    'Authorization': `Bearer ${this.props.user.api_key}`
+                }
             })
             .then((res) => {
                 console.log(res)

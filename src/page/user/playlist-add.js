@@ -39,6 +39,10 @@ class PlaylistAdd extends React.Component {
                 artist: this.state.artist,
                 url: this.state.url,
                 playlist_id: this.state.playlist_id
+            }, {
+                headers: {
+                    'Authorization': `Bearer ${this.props.user.api_key}`
+                }
             })
             .then((response) => { // Updates state with the new track
                 console.log(response.data)

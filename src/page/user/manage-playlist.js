@@ -42,7 +42,12 @@ class ManagePlaylist extends React.Component {
     // Delete handler for deleting a single track from the playlist
     handleDelete(index, id) {
         if (window.confirm("Are you sure you want to delete this song?")) { // Delete validation window
-            axios.delete(this.props.api + 'track/' + id) // Delete song by id
+            axios
+                .delete(this.props.api + 'track/' + id, {
+                    headers: {
+                        'Authorization': `Bearer ${this.props.user.api_key}`
+                    }
+                })
                 .then(() => {
                     // delete track from local state and refresh component
                     let tracks = [...this.state.playlist.tracks]

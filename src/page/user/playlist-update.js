@@ -47,18 +47,22 @@ class PlaylistUpdate extends React.Component {
 
     handleSubmit(event) {
         axios
-        .put(this.props.api + 'track/' + this.state.id, {
-            title: this.state.title,
-            artist: this.state.artist,
-            url: this.state.url
-        })
-        .then(() => {
-            // redirect back to manage rooms page
-            this.props.history.push('/manage-playlist')
-        }).catch(error => {
-            alert(error)
-            console.log(error)
-        })
+            .put(this.props.api + 'track/' + this.state.id, {
+                title: this.state.title,
+                artist: this.state.artist,
+                url: this.state.url
+            }, {
+                headers: {
+                    'Authorization': `Bearer ${this.props.user.api_key}`
+                }
+            })
+            .then(() => {
+                // redirect back to manage rooms page
+                this.props.history.push('/manage-playlist')
+            }).catch(error => {
+                alert(error)
+                console.log(error)
+            })
 
         event.preventDefault()
     }
