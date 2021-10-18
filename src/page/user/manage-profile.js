@@ -183,7 +183,7 @@ class ManageProfile extends React.Component {
         return (
             <div className="container main manage-profile">
 
-                <h1 className="mb-4" data-testid="manageProfileHeader">Manag Profile</h1>
+                <h1 className="mb-4" data-testid="manageProfileHeader">Manage Profile</h1>
 
                 {/* Invalid alerts */}
                 <div><FormErrors formErrors={this.state.formErrors} /></div>
