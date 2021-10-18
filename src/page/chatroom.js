@@ -4,7 +4,7 @@ import ReactPlayer from 'react-player'
 import { w3cwebsocket as W3CWebSocket } from 'websocket';
 import { connect } from 'react-redux';
 import axios from 'axios';
-import './chatroom.css';
+import '../css/chatroom.css';
 
 
 const socket = new W3CWebSocket('ws://127.0.0.1:8080');

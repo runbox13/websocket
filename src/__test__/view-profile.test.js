@@ -6,6 +6,7 @@ import { Provider } from 'react-redux';
 import { store, persistor } from '../store/index.js';
 import { PersistGate } from 'redux-persist/integration/react';
 
+//Wrapper to wrap arouund the Profile component during render
 const Wrapper = ({ children }) => (
     <Provider store={store}>
       <PersistGate persistor={persistor}>
@@ -14,7 +15,7 @@ const Wrapper = ({ children }) => (
     </Provider>
   );
 
-
+//Render Profile and test to see if "Profile" is shown on the screen
 it('Shows Bio', () => {
   render(<Profile />, {wrapper: Wrapper});
   expect(screen.getByText('Bio')).toBeInTheDocument();

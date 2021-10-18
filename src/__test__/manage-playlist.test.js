@@ -5,7 +5,7 @@ import '@testing-library/jest-dom/extend-expect';
 import { Provider } from 'react-redux';
 import { store, persistor } from '../store/index.js';
 import { PersistGate } from 'redux-persist/integration/react';
-
+//Wrapper to wrap arouund the ManagePlaylist component during render
 const Wrapper = ({ children }) => (
     <Provider store={store}>
       <PersistGate persistor={persistor}>
@@ -14,13 +14,7 @@ const Wrapper = ({ children }) => (
     </Provider>
   );
 
-// test("Song Title Column renders", () => {
-//     const component = render(<ManagePlaylist />, { wrapper: Wrapper })
-//     const playlistTable = component.getByTestId("playlist_table")
-
-//     expect(playlistTable.textContent).toContain("Song Title")
-// })
-
+  //Render ManagePlaylist and test to see if "Manage Playlist" is shown on the screen
 test("Manage playlist header renders", () => {
     const component = render(<ManagePlaylist />, { wrapper: Wrapper })
     const mpHeader = component.getByTestId("mpHeader")

@@ -37,6 +37,10 @@ class CreateRoom extends React.Component {
                 userId: this.props.user.id,
                 name: this.state.name,
                 description: this.state.description
+            }, {
+                headers: {
+                    'Authorization': `Bearer ${this.props.user.api_key}`
+                }
             })
             .then((response) => {
                 console.log(response.data)

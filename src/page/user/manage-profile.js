@@ -9,7 +9,7 @@ import {
     Alert
 } from 'reactstrap';
 import axios from 'axios';
-import { FormErrors } from '../../FormErrors';
+import { FormErrors } from '../../helper/error-alert';
 
 
 class ManageProfile extends React.Component {
@@ -125,17 +125,22 @@ class ManageProfile extends React.Component {
     }
 
     handleUpdate(e) {
-        axios.put(this.props.api + 'user/' + this.props.user.id, {
-            email: this.state.email,
-            display_name: this.state.display_name,
-            bio: this.state.bio,
-            avatar: this.state.avatar
-        })
+
+        axios
+            .put(this.props.api + 'user/' + this.props.user.id, {
+                email: this.state.email,
+                display_name: this.state.display_name,
+                bio: this.state.bio,
+                avatar: this.state.avatar
+            },
+            {
+                headers: {
+                    'Authorization': `Bearer ${this.props.user.api_key}`
+                }
+            })
             .then((response) => {
 
-                //console.log(response.data)
-
-                //dispatch USER_SESSION action to save user data to redux store
+                // dispatch USER_SESSION action to save user data to redux store
                 this.props.dispatch({
                     type: 'USER_SESSION',
                     payload: response.data.user
@@ -151,14 +156,21 @@ class ManageProfile extends React.Component {
                 alert(error)
                 console.log(error)
             })
-        e.preventDefault();
+        
+        e.preventDefault()
     }
 
     handleDelete() {
         if (window.confirm("Are you sure you want to delete your profile?")) {
-            axios.delete(this.props.api + 'user/' + this.props.user.id)
-                .then((response) => {
-                    console.log(response)
+            axios
+                .delete(this.props.api + 'user/' + this.props.user.id, {
+                    headers: {
+                        'Authorization': `Bearer ${this.props.user.api_key}`
+                    }
+                })
+                .then(() => {
+                    // destroy user object in redux and redirect to home page
+                    this.props.dispatch({type: 'USER_SESSION', payload: ''})
                     window.location.href = '/?account-deleted'
                 });
         }
@@ -226,7 +238,7 @@ class ManageProfile extends React.Component {
                     </FormGroup>
 
                     <FormGroup>
-                        <img src={this.state.avatar} width="200" height="200" alt="" />
+                        <img src={this.state.avatar} width="150" height="150" alt="" />
                     </FormGroup>
 
 

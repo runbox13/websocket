@@ -32,7 +32,12 @@ class ManageRoom extends React.Component {
 
     handleDelete(id, index) {
         if (window.confirm("Are you sure you want to delete this room?")) {
-            axios.delete(this.props.api + 'room/' + id)
+            axios
+                .delete(this.props.api + 'room/' + id, {
+                    headers: {
+                        'Authorization': `Bearer ${this.props.user.api_key}`
+                    }
+                })
                 .then((response) => {
                     console.log(response)
 

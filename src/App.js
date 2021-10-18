@@ -1,9 +1,7 @@
-import './App.css'
+import './css/App.css'
 import React from 'react'
 import logo from './logo.svg'
 import { connect } from 'react-redux'
-
-
 
 class App extends React.Component {
   constructor() {
