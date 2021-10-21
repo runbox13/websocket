@@ -66,7 +66,7 @@ class PlaylistAdd extends React.Component {
                 
                 <form onSubmit={this.handleSubmit}>
                     <div className="form-group">
-                        <label>Title</label>
+                        <label htmlFor="title">Title</label>
                         <input 
                             className="form-control" 
                             id="title"
@@ -76,7 +76,7 @@ class PlaylistAdd extends React.Component {
                             required />
                     </div>
                     <div className="form-group">
-                        <label>Artist</label>
+                        <label htmlFor="artist">Artist</label>
                         <input 
                             className="form-control"
                             id="artist"
@@ -86,7 +86,7 @@ class PlaylistAdd extends React.Component {
                             required />
                     </div>
                     <div className="form-group">
-                        <label>URL</label>
+                        <label htmlFor="url">URL</label>
                         <input 
                             className="form-control" 
                             id="url"
@@ -103,7 +103,7 @@ class PlaylistAdd extends React.Component {
             </div>
         )
     }
-};
+}
 
 const mapStateToProps = state => {
     return { 

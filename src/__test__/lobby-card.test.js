@@ -15,7 +15,7 @@ const Wrapper = ({ children }) => (
 );
 
 //Render Lobby and test to see if lobby cards is shown on the screen
-test("Lobby cards loaded in ", () => {
+test("Lobby cards loaded in", () => {
     const component = render(<Lobby/>, { wrapper: Wrapper })
     const cardEle = component.getByTestId("cardHeader")
 

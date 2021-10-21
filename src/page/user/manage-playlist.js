@@ -118,7 +118,7 @@ class ManagePlaylist extends React.Component {
             
         )
     }
-};
+}
 
 const mapStateToProps = state => {
     return { 
