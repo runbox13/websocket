@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { Container, Row, Col, Card, Button, CardTitle, ListGroup, ListGroupItem, Popover, PopoverHeader, PopoverBody, Input, InputGroup, InputGroupAddon } from 'reactstrap';
+import React, { useEffect, useState } from 'react';
+import { Container, Row, Col, Card, Button, CardTitle, ListGroup, ListGroupItem, Popover, PopoverHeader, PopoverBody, InputGroup, InputGroupAddon } from 'reactstrap';
 import ReactPlayer from 'react-player'
 import { w3cwebsocket as W3CWebSocket } from 'websocket';
 import { connect } from 'react-redux';
@@ -185,15 +185,14 @@ function SideBarChatbox(props) {
     var usersInRoom = [];
     var chatLog = [];
 
-    const redirectProfile = () => {
-
-    }
+    useEffect(() => {
+        document.getElementById("messageContainer").scrollTop = document.getElementById("messageContainer").scrollHeight;
+    })
     
-    if(props.chatLog.length != 0) {
+    if(props.chatLog.length !== 0) {
         chatLog = props.chatLog.map(t => 
-             <><a className="chatUsername" to="route" target="_blank" href={"profile?id=" + props.user.id}>{t.user.display_name}: </a><span className="chatMessage">{t.message}</span><br/></> 
+             <><a className="chatUsername" to="route" target="_blank" rel="noreferrer" href={"profile?id=" + props.user.id}>{t.user.display_name}: </a><span className="chatMessage">{t.message}</span><br/></> 
         )
-        console.log(chatLog);
     }
 
     const send = () => {
@@ -219,7 +218,7 @@ function SideBarChatbox(props) {
     }
 
     for (var key in props.state.users) {
-        usersInRoom.push(<ListGroupItem className="rounded-0" key={key}>{props.state.users[key].display_name}</ListGroupItem>);
+        usersInRoom.push(<ListGroupItem className="rounded-0" key={key}><a rel="noreferrer" target="_blank" href={"profile?id=" + props.state.users[key].id}>{props.state.users[key].display_name}</a></ListGroupItem>);
     }
 
     return (
