@@ -1,8 +1,7 @@
 import React from 'react';
-import { connect } from 'react-redux';
 import '../css/lobby.css';
 import axios from 'axios';
-import { /* useDispatch, */ useSelector } from "react-redux";
+import { /* useDispatch, */ connect, useSelector } from "react-redux";
 import { Card, CardText, CardTitle, CardBody, CardSubtitle, CardImg } from 'reactstrap';
 import { placeholder } from '../helper/placeholder'
 
@@ -30,7 +29,7 @@ function Lobby() {
 
   function Chatroom() {
     return (
-      <section className='flex-container' data-testid="cardHeader">
+      <section className="flex-container" data-testid="cardHeader">
         {rooms.map((room) => {
           return <Room key={room.id} {...room}> </Room>;
         })}

@@ -26,7 +26,9 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "start-websocket": "node ./src/websocket.js"
+    "start-websocket": "node ./src/websocket.js",
+    "lint": "eslint -c .eslintrc.js --ext .js,.jsx .",
+    "lint:fix": "npm run lint -- --fix"
   },
   "eslintConfig": {
     "extends": [

@@ -172,7 +172,7 @@ function SideBarChatbox(props) {
     return (
         <div id="rightSideBar" className="sideBarCards">
             <div className="sideBarTitle">Chatroom</div>
-            <ListGroup className="rounded-0" id='usersList'>
+            <ListGroup className="rounded-0" id="usersList">
                 {array}
             </ListGroup>
         </div>)
@@ -303,7 +303,7 @@ class Chatroom extends React.Component {
             time: 0
         }
 
-        socket.onclose = event => {
+        socket.onclose = () => {
         };
 
         socket.onmessage = event => {
@@ -315,7 +315,7 @@ class Chatroom extends React.Component {
             //Set the DJ state
             if (messageEvent.type === "setDj") {
                 //Set DJ state from websocket data
-                this.setState(prevState => { return { dj: messageEvent.payload } });
+                this.setState(() => { return { dj: messageEvent.payload } });
                 //If this user is the DJ, set the booleans
                 if (this.state.dj != null && this.state.dj.id === this.props.user.id) {
                     this.setState({ isDj: true });
@@ -494,7 +494,7 @@ class Chatroom extends React.Component {
                 </Container>
             </>
         );
-    };
+    }
 }
 
 const mapStateToProps = state => {
