@@ -33,7 +33,6 @@ class ManageProfile extends React.Component {
             profileUpdateAlert: false,
             resetAlert: false
         }
-
         this.handleChange = this.handleChange.bind(this)
 
         // Bound update, reset and delete functions to component.
@@ -42,7 +41,7 @@ class ManageProfile extends React.Component {
         this.handleDelete = this.handleDelete.bind(this)
 
         // Bound avatar handler functions to component.
-        this.handleRemove = this.handleRemove.bind(this)
+        // this.handleRemove = this.handleRemove.bind(this)
         this.handleFileSelect = this.handleFileSelect.bind(this)
 
         // Bound update and reset alerts to component.
@@ -117,22 +116,17 @@ class ManageProfile extends React.Component {
         }, () => { this.validateField(name, value) })
     }
 
+    // handleRemove() {
+    //     this.setState({
+    //         avatar: null,
+    //         formValid: !this.state.formValid
+    //     }, () => {console.log("Removed state: " + this.state.avatar)})
+    // }
+
     handleFileSelect = (e) => {
         this.setState({
             avatar: URL.createObjectURL(e.target.files[0]),
-        })
-    }
-
-    
-    handleRemove() {
-        // var binaryData = [];
-        // binaryData.push({logo});
-
-        this.setState({
-            // avatar: window.URL.createObjectURL(new Blob(binaryData, {type: {logo}})),
-            avatar: null,
-            formValid: !this.state.formValid
-        }, () => {console.log("State: " + this.state.avatar)} )
+        }, () => { console.log("Added state: " + this.state.avatar) })
     }
 
     // Reset state to user info in redux store.
@@ -144,8 +138,6 @@ class ManageProfile extends React.Component {
     }
 
     handleUpdate(e) {
-
-        console.log("State: " + this.state.avatar) 
 
         axios
             .put(this.props.api + 'user/' + this.props.user.id, {
@@ -160,7 +152,6 @@ class ManageProfile extends React.Component {
                     }
                 })
             .then((response) => {
-                console.log(response.data)
 
                 // dispatch USER_SESSION action to save user data to redux store
                 this.props.dispatch({
@@ -270,14 +261,13 @@ class ManageProfile extends React.Component {
                         }
                     </FormGroup>
 
-                    <FormGroup>
+                    {/* <FormGroup>
                         <Button
                             color="secondary"
                             className="mt-2"
                             onClick={this.handleRemove}>Remove Picture
                         </Button>
-                    </FormGroup>
-
+                    </FormGroup> */}
 
                     {
                         !this.state.formValid
