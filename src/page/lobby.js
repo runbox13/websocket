@@ -6,6 +6,8 @@ import { /* useDispatch, */ useSelector } from "react-redux";
 import { Card, CardText, CardTitle, CardBody, CardSubtitle, CardImg } from 'reactstrap';
 import { placeholder } from '../helper/placeholder'
 
+
+
 function Lobby() {
   const [rooms, setPost] = React.useState([]);
   const [users, setUsers] = React.useState();
@@ -75,6 +77,5 @@ function Lobby() {
     </div>
   );
 }
-
 
 export default connect()(Lobby);
