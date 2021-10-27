@@ -47,8 +47,6 @@ class Profile extends React.Component {
 
     componentDidMount() {
         var id = window.location.href.split('=').pop()
-        console.log("State: " + this.props.user.avatar)
-
 
         axios
             .get(this.props.api + "user/" + id)

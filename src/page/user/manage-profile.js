@@ -53,7 +53,6 @@ class ManageProfile extends React.Component {
     componentDidMount() {
         // Pass user into state if component runs
         this.fetchUser();
-        console.log(this.props.user)
     }
 
     // Fetch user from redux store.
@@ -116,17 +115,10 @@ class ManageProfile extends React.Component {
         }, () => { this.validateField(name, value) })
     }
 
-    // handleRemove() {
-    //     this.setState({
-    //         avatar: null,
-    //         formValid: !this.state.formValid
-    //     }, () => {console.log("Removed state: " + this.state.avatar)})
-    // }
-
     handleFileSelect = (e) => {
         this.setState({
-            avatar: URL.createObjectURL(e.target.files[0]),
-        }, () => { console.log("Added state: " + this.state.avatar) })
+            avatar: URL.createObjectURL(e.target.files[0])
+        })
     }
 
     // Reset state to user info in redux store.
@@ -260,14 +252,6 @@ class ManageProfile extends React.Component {
                                     alt="Loading..." />
                         }
                     </FormGroup>
-
-                    {/* <FormGroup>
-                        <Button
-                            color="secondary"
-                            className="mt-2"
-                            onClick={this.handleRemove}>Remove Picture
-                        </Button>
-                    </FormGroup> */}
 
                     {
                         !this.state.formValid
