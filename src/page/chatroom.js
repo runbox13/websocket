@@ -4,7 +4,7 @@ import ReactPlayer from 'react-player'
 import { w3cwebsocket as W3CWebSocket } from 'websocket';
 import { connect } from 'react-redux';
 import axios from 'axios';
-import './chatroom.css';
+import '../css/chatroom.css';
 
 
 const socket = new W3CWebSocket('ws://127.0.0.1:8080');
@@ -367,7 +367,7 @@ class Chatroom extends React.Component {
             chatLog: []
         }
 
-        socket.onclose = event => {
+        socket.onclose = () => {
         };
 
         socket.onmessage = event => {
@@ -379,7 +379,7 @@ class Chatroom extends React.Component {
             //Set the DJ state
             if (messageEvent.type === "setDj") {
                 //Set DJ state from websocket data
-                this.setState(prevState => { return { dj: messageEvent.payload } });
+                this.setState(() => { return { dj: messageEvent.payload } });
                 //If this user is the DJ, set the booleans
                 if (this.state.dj != null && this.state.dj.id === this.props.user.id) {
                     this.setState({ isDj: true });
@@ -565,7 +565,7 @@ class Chatroom extends React.Component {
                 </Container>
             </>
         );
-    };
+    }
 }
 
 const mapStateToProps = state => {

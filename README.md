@@ -2,11 +2,29 @@
 
 This repository contains the front end react application which uses the [we-music-api](https://github.com/peefeeyatko/we-music-api) backend service.
 
+## Feature Assignment
+Register - Marshall Sutton\
+Login - Marshall Sutton\
+Logout - Marshall Sutton\
+Manage Room - Marshall Sutton\
+Lobby - Simon Nguyen\
+Like/Dislike DJ Playing - Simon Nguyen\
+Delete From Playlist - Reynard Kasim\
+Add To Playlist - Reynard Kasim\
+Create Playlist - Reynard Kasim\
+View User Profile - Natasha Lee\
+Manage Avatar - Natasha Lee\
+Update Account - Liam Tran\
+Remove Account - Liam Tran\
+Chatroom - Toan Nguyen\
+Chatbox - Toan Nguyen
+
 ## Getting Started
 
 1. `git clone https://github.com/peefeeyatko/we-music-client.git`
 2. `npm install`
 3. `npm start`
+4. `npm run-script start-websocket`
 
 ## Available Scripts
 
@@ -19,6 +37,10 @@ Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
 
 The page will reload if you make edits.\
 You will also see any lint errors in the console.
+
+### `npm run-script start-websocket`
+Starts the websocket server in order to use Chatroom functionalities.
+The server is run on [http://localhost:8080].
 
 ### `npm test`
 

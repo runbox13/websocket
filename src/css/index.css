@@ -70,15 +70,22 @@ table.manage-rooms .btn {
   margin-right: 10px;
 }
 
-.code-link {
+.user-link {
+  font-size: .875em;
+  color: #d63384;
+  word-wrap: break-word;
+  font-family: var(--bs-font-monospace);
+  direction: ltr;
+  unicode-bidi: bidi-override;
   cursor: pointer;
 }
 
-.code-link:hover {
+.user-link:hover {
   text-decoration: underline;
+  color: #d63384;
 }
 
-.manage-playlist .btn {
+.btn {
   margin-right: 5px;
 }
 

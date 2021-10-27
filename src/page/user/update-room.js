@@ -57,6 +57,10 @@ class UpdateRoom extends React.Component {
             .put(this.props.api + 'room/' + this.state.id, {
                 name: this.state.name,
                 description: this.state.description
+            }, {
+                headers: {
+                    'Authorization': `Bearer ${this.props.user.api_key}`
+                }
             })
             .then(() => {
                 // redirect back to manage rooms page
