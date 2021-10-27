@@ -4,6 +4,7 @@ import { Tab, Tabs, TabList, TabPanel } from 'react-tabs'
 import 'react-tabs/style/react-tabs.css'
 import axios from 'axios';
 import { Card, Button, CardText, CardTitle, CardBody } from 'reactstrap';
+import logo from '../defaultpic.png';
 
 
 
@@ -47,8 +48,6 @@ class Profile extends React.Component {
     componentDidMount() {
         var id = window.location.href.split('=').pop()
 
-
-
         axios
             .get(this.props.api + "user/" + id)
             .then(res => {
@@ -89,7 +88,12 @@ class Profile extends React.Component {
                 <div className="mb-4">
 
 
-                    <img src={this.state.users.avatar} alt={this.state.users.display_name} width="100" height="100" />
+                    {
+                        this.props.user.avatar !== null
+                            ? <img src={this.props.user.avatar} width="150" height="150" alt="Loading..." />
+                            : <img src={logo} width="150" height="150" alt="Loading..." />
+                    }
+
                     <h1> {this.state.users.display_name}</h1>
 
                 </div>

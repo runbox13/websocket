@@ -10,6 +10,7 @@ import {
 } from 'reactstrap';
 import axios from 'axios';
 import { FormErrors } from '../../helper/error-alert';
+import logo from '../../defaultpic.png';
 
 
 class ManageProfile extends React.Component {
@@ -30,16 +31,20 @@ class ManageProfile extends React.Component {
             bioValid: true,
 
             profileUpdateAlert: false,
-            resetAlert: false,
+            resetAlert: false
         }
-
         this.handleChange = this.handleChange.bind(this)
 
+        // Bound update, reset and delete functions to component.
         this.handleReset = this.handleReset.bind(this)
         this.handleUpdate = this.handleUpdate.bind(this)
         this.handleDelete = this.handleDelete.bind(this)
+
+        // Bound avatar handler functions to component.
+        // this.handleRemove = this.handleRemove.bind(this)
         this.handleFileSelect = this.handleFileSelect.bind(this)
 
+        // Bound update and reset alerts to component.
         this.dismissProfileUpdate = this.dismissProfileUpdate.bind(this)
         this.dismissReset = this.dismissReset.bind(this)
 
@@ -133,11 +138,11 @@ class ManageProfile extends React.Component {
                 bio: this.state.bio,
                 avatar: this.state.avatar
             },
-            {
-                headers: {
-                    'Authorization': `Bearer ${this.props.user.api_key}`
-                }
-            })
+                {
+                    headers: {
+                        'Authorization': `Bearer ${this.props.user.api_key}`
+                    }
+                })
             .then((response) => {
 
                 // dispatch USER_SESSION action to save user data to redux store
@@ -156,7 +161,7 @@ class ManageProfile extends React.Component {
                 alert(error)
                 console.log(error)
             })
-        
+
         e.preventDefault()
     }
 
@@ -170,7 +175,7 @@ class ManageProfile extends React.Component {
                 })
                 .then(() => {
                     // destroy user object in redux and redirect to home page
-                    this.props.dispatch({type: 'USER_SESSION', payload: ''})
+                    this.props.dispatch({ type: 'USER_SESSION', payload: '' })
                     window.location.href = '/?account-deleted'
                 });
         }
@@ -238,9 +243,15 @@ class ManageProfile extends React.Component {
                     </FormGroup>
 
                     <FormGroup>
-                        <img src={this.state.avatar} width="150" height="150" alt="" />
-                    </FormGroup>
+                        {
+                            this.state.avatar !== null
+                                ? <img src={this.state.avatar} width="150" height="150"
+                                    alt="Loading..." />
 
+                                : <img src={logo} width="150" height="150"
+                                    alt="Loading..." />
+                        }
+                    </FormGroup>
 
                     {
                         !this.state.formValid
