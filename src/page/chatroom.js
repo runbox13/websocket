@@ -14,126 +14,133 @@ function SidebarPlaylist(props) {
     var listItems;
     var songQueue = [];
 
+    /*  if (props.dj != null) {
+         if (props.dj.id === props.user.id && props.user.id < 15) {
+             tracks.push({
+                 id: "0",
+                 title: "get you the moon",
+                 artist: "Kina",
+                 url: "https://www.youtube.com/watch?v=WTsmIbNku5g"
+             });
+ 
+             tracks.push({
+                 id: "1",
+                 title: "when i met u",
+                 artist: "hateful",
+                 url: "https://www.youtube.com/watch?v=30JOhWFkLro"
+             });
+             tracks.push({
+                 id: "2",
+                 title: "3.A.M Study Session",
+                 artist: "Lofi Girl",
+                 url: "https://www.youtube.com/watch?v=BTYAsjAVa3I"
+             });
+             tracks.push({
+                 id: "3",
+                 title: "Chill Drive",
+                 artist: "chilli music",
+                 url: "https://www.youtube.com/watch?v=EIm4HvDgQCM"
+             });
+             tracks.push({
+                 id: "4",
+                 title: "Last breeze of the evening ",
+                 artist: "Dreamy",
+                 url: "https://www.youtube.com/watch?v=UMhOGEo8O5A"
+             });
+             tracks.push({
+                 id: "5",
+                 title: "The answer is in the stars ~ lofi mix",
+                 artist: "Dreamy",
+                 url: "https://www.youtube.com/watch?v=_DwmKtbVFJ4"
+             });
+             tracks.push({
+                 id: "6",
+                 title: "Why'd You Only Call Me When You're High?",
+                 artist: "Arctic Monkeys",
+                 url: "https://www.youtube.com/watch?v=6366dxFf-Os"
+             });
+             tracks.push({
+                 id: "7",
+                 title: "Knee Socks",
+                 artist: "Arctic Monkeys",
+                 url: "https://www.youtube.com/watch?v=oTP5bXzfh1c"
+             });
+             tracks.push({
+                 id: "8",
+                 title: "Mardy Bum",
+                 artist: "Arctic Monkeys",
+                 url: "https://www.youtube.com/watch?v=dO368WjwyFs"
+             });
+         } */
 
-    if (props.dj != null) {
-        if (props.dj.id === props.user.id && props.user.id < 15) {
-            tracks.push({
-                id: "0",
-                title: "get you the moon",
-                artist: "Kina",
-                url: "https://www.youtube.com/watch?v=WTsmIbNku5g"
-            });
+    /*  if (props.dj.id === props.user.id && props.user.id > 15) {
+         tracks.push({
+             id: "0",
+             title: "Do i wanna know",
+             artist: "Arctic Monkeys",
+             url: "https://www.youtube.com/watch?v=bpOSxM0rNPM"
+         });
 
-            tracks.push({
-                id: "1",
-                title: "when i met u",
-                artist: "hateful",
-                url: "https://www.youtube.com/watch?v=30JOhWFkLro"
-            });
-            tracks.push({
-                id: "2",
-                title: "3.A.M Study Session",
-                artist: "Lofi Girl",
-                url: "https://www.youtube.com/watch?v=BTYAsjAVa3I"
-            });
-            tracks.push({
-                id: "3",
-                title: "Chill Drive",
-                artist: "chilli music",
-                url: "https://www.youtube.com/watch?v=EIm4HvDgQCM"
-            });
-            tracks.push({
-                id: "4",
-                title: "Last breeze of the evening ",
-                artist: "Dreamy",
-                url: "https://www.youtube.com/watch?v=UMhOGEo8O5A"
-            });
-            tracks.push({
-                id: "5",
-                title: "The answer is in the stars ~ lofi mix",
-                artist: "Dreamy",
-                url: "https://www.youtube.com/watch?v=_DwmKtbVFJ4"
-            });
-            tracks.push({
-                id: "6",
-                title: "Why'd You Only Call Me When You're High?",
-                artist: "Arctic Monkeys",
-                url: "https://www.youtube.com/watch?v=6366dxFf-Os"
-            });
-            tracks.push({
-                id: "7",
-                title: "Knee Socks",
-                artist: "Arctic Monkeys",
-                url: "https://www.youtube.com/watch?v=oTP5bXzfh1c"
-            });
-            tracks.push({
-                id: "8",
-                title: "Mardy Bum",
-                artist: "Arctic Monkeys",
-                url: "https://www.youtube.com/watch?v=dO368WjwyFs"
-            });
-        }
+         tracks.push({
+             id: "1",
+             title: "505",
+             artist: "Arctic Monkeys",
+             url: "https://www.youtube.com/watch?v=qU9mHegkTc4"
+         });
+         tracks.push({
+             id: "2",
+             title: "Why'd You Only Call Me When You're High?",
+             artist: "Arctic Monkeys",
+             url: "https://www.youtube.com/watch?v=6366dxFf-Os"
+         });
+         tracks.push({
+             id: "3",
+             title: "Knee Socks",
+             artist: "Arctic Monkeys",
+             url: "https://www.youtube.com/watch?v=oTP5bXzfh1c"
+         });
+         tracks.push({
+             id: "4",
+             title: "Mardy Bum",
+             artist: "Arctic Monkeys",
+             url: "https://www.youtube.com/watch?v=dO368WjwyFs"
+         });
+         tracks.push({
+             id: "5",
+             title: "Chill Drive",
+             artist: "chilli music",
+             url: "https://www.youtube.com/watch?v=EIm4HvDgQCM"
+         });
+         tracks.push({
+             id: "6",
+             title: "Last breeze of the evening ",
+             artist: "Dreamy",
+             url: "https://www.youtube.com/watch?v=UMhOGEo8O5A"
+         });
+         tracks.push({
+             id: "7",
+             title: "The answer is in the stars ~ lofi mix",
+             artist: "Dreamy",
+             url: "https://www.youtube.com/watch?v=_DwmKtbVFJ4"
+         });
+     }
+ } */
 
-        if (props.dj.id === props.user.id && props.user.id > 15) {
-            tracks.push({
-                id: "0",
-                title: "Do i wanna know",
-                artist: "Arctic Monkeys",
-                url: "https://www.youtube.com/watch?v=bpOSxM0rNPM"
-            });
 
-            tracks.push({
-                id: "1",
-                title: "505",
-                artist: "Arctic Monkeys",
-                url: "https://www.youtube.com/watch?v=qU9mHegkTc4"
-            });
-            tracks.push({
-                id: "2",
-                title: "Why'd You Only Call Me When You're High?",
-                artist: "Arctic Monkeys",
-                url: "https://www.youtube.com/watch?v=6366dxFf-Os"
-            });
-            tracks.push({
-                id: "3",
-                title: "Knee Socks",
-                artist: "Arctic Monkeys",
-                url: "https://www.youtube.com/watch?v=oTP5bXzfh1c"
-            });
-            tracks.push({
-                id: "4",
-                title: "Mardy Bum",
-                artist: "Arctic Monkeys",
-                url: "https://www.youtube.com/watch?v=dO368WjwyFs"
-            });
-            tracks.push({
-                id: "5",
-                title: "Chill Drive",
-                artist: "chilli music",
-                url: "https://www.youtube.com/watch?v=EIm4HvDgQCM"
-            });
-            tracks.push({
-                id: "6",
-                title: "Last breeze of the evening ",
-                artist: "Dreamy",
-                url: "https://www.youtube.com/watch?v=UMhOGEo8O5A"
-            });
-            tracks.push({
-                id: "7",
-                title: "The answer is in the stars ~ lofi mix",
-                artist: "Dreamy",
-                url: "https://www.youtube.com/watch?v=_DwmKtbVFJ4"
-            });
-        }
-    }
 
     var sendTrack = (track) => {
         props.parentCallback(track);
     }
 
-    if (tracks != null) {
-        listItems = tracks.map((t) => <ListGroupItem action className="rounded-0" key={t.id} onClick={() => sendTrack(t)}> {t.artist}: {t.title}</ListGroupItem>);
+    if (tracks != null && props.dj != null) {
+        if (props.dj.id === props.user.id) {
+            var test;
+            listItems = props.tracks.map((t) => <ListGroupItem action className="rounded-0" key={t.id} onClick={() => sendTrack(t)}> {t.artist}: {t.title}</ListGroupItem>);
+            props.tracks.map((t) => test = t);
+            console.log(test);
+        }
     }
+
 
     if (props.songQueue.length > 1) {
         var tempQueue = [...props.songQueue];
@@ -188,10 +195,10 @@ function SideBarChatbox(props) {
     useEffect(() => {
         document.getElementById("messageContainer").scrollTop = document.getElementById("messageContainer").scrollHeight;
     })
-    
-    if(props.chatLog.length !== 0) {
-        chatLog = props.chatLog.map(t => 
-             <><a className="chatUsername" to="route" target="_blank" rel="noreferrer" href={"profile?id=" + props.user.id}>{t.user.display_name}: </a><span className="chatMessage">{t.message}</span><br/></> 
+
+    if (props.chatLog.length !== 0) {
+        chatLog = props.chatLog.map(t =>
+            <><a className="chatUsername" to="route" target="_blank" rel="noreferrer" href={"profile?id=" + props.user.id}>{t.user.display_name}: </a><span className="chatMessage">{t.message}</span><br /></>
         )
     }
 
@@ -209,8 +216,8 @@ function SideBarChatbox(props) {
 
     }
     const sendMessage = (event) => {
-        if(event.type === "keypress") {
-            if(event.key === "Enter") {
+        if (event.type === "keypress") {
+            if (event.key === "Enter") {
                 event.preventDefault();
                 send();
             }
@@ -229,11 +236,11 @@ function SideBarChatbox(props) {
             <ChatboxPopover usersInRoom={usersInRoom} />
             <div id="chatbox">
                 <div id="messageContainer">
-                {chatLog}
+                    {chatLog}
                 </div>
             </div>
             <InputGroup>
-                <textarea placeholder="Send a message" id="textInput" onKeyPress={(key) => sendMessage(key)}/>
+                <textarea placeholder="Send a message" id="textInput" onKeyPress={(key) => sendMessage(key)} />
                 <InputGroupAddon addonType="append">
                     <Button id="sendButton" onClick={(event) => sendMessage(event)}>Send</Button>
                 </InputGroupAddon>
@@ -344,7 +351,16 @@ class Chatroom extends React.Component {
                     newState.room = payload.data;
                     return newState;
                 })
-                joinChatroom(this.props.user, this.state.room);
+
+                axios.get(this.props.api + "playlist/created-by/" + this.props.user.id)
+                    .then(payload => {
+                        this.setState(prevState => {
+                            var newState = Object.assign(prevState);
+                            newState.tracks = payload.data.tracks;
+                            return newState;
+                        })
+                        joinChatroom(this.props.user, this.state.room);
+                    })
             }).catch(error => { console.log(error) });
     }
 
@@ -364,7 +380,8 @@ class Chatroom extends React.Component {
             songQueue: [],
             isPaused: false,
             time: 0,
-            chatLog: []
+            chatLog: [],
+            tracks: []
         }
 
         socket.onclose = () => {
@@ -458,8 +475,8 @@ class Chatroom extends React.Component {
             }
 
             //Chatbox
-            if(messageEvent.type === "getChatLog") {
-                this.setState({chatLog: messageEvent.chatLog})
+            if (messageEvent.type === "getChatLog") {
+                this.setState({ chatLog: messageEvent.chatLog })
                 console.log(this.state.chatLog);
             }
 
@@ -550,7 +567,7 @@ class Chatroom extends React.Component {
                     </div>
                     <Row>
                         <Col id="leftColumn" className="column" xs="auto">
-                            <SidebarPlaylist songPlaying={this.state.songQueue[0]} songQueue={this.state.songQueue} dj={this.state.dj} user={this.props.user} parentCallback={this.setTrackCallback} />
+                            <SidebarPlaylist tracks={this.state.tracks} api={this.props.api} songPlaying={this.state.songQueue[0]} songQueue={this.state.songQueue} dj={this.state.dj} user={this.props.user} parentCallback={this.setTrackCallback} />
                         </Col>
                         <Col id="midColumn" className="column " xs="auto">
                             <CenterChatroom deQueueCallback={this.deQueue} queueCallback={this.queueDj} jumpOffDjCallback={this.jumpOffDj} isQueued={this.state.isQueued} songQueue={this.state.songQueue} nextSongCallback={this.nextSongCallback}
