@@ -67,7 +67,7 @@ function Lobby() {
       <p>
         Hey there, <a
           className="user-link"
-          href={'/profile?id=' + user.id}>
+          href={this.props.history.push('/profile?id=' + user.id)}>
           {user.display_name}
         </a>
       </p>
