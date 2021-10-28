@@ -10,7 +10,7 @@ import {
 } from 'reactstrap';
 import axios from 'axios';
 import { FormErrors } from '../../helper/error-alert';
-import logo from '../../defaultpic.png';
+import logo from '../../logo.svg';
 
 
 class ManageProfile extends React.Component {
@@ -244,7 +244,7 @@ class ManageProfile extends React.Component {
 
                     <FormGroup>
                         {
-                            this.state.avatar !== null
+                            this.state.avatar
                                 ? <img src={this.state.avatar} width="150" height="150"
                                     alt="Loading..." />
 

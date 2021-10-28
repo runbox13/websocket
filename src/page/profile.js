@@ -4,7 +4,7 @@ import { Tab, Tabs, TabList, TabPanel } from 'react-tabs'
 import 'react-tabs/style/react-tabs.css'
 import axios from 'axios';
 import { Card, Button, CardText, CardTitle, CardBody } from 'reactstrap';
-import logo from '../defaultpic.png';
+import logo from '../logo.svg';
 
 
 
@@ -89,7 +89,7 @@ class Profile extends React.Component {
 
 
                     {
-                        this.props.user.avatar !== null
+                        this.props.user.avatar
                             ? <img src={this.props.user.avatar} width="150" height="150" alt="Loading..." />
                             : <img src={logo} width="150" height="150" alt="Loading..." />
                     }
