@@ -4,6 +4,7 @@ import axios from 'axios';
 import { /* useDispatch, */ connect, useSelector } from "react-redux";
 import { Card, CardText, CardTitle, CardBody, CardSubtitle, CardImg } from 'reactstrap';
 import { placeholder } from '../helper/placeholder'
+import {Link} from "react-router-dom";
 
 
 
@@ -65,11 +66,11 @@ function Lobby() {
     <div className="container main lobby">
       <h1>Lobby</h1>
       <p>
-        Hey there, <a
-          className="user-link"
-          href={'/profile?id=' + user.id}>
-          {user.display_name}
-        </a>
+        Hey there, 
+        <ul>
+              <li><Link to={'/profile?id=' + user.id}>{user.display_name} </Link></li>
+        </ul>
+
       </p>
       <div>{Chatroom()}</div>
 
