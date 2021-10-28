@@ -2,7 +2,7 @@ import { createStore } from 'redux'
 
 const initialState = {
     user: {},
-    api: 'http://localhost:8000'
+    api: 'https://we-music-api.herokuapp.com/'
 };
   
 const reducer = (state = initialState, action) => {
