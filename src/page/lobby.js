@@ -67,9 +67,9 @@ function Lobby() {
       <h1>Lobby</h1>
       <p>
         Hey there, 
-        <ul>
-              <li><Link to={'/profile?id=' + user.id}>{user.display_name} </Link></li>
-        </ul>
+        
+              <Link className="user-link" to={'/profile?id=' + user.id}>{user.display_name} </Link>
+        
 
       </p>
       <div>{Chatroom()}</div>
