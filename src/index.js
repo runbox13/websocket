@@ -1,6 +1,6 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
-import {
+import { browserHistory,
   BrowserRouter as Router,
   Route,
   Switch
@@ -31,7 +31,7 @@ window.store = store
 
 ReactDOM.render(
   <Provider store={store}>
-    <Router>
+    <Router history={browserHistory}>
       <Header />
       <Switch>
         <Route exact path="/" component={App} />
