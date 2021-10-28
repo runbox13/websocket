@@ -22,11 +22,10 @@
     "websocket": "^1.0.34"
   },
   "scripts": {
-    "start": "react-scripts start",
+    "start": "node ./src/websocket.js",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "start-websocket": "node ./src/websocket.js",
     "lint": "eslint -c .eslintrc.js --ext .js,.jsx .",
     "lint:fix": "npm run lint -- --fix"
   },
