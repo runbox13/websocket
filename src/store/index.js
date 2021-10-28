@@ -6,7 +6,7 @@ import autoMergeLevel2 from 'redux-persist/lib/stateReconciler/autoMergeLevel2'
 
 const initialState = {
     user: {},
-    api: 'http://localhost:8000/'
+    api: 'https://we-music-api.herokuapp.com/'
 };
   
 const reducer = (state = initialState, action) => {
