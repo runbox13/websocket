@@ -44,14 +44,14 @@ function Lobby() {
     return (
 
       <Card className="lobbycard">
-        <a href={"/chatroom?id=" + id} >
+        <Link  to={"/chatroom?id=" + id}></Link>
           <CardImg variant="top" src={placeholder[Math.floor(Math.random() * placeholder.length)].img} />
         </a>
         <CardBody>
           <CardTitle>
             <b>{name}</b>
           </CardTitle>
-          <CardSubtitle className="mb-2 text-muted"><p>Created by <a className="mb-2 user-link" href={"/profile?id=" + user_id}>{users.find(x => x.id === user_id).display_name}</a></p></CardSubtitle>
+          <CardSubtitle className="mb-2 text-muted"><p>Created by <Link className="mb-2 user-link" to={"/profile?id=" + user_id}>{users.find(x => x.id === user_id).display_name}</Link></p></CardSubtitle>
           <CardText>
             {description}
           </CardText>
@@ -66,12 +66,7 @@ function Lobby() {
     <div className="container main lobby">
       <h1>Lobby</h1>
       <p>
-        Hey there, 
-        
-              <Link className="user-link" to={'/profile?id=' + user.id}>{user.display_name} </Link>
-        
-
-      </p>
+        Hey there, <Link className="user-link" to={'/profile?id=' + user.id}>{user.display_name} </Link></p>
       <div>{Chatroom()}</div>
 
     </div>
