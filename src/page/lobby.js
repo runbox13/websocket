@@ -44,9 +44,9 @@ function Lobby() {
     return (
 
       <Card className="lobbycard">
-        <Link  to={"/chatroom?id=" + id}></Link>
+        <Link to={"/chatroom?id=" + id}>
           <CardImg variant="top" src={placeholder[Math.floor(Math.random() * placeholder.length)].img} />
-        </a>
+        </Link>
         <CardBody>
           <CardTitle>
             <b>{name}</b>
