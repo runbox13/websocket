@@ -97,7 +97,9 @@ wsServer.on('request', function (request) {
                     //Array of user objects to use queue pop/push functionalities
                     queue: [],
                     songPlaying: "",
-                    songQueue: []
+                    songQueue: [],
+                    //Chatbox
+                    chatLog: []
                 }
 
             connections[room.id].users[user.id] = {
@@ -128,8 +130,8 @@ wsServer.on('request', function (request) {
                             queue: connections[room.id].queue,
                             dj: connections[room.id].dj,
                             songQueue: connections[room.id].songQueue,
-
                             action: action,
+                            chatLog: connections[room.id].chatLog
                         }))
                 }
             }
@@ -187,7 +189,7 @@ wsServer.on('request', function (request) {
             }
         }
 
-        if(payload.messageType === "nextSong") {
+        if (payload.messageType === "nextSong") {
             var room = connections[payload.roomId];
             room.songQueue.shift();
             for (var key in room.users) {
@@ -198,9 +200,9 @@ wsServer.on('request', function (request) {
             }
         }
 
-        if(payload.messageType === "djPause") {
+        if (payload.messageType === "djPause") {
             var room = connections[payload.roomId];
-            for(var key in room.users) {
+            for (var key in room.users) {
                 room.users[key].connection.sendUTF(JSON.stringify({
                     type: "djPause",
                     isPaused: true
@@ -208,9 +210,9 @@ wsServer.on('request', function (request) {
             }
         }
 
-        if(payload.messageType === "djPlay") {
+        if (payload.messageType === "djPlay") {
             var room = connections[payload.roomId];
-            for(var key in room.users) {
+            for (var key in room.users) {
                 room.users[key].connection.sendUTF(JSON.stringify({
                     type: "djPlay",
                     isPaused: false
@@ -218,12 +220,28 @@ wsServer.on('request', function (request) {
             }
         }
 
-        if(payload.messageType === "getTime") {
+        if (payload.messageType === "getTime") {
             var room = connections[payload.roomId];
-            for(var key in room.users) {
+            for (var key in room.users) {
                 room.users[key].connection.sendUTF(JSON.stringify({
                     type: "getTime",
                     time: payload.time
+                }));
+            }
+        }
+
+        //Chatbox
+        if (payload.messageType === "chatMessage") {
+            var room = connections[payload.roomId];
+            room.chatLog.push(
+                {
+                    user: payload.user,
+                    message: payload.message
+                });
+            for (var key in room.users) {
+                room.users[key].connection.sendUTF(JSON.stringify({
+                    type: "getChatLog",
+                    chatLog: room.chatLog
                 }));
             }
         }

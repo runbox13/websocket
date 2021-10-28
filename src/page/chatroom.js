@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { Container, Row, Col, Card, Button, CardTitle, ListGroup, ListGroupItem} from 'reactstrap';
+import React, { useEffect, useState } from 'react';
+import { Container, Row, Col, Card, Button, CardTitle, ListGroup, ListGroupItem, Popover, PopoverHeader, PopoverBody, InputGroup, InputGroupAddon } from 'reactstrap';
 import ReactPlayer from 'react-player'
 import { w3cwebsocket as W3CWebSocket } from 'websocket';
 import { connect } from 'react-redux';
@@ -13,168 +13,121 @@ function SidebarPlaylist(props) {
     var tracks = [];
     var listItems;
     var songQueue = [];
-    
-
-    if (props.dj != null) {
-        if (props.dj.id === props.user.id && props.user.id < 15) {
-            tracks.push({
-                id: "0",
-                title: "get you the moon",
-                artist: "Kina",
-                url: "https://www.youtube.com/watch?v=WTsmIbNku5g"
-            });
-
-            tracks.push({
-                id: "1",
-                title: "when i met u",
-                artist: "hateful",
-                url: "https://www.youtube.com/watch?v=30JOhWFkLro"
-            });
-            tracks.push({
-                id: "2",
-                title: "3.A.M Study Session",
-                artist: "Lofi Girl",
-                url: "https://www.youtube.com/watch?v=BTYAsjAVa3I"
-            });
-            tracks.push({
-                id: "3",
-                title: "Chill Drive",
-                artist: "chilli music",
-                url: "https://www.youtube.com/watch?v=EIm4HvDgQCM"
-            });
-            tracks.push({
-                id: "4",
-                title: "Last breeze of the evening ",
-                artist: "Dreamy",
-                url: "https://www.youtube.com/watch?v=UMhOGEo8O5A"
-            });
-            tracks.push({
-                id: "5",
-                title: "The answer is in the stars ~ lofi mix",
-                artist: "Dreamy",
-                url: "https://www.youtube.com/watch?v=_DwmKtbVFJ4"
-            });
-            tracks.push({
-                id: "6",
-                title: "Why'd You Only Call Me When You're High?",
-                artist: "Arctic Monkeys",
-                url: "https://www.youtube.com/watch?v=6366dxFf-Os"
-            });
-            tracks.push({
-                id: "7",
-                title: "Knee Socks",
-                artist: "Arctic Monkeys",
-                url: "https://www.youtube.com/watch?v=oTP5bXzfh1c"
-            });
-            tracks.push({
-                id: "8",
-                title: "Mardy Bum",
-                artist: "Arctic Monkeys",
-                url: "https://www.youtube.com/watch?v=dO368WjwyFs"
-            });
-        }
-
-        if (props.dj.id === props.user.id && props.user.id > 15) {
-            tracks.push({
-                id: "0",
-                title: "Do i wanna know",
-                artist: "Arctic Monkeys",
-                url: "https://www.youtube.com/watch?v=bpOSxM0rNPM"
-            });
-
-            tracks.push({
-                id: "1",
-                title: "505",
-                artist: "Arctic Monkeys",
-                url: "https://www.youtube.com/watch?v=qU9mHegkTc4"
-            });
-            tracks.push({
-                id: "2",
-                title: "Why'd You Only Call Me When You're High?",
-                artist: "Arctic Monkeys",
-                url: "https://www.youtube.com/watch?v=6366dxFf-Os"
-            });
-            tracks.push({
-                id: "3",
-                title: "Knee Socks",
-                artist: "Arctic Monkeys",
-                url: "https://www.youtube.com/watch?v=oTP5bXzfh1c"
-            });
-            tracks.push({
-                id: "4",
-                title: "Mardy Bum",
-                artist: "Arctic Monkeys",
-                url: "https://www.youtube.com/watch?v=dO368WjwyFs"
-            });
-            tracks.push({
-                id: "5",
-                title: "Chill Drive",
-                artist: "chilli music",
-                url: "https://www.youtube.com/watch?v=EIm4HvDgQCM"
-            });
-            tracks.push({
-                id: "6",
-                title: "Last breeze of the evening ",
-                artist: "Dreamy",
-                url: "https://www.youtube.com/watch?v=UMhOGEo8O5A"
-            });
-            tracks.push({
-                id: "7",
-                title: "The answer is in the stars ~ lofi mix",
-                artist: "Dreamy",
-                url: "https://www.youtube.com/watch?v=_DwmKtbVFJ4"
-            });
-        }
-    }
 
     var sendTrack = (track) => {
         props.parentCallback(track);
     }
 
-    if (tracks != null) {
-        listItems = tracks.map((t) => <ListGroupItem action className="rounded-0" key={t.id} onClick={() => sendTrack(t)}> {t.artist}: {t.title}</ListGroupItem>);
+    if (tracks != null && props.dj != null) {
+        if (props.dj.id === props.user.id) {
+            listItems = props.tracks.map((t) => <ListGroupItem action className="rounded-0" key={t.id} onClick={() => sendTrack(t)}> {t.artist}: {t.title}</ListGroupItem>);
+        }
     }
 
+
     if (props.songQueue.length > 1) {
-            var tempQueue = [...props.songQueue];
-            if(props.songPlaying.queueId === tempQueue[0].queueId){
-                tempQueue.splice(0, 1);
-            }
-            songQueue = tempQueue.map((t) => <ListGroupItem className="rounded-0" key={t.queueId}> {t.artist}: {t.title}</ListGroupItem>);
-        
+        var tempQueue = [...props.songQueue];
+        if (props.songPlaying.queueId === tempQueue[0].queueId) {
+            tempQueue.splice(0, 1);
+        }
+        songQueue = tempQueue.map((t) => <ListGroupItem className="rounded-0" key={t.queueId}> {t.artist}: {t.title}</ListGroupItem>);
+
     } else songQueue = [];
 
     return (
         <>
-        <div  id="leftSideBar" className="sideBarCards">
-            <div className="sideBarTitle">Playlist</div>
-            <ListGroup>
-                {listItems}
-            </ListGroup>
-        </div>
-        <div id="queueSideBar" className="sideBarCards">
-            <div className="sideBarTitle">Queue</div>
-            <ListGroup>
-                {songQueue}
-            </ListGroup>
-        </div>
+            <div id="leftSideBar" className="sideBarCards">
+                <div className="sideBarTitle">Playlist</div>
+                <ListGroup>
+                    {listItems}
+                </ListGroup>
+            </div>
+            <div id="queueSideBar" className="sideBarCards">
+                <div className="sideBarTitle">Queue</div>
+                <ListGroup>
+                    {songQueue}
+                </ListGroup>
+            </div>
         </>
     );
 }
 
+function ChatboxPopover(props) {
+    const [popoverOpen, setPopoverOpen] = useState(false);
+    const togglePopover = () => { setPopoverOpen(!popoverOpen) };
+
+    return (
+        <div>
+            <Button id="popOverButton">View Users in Room</Button>
+            <Popover placement="left" isOpen={popoverOpen} target="popOverButton" toggle={togglePopover}>
+                <PopoverHeader>Users in Room</PopoverHeader>
+                <PopoverBody>
+                    <ListGroup className="rounded-0" id="usersList">
+                        {props.usersInRoom}
+                    </ListGroup>
+                </PopoverBody>
+            </Popover>
+        </div>
+    );
+}
+
 function SideBarChatbox(props) {
-    var array = [];
+    var usersInRoom = [];
+    var chatLog = [];
+
+    useEffect(() => {
+        document.getElementById("messageContainer").scrollTop = document.getElementById("messageContainer").scrollHeight;
+    })
+
+    if (props.chatLog.length !== 0) {
+        chatLog = props.chatLog.map(t =>
+            <><a className="chatUsername" to="route" target="_blank" rel="noreferrer" href={"profile?id=" + props.user.id}>{t.user.display_name}: </a><span className="chatMessage">{t.message}</span><br /></>
+        )
+    }
+
+    const send = () => {
+        var textInput = document.getElementById("textInput");
+        socket.send(JSON.stringify({
+            type: "message",
+            messageType: "chatMessage",
+            roomId: props.state.room.id,
+            user: props.user,
+            message: textInput.value
+        }));
+        console.log(textInput.value);
+        textInput.value = "";
+
+    }
+    const sendMessage = (event) => {
+        if (event.type === "keypress") {
+            if (event.key === "Enter") {
+                event.preventDefault();
+                send();
+            }
+        } else send();
+    }
 
     for (var key in props.state.users) {
-        array.push(<ListGroupItem className="rounded-0" key={key}>{props.state.users[key].display_name}</ListGroupItem>);
+        usersInRoom.push(<ListGroupItem className="rounded-0" key={key}><a rel="noreferrer" target="_blank" href={"profile?id=" + props.state.users[key].id}>{props.state.users[key].display_name}</a></ListGroupItem>);
     }
 
     return (
         <div id="rightSideBar" className="sideBarCards">
-            <div className="sideBarTitle">Chatroom</div>
-            <ListGroup className="rounded-0" id="usersList">
-                {array}
-            </ListGroup>
+            <div className="sideBarTitle">
+                Chatbox
+            </div>
+            <ChatboxPopover usersInRoom={usersInRoom} />
+            <div id="chatbox">
+                <div id="messageContainer">
+                    {chatLog}
+                </div>
+            </div>
+            <InputGroup>
+                <textarea placeholder="Send a message" id="textInput" onKeyPress={(key) => sendMessage(key)} />
+                <InputGroupAddon addonType="append">
+                    <Button id="sendButton" onClick={(event) => sendMessage(event)}>Send</Button>
+                </InputGroupAddon>
+            </InputGroup>
         </div>)
 }
 
@@ -184,14 +137,13 @@ function CenterChatroom(props) {
     var [djTime, setDjTime] = useState(0);
 
     if (props.songPlaying != null) {
-        if(!props.isDj) songURL = props.songPlaying.url + "&t=" + time;
+        if (!props.isDj) songURL = props.songPlaying.url + "&t=" + time;
         else songURL = props.songPlaying.url + "&t=" + djTime;
     }
 
     var updateTime = (progress) => {
-        if(!props.isDj) {
+        if (!props.isDj) {
             if (progress.playedSeconds < props.time - 3 || progress.playedSeconds > props.time + 3) {
-                console.log(progress.playedSeconds + " " + time);
                 setTime(props.time);
             }
         }
@@ -206,7 +158,6 @@ function CenterChatroom(props) {
 
     var djPause = () => {
         props.djPauseCallback();
-        console.log("callback");
     }
 
     var djPlay = () => {
@@ -214,7 +165,7 @@ function CenterChatroom(props) {
     }
 
     var nextSong = () => {
-        if(djTime === 0) setDjTime("");
+        if (djTime === 0) setDjTime("");
         else setDjTime(0);
         setTimeout(props.nextSongCallback());
     }
@@ -229,7 +180,11 @@ function CenterChatroom(props) {
             </div>
 
             {props.songPlaying !== "" ? <Card id="songCard"><CardTitle id="songTitle"><h5 id="songHeader">{props.songPlaying.artist + " - " + props.songPlaying.title}</h5></CardTitle>
-            {props.isDj ? <Button id="nextSongButton" onClick={nextSong}>Next Song</Button> : ""}
+                {props.isDj ? <Button id="nextSongButton" onClick={nextSong}>Next Song</Button> :
+                    <>
+                        <Button color={props.dislikeColor} className={"likeDislike " + props.dislikeClass} onClick={props.dislikeCallback}>Dislike</Button>
+                        <Button color={props.likeColor} className={"likeDislike " + props.likeClass} onClick={props.likeCallback}>Save to your playlist</Button>
+                    </>}
             </Card> : ""}
         </div>
     );
@@ -274,14 +229,24 @@ class Chatroom extends React.Component {
 
         var roomId = (window.location.href).split("?id=")[1];
 
-        axios.get(this.props.api + "room/" + roomId)
+        axios.get(this.props.api + "room/" + roomId) 
             .then(payload => {
                 this.setState(prevState => {
                     var newState = Object.assign(prevState);
                     newState.room = payload.data;
                     return newState;
                 })
-                joinChatroom(this.props.user, this.state.room);
+
+                axios.get(this.props.api + "playlist/created-by/" + this.props.user.id)
+                    .then(payload => {
+                        this.setState(prevState => {
+                            var newState = Object.assign(prevState);
+                            newState.tracks = payload.data.tracks;
+                            newState.playListId = payload.data.playlist.id;
+                            return newState;
+                        })
+                        joinChatroom(this.props.user, this.state.room);
+                    })
             }).catch(error => { console.log(error) });
     }
 
@@ -300,7 +265,14 @@ class Chatroom extends React.Component {
             isDj: false,
             songQueue: [],
             isPaused: false,
-            time: 0
+            time: 0,
+            chatLog: [],
+            tracks: [],
+            like: 0,
+            dislike: 0,
+            likeActive: false,
+            dislikeActive: true,
+            playListId: null
         }
 
         socket.onclose = () => {
@@ -336,8 +308,10 @@ class Chatroom extends React.Component {
                         newState.dj = messageEvent.dj;
                         newState.queue = messageEvent.queue;
                         newState.songQueue = messageEvent.songQueue;
+                        newState.chatLog = messageEvent.chatLog;
                         return newState;
                     })
+                    this.setLike();
                 }
 
                 if (messageEvent.action === "DELETE") {
@@ -374,6 +348,7 @@ class Chatroom extends React.Component {
 
             if (messageEvent.type === "getSongQueue") {
                 this.setState({ songQueue: messageEvent.songQueue });
+                this.setLike();
             }
 
             if (messageEvent.type === "djPause") {
@@ -390,6 +365,12 @@ class Chatroom extends React.Component {
 
             if (messageEvent.type === "nextSong") {
                 this.setState({ songQueue: messageEvent.songQueue })
+                this.setLike();
+            }
+
+            //Chatbox
+            if (messageEvent.type === "getChatLog") {
+                this.setState({ chatLog: messageEvent.chatLog })
             }
 
         };
@@ -425,7 +406,6 @@ class Chatroom extends React.Component {
     }
 
     setTrackCallback = (track) => {
-        console.log(track);
         socket.send(JSON.stringify({
             type: "message",
             messageType: "setTrack",
@@ -467,28 +447,82 @@ class Chatroom extends React.Component {
         }));
     }
 
+    setDislike() {
+
+    }
+
+    setLike() {
+        console.log("activated");
+        console.log(this.state.songQueue.length + " " + Object.keys(this.state.tracks).length);
+        if (this.state.songQueue.length > 0) {
+            if(Object.keys(this.state.tracks).length === 0) {
+                this.setState({likeActive: true});
+            }
+            for (var key in this.state.tracks) {
+                if (this.state.tracks[key].title === this.state.songQueue[0].title && this.state.tracks[key].artist === this.state.songQueue[0].artist) {
+                    this.setState({ likeActive: false });
+                    return;
+                }
+            }
+
+            this.setState({ likeActive: true });
+        }
+    }
+
+    handleLike = () => {
+        if (this.state.likeActive) {
+            axios
+                .post(this.props.api + 'track/store', { // Posts the new track data to the playlist database
+                    title: this.state.songQueue[0].title,
+                    artist: this.state.songQueue[0].artist,
+                    url: this.state.songQueue[0].url,
+                    playlist_id: this.state.playListId
+                }, {
+                    headers: {
+                        'Authorization': `Bearer ${this.props.user.api_key}`
+                    }
+                }).then(() => {
+                    axios.get(this.props.api + "playlist/created-by/" + this.props.user.id)
+                    .then(payload => {
+                        this.setState(prevState => {
+                            var newState = Object.assign(prevState);
+                            newState.tracks = payload.data.tracks;
+                            return newState;
+                        })
+                    })
+                })
+                .catch(e => console.log(e));
+        }
+        this.setState({ likeActive: false });
+    }
+
+    handleDislike = () => {
+        this.setDislike();
+    }
+
+
     render() {
         return (
             <>
                 <Container fluid className="mainContainer">
                     <div id="topBar">
                         <div id="topBarTitle"><h5 id="topBarHeader">{this.state.room.name}{this.state.dj ? " | DJ: " + this.state.dj.display_name : ""}</h5></div>
-                            {!this.state.isDj && !this.state.isQueued ? <Button className="topBarButton" onClick={this.queueDj}>Queue Up for DJ</Button> : ""}
-                            {!this.state.isDj && this.state.isQueued ? <Button className="topBarButton" onClick={this.deQueue}>Dequeue</Button> : ""}
-                            {this.state.isDj ? <Button className="topBarButton" onClick={this.jumpOffDj}>Jump Off DJ</Button> : ""}
+                        {!this.state.isDj && !this.state.isQueued ? <Button className="topBarButton" onClick={this.queueDj}>Queue Up for DJ</Button> : ""}
+                        {!this.state.isDj && this.state.isQueued ? <Button className="topBarButton" onClick={this.deQueue}>Dequeue</Button> : ""}
+                        {this.state.isDj ? <Button className="topBarButton" onClick={this.jumpOffDj}>Jump Off DJ</Button> : ""}
                     </div>
                     <Row>
-                        <Col id="leftColumn"className="column" xs="auto">
-                            <SidebarPlaylist songPlaying={this.state.songQueue[0]} songQueue={this.state.songQueue} dj={this.state.dj} user={this.props.user} parentCallback={this.setTrackCallback} />
+                        <Col id="leftColumn" className="column" xs="auto">
+                            <SidebarPlaylist tracks={this.state.tracks} api={this.props.api} songPlaying={this.state.songQueue[0]} songQueue={this.state.songQueue} dj={this.state.dj} user={this.props.user} parentCallback={this.setTrackCallback} />
                         </Col>
                         <Col id="midColumn" className="column " xs="auto">
-                            <CenterChatroom deQueueCallback={this.deQueue} queueCallback={this.queueDj} jumpOffDjCallback={this.jumpOffDj} isQueued={this.state.isQueued} songQueue={this.state.songQueue} nextSongCallback={this.nextSongCallback}
+                            <CenterChatroom dislikeColor={this.state.dislikeActive ? "danger" : ""} likeColor={this.state.likeActive ? "success" : ""} dislikeClass={this.state.dislikeActive ? "active" : "deactivated"} likeClass={this.state.likeActive ? "active" : "deactivated"} likeCallback={this.handleLike} dislikeCallback={this.handleDislike} deQueueCallback={this.deQueue} queueCallback={this.queueDj} jumpOffDjCallback={this.jumpOffDj} isQueued={this.state.isQueued} songQueue={this.state.songQueue} nextSongCallback={this.nextSongCallback}
                                 isDj={this.state.isDj} time={this.state.time} getTimeCallback={this.getTimeCallback} djPlayCallback={this.djPlayCallback} djPauseCallback={this.djPauseCallback}
                                 isPaused={this.state.isPaused} dj={this.state.dj} user={this.props.user}
                                 songPlaying={this.state.songQueue.length !== 0 ? this.state.songQueue[0] : ""} />
                         </Col>
                         <Col id="rightColumn" className="column " xs="auto">
-                            <SideBarChatbox state={this.state} />
+                            <SideBarChatbox chatLog={this.state.chatLog} user={this.props.user} state={this.state} />
                         </Col>
                     </Row>
                 </Container>
@@ -500,7 +534,7 @@ class Chatroom extends React.Component {
 const mapStateToProps = state => {
     return {
         user: state.user,
-        api: state.api
+        api: state.api,
     }
 }
 
