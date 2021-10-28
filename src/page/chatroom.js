@@ -14,130 +14,13 @@ function SidebarPlaylist(props) {
     var listItems;
     var songQueue = [];
 
-    /*  if (props.dj != null) {
-         if (props.dj.id === props.user.id && props.user.id < 15) {
-             tracks.push({
-                 id: "0",
-                 title: "get you the moon",
-                 artist: "Kina",
-                 url: "https://www.youtube.com/watch?v=WTsmIbNku5g"
-             });
- 
-             tracks.push({
-                 id: "1",
-                 title: "when i met u",
-                 artist: "hateful",
-                 url: "https://www.youtube.com/watch?v=30JOhWFkLro"
-             });
-             tracks.push({
-                 id: "2",
-                 title: "3.A.M Study Session",
-                 artist: "Lofi Girl",
-                 url: "https://www.youtube.com/watch?v=BTYAsjAVa3I"
-             });
-             tracks.push({
-                 id: "3",
-                 title: "Chill Drive",
-                 artist: "chilli music",
-                 url: "https://www.youtube.com/watch?v=EIm4HvDgQCM"
-             });
-             tracks.push({
-                 id: "4",
-                 title: "Last breeze of the evening ",
-                 artist: "Dreamy",
-                 url: "https://www.youtube.com/watch?v=UMhOGEo8O5A"
-             });
-             tracks.push({
-                 id: "5",
-                 title: "The answer is in the stars ~ lofi mix",
-                 artist: "Dreamy",
-                 url: "https://www.youtube.com/watch?v=_DwmKtbVFJ4"
-             });
-             tracks.push({
-                 id: "6",
-                 title: "Why'd You Only Call Me When You're High?",
-                 artist: "Arctic Monkeys",
-                 url: "https://www.youtube.com/watch?v=6366dxFf-Os"
-             });
-             tracks.push({
-                 id: "7",
-                 title: "Knee Socks",
-                 artist: "Arctic Monkeys",
-                 url: "https://www.youtube.com/watch?v=oTP5bXzfh1c"
-             });
-             tracks.push({
-                 id: "8",
-                 title: "Mardy Bum",
-                 artist: "Arctic Monkeys",
-                 url: "https://www.youtube.com/watch?v=dO368WjwyFs"
-             });
-         } */
-
-    /*  if (props.dj.id === props.user.id && props.user.id > 15) {
-         tracks.push({
-             id: "0",
-             title: "Do i wanna know",
-             artist: "Arctic Monkeys",
-             url: "https://www.youtube.com/watch?v=bpOSxM0rNPM"
-         });
-
-         tracks.push({
-             id: "1",
-             title: "505",
-             artist: "Arctic Monkeys",
-             url: "https://www.youtube.com/watch?v=qU9mHegkTc4"
-         });
-         tracks.push({
-             id: "2",
-             title: "Why'd You Only Call Me When You're High?",
-             artist: "Arctic Monkeys",
-             url: "https://www.youtube.com/watch?v=6366dxFf-Os"
-         });
-         tracks.push({
-             id: "3",
-             title: "Knee Socks",
-             artist: "Arctic Monkeys",
-             url: "https://www.youtube.com/watch?v=oTP5bXzfh1c"
-         });
-         tracks.push({
-             id: "4",
-             title: "Mardy Bum",
-             artist: "Arctic Monkeys",
-             url: "https://www.youtube.com/watch?v=dO368WjwyFs"
-         });
-         tracks.push({
-             id: "5",
-             title: "Chill Drive",
-             artist: "chilli music",
-             url: "https://www.youtube.com/watch?v=EIm4HvDgQCM"
-         });
-         tracks.push({
-             id: "6",
-             title: "Last breeze of the evening ",
-             artist: "Dreamy",
-             url: "https://www.youtube.com/watch?v=UMhOGEo8O5A"
-         });
-         tracks.push({
-             id: "7",
-             title: "The answer is in the stars ~ lofi mix",
-             artist: "Dreamy",
-             url: "https://www.youtube.com/watch?v=_DwmKtbVFJ4"
-         });
-     }
- } */
-
-
-
     var sendTrack = (track) => {
         props.parentCallback(track);
     }
 
     if (tracks != null && props.dj != null) {
         if (props.dj.id === props.user.id) {
-            var test;
             listItems = props.tracks.map((t) => <ListGroupItem action className="rounded-0" key={t.id} onClick={() => sendTrack(t)}> {t.artist}: {t.title}</ListGroupItem>);
-            props.tracks.map((t) => test = t);
-            console.log(test);
         }
     }
 
@@ -261,7 +144,6 @@ function CenterChatroom(props) {
     var updateTime = (progress) => {
         if (!props.isDj) {
             if (progress.playedSeconds < props.time - 3 || progress.playedSeconds > props.time + 3) {
-                console.log(progress.playedSeconds + " " + time);
                 setTime(props.time);
             }
         }
@@ -276,7 +158,6 @@ function CenterChatroom(props) {
 
     var djPause = () => {
         props.djPauseCallback();
-        console.log("callback");
     }
 
     var djPlay = () => {
@@ -299,7 +180,11 @@ function CenterChatroom(props) {
             </div>
 
             {props.songPlaying !== "" ? <Card id="songCard"><CardTitle id="songTitle"><h5 id="songHeader">{props.songPlaying.artist + " - " + props.songPlaying.title}</h5></CardTitle>
-                {props.isDj ? <Button id="nextSongButton" onClick={nextSong}>Next Song</Button> : ""}
+                {props.isDj ? <Button id="nextSongButton" onClick={nextSong}>Next Song</Button> :
+                    <>
+                        <Button color={props.dislikeColor} className={"likeDislike " + props.dislikeClass} onClick={props.dislikeCallback}>Dislike</Button>
+                        <Button color={props.likeColor} className={"likeDislike " + props.likeClass} onClick={props.likeCallback}>Save to your playlist</Button>
+                    </>}
             </Card> : ""}
         </div>
     );
@@ -344,7 +229,7 @@ class Chatroom extends React.Component {
 
         var roomId = (window.location.href).split("?id=")[1];
 
-        axios.get(this.props.api + "room/" + roomId)
+        axios.get(this.props.api + "room/" + roomId) 
             .then(payload => {
                 this.setState(prevState => {
                     var newState = Object.assign(prevState);
@@ -357,6 +242,7 @@ class Chatroom extends React.Component {
                         this.setState(prevState => {
                             var newState = Object.assign(prevState);
                             newState.tracks = payload.data.tracks;
+                            newState.playListId = payload.data.playlist.id;
                             return newState;
                         })
                         joinChatroom(this.props.user, this.state.room);
@@ -381,7 +267,12 @@ class Chatroom extends React.Component {
             isPaused: false,
             time: 0,
             chatLog: [],
-            tracks: []
+            tracks: [],
+            like: 0,
+            dislike: 0,
+            likeActive: false,
+            dislikeActive: true,
+            playListId: null
         }
 
         socket.onclose = () => {
@@ -420,6 +311,7 @@ class Chatroom extends React.Component {
                         newState.chatLog = messageEvent.chatLog;
                         return newState;
                     })
+                    this.setLike();
                 }
 
                 if (messageEvent.action === "DELETE") {
@@ -456,6 +348,7 @@ class Chatroom extends React.Component {
 
             if (messageEvent.type === "getSongQueue") {
                 this.setState({ songQueue: messageEvent.songQueue });
+                this.setLike();
             }
 
             if (messageEvent.type === "djPause") {
@@ -472,12 +365,12 @@ class Chatroom extends React.Component {
 
             if (messageEvent.type === "nextSong") {
                 this.setState({ songQueue: messageEvent.songQueue })
+                this.setLike();
             }
 
             //Chatbox
             if (messageEvent.type === "getChatLog") {
                 this.setState({ chatLog: messageEvent.chatLog })
-                console.log(this.state.chatLog);
             }
 
         };
@@ -513,7 +406,6 @@ class Chatroom extends React.Component {
     }
 
     setTrackCallback = (track) => {
-        console.log(track);
         socket.send(JSON.stringify({
             type: "message",
             messageType: "setTrack",
@@ -555,6 +447,60 @@ class Chatroom extends React.Component {
         }));
     }
 
+    setDislike() {
+
+    }
+
+    setLike() {
+        console.log("activated");
+        console.log(this.state.songQueue.length + " " + Object.keys(this.state.tracks).length);
+        if (this.state.songQueue.length > 0) {
+            if(Object.keys(this.state.tracks).length === 0) {
+                this.setState({likeActive: true});
+            }
+            for (var key in this.state.tracks) {
+                if (this.state.tracks[key].title === this.state.songQueue[0].title && this.state.tracks[key].artist === this.state.songQueue[0].artist) {
+                    this.setState({ likeActive: false });
+                    return;
+                }
+            }
+
+            this.setState({ likeActive: true });
+        }
+    }
+
+    handleLike = () => {
+        if (this.state.likeActive) {
+            axios
+                .post(this.props.api + 'track/store', { // Posts the new track data to the playlist database
+                    title: this.state.songQueue[0].title,
+                    artist: this.state.songQueue[0].artist,
+                    url: this.state.songQueue[0].url,
+                    playlist_id: this.state.playListId
+                }, {
+                    headers: {
+                        'Authorization': `Bearer ${this.props.user.api_key}`
+                    }
+                }).then(() => {
+                    axios.get(this.props.api + "playlist/created-by/" + this.props.user.id)
+                    .then(payload => {
+                        this.setState(prevState => {
+                            var newState = Object.assign(prevState);
+                            newState.tracks = payload.data.tracks;
+                            return newState;
+                        })
+                    })
+                })
+                .catch(e => console.log(e));
+        }
+        this.setState({ likeActive: false });
+    }
+
+    handleDislike = () => {
+        this.setDislike();
+    }
+
+
     render() {
         return (
             <>
@@ -570,7 +516,7 @@ class Chatroom extends React.Component {
                             <SidebarPlaylist tracks={this.state.tracks} api={this.props.api} songPlaying={this.state.songQueue[0]} songQueue={this.state.songQueue} dj={this.state.dj} user={this.props.user} parentCallback={this.setTrackCallback} />
                         </Col>
                         <Col id="midColumn" className="column " xs="auto">
-                            <CenterChatroom deQueueCallback={this.deQueue} queueCallback={this.queueDj} jumpOffDjCallback={this.jumpOffDj} isQueued={this.state.isQueued} songQueue={this.state.songQueue} nextSongCallback={this.nextSongCallback}
+                            <CenterChatroom dislikeColor={this.state.dislikeActive ? "danger" : ""} likeColor={this.state.likeActive ? "success" : ""} dislikeClass={this.state.dislikeActive ? "active" : "deactivated"} likeClass={this.state.likeActive ? "active" : "deactivated"} likeCallback={this.handleLike} dislikeCallback={this.handleDislike} deQueueCallback={this.deQueue} queueCallback={this.queueDj} jumpOffDjCallback={this.jumpOffDj} isQueued={this.state.isQueued} songQueue={this.state.songQueue} nextSongCallback={this.nextSongCallback}
                                 isDj={this.state.isDj} time={this.state.time} getTimeCallback={this.getTimeCallback} djPlayCallback={this.djPlayCallback} djPauseCallback={this.djPauseCallback}
                                 isPaused={this.state.isPaused} dj={this.state.dj} user={this.props.user}
                                 songPlaying={this.state.songQueue.length !== 0 ? this.state.songQueue[0] : ""} />
@@ -588,7 +534,7 @@ class Chatroom extends React.Component {
 const mapStateToProps = state => {
     return {
         user: state.user,
-        api: state.api
+        api: state.api,
     }
 }
 

@@ -187,3 +187,12 @@
 } 
 */
 
+/* Like/Dislike */
+
+.likeDislike {
+  float: right;
+}
+
+.deactivated {
+  background-color: grey;
+}
