@@ -99,7 +99,9 @@ wsServer.on('request', function (request) {
                     songPlaying: "",
                     songQueue: [],
                     //Chatbox
-                    chatLog: []
+                    chatLog: [],
+                    //Like/dislike
+                    dislikeCount: 0
                 }
 
             connections[room.id].users[user.id] = {
@@ -191,6 +193,7 @@ wsServer.on('request', function (request) {
 
         if (payload.messageType === "nextSong") {
             var room = connections[payload.roomId];
+            room.dislikeCount = 0;
             room.songQueue.shift();
             for (var key in room.users) {
                 room.users[key].connection.sendUTF(JSON.stringify({
@@ -243,6 +246,23 @@ wsServer.on('request', function (request) {
                     type: "getChatLog",
                     chatLog: room.chatLog
                 }));
+            }
+        }
+
+        //Like/Dislike
+        if(payload.messageType === "getDislike") {
+            var room = connections[payload.roomId];
+            var count = Object.keys(room.users).length;
+            room.dislikeCount += 1;
+            if(room.dislikeCount > count * 0.5) {
+                room.dislikeCount = 0;
+                room.songQueue.shift();
+                for(var key in room.users) {
+                    room.users[key].connection.sendUTF(JSON.stringify({
+                        type: "nextSong",
+                        songQueue: room.songQueue
+                    }));
+                }
             }
         }
 

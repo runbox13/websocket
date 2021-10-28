@@ -349,6 +349,7 @@ class Chatroom extends React.Component {
             if (messageEvent.type === "getSongQueue") {
                 this.setState({ songQueue: messageEvent.songQueue });
                 this.setLike();
+                this.setDislike();
             }
 
             if (messageEvent.type === "djPause") {
@@ -366,6 +367,7 @@ class Chatroom extends React.Component {
             if (messageEvent.type === "nextSong") {
                 this.setState({ songQueue: messageEvent.songQueue })
                 this.setLike();
+                this.setDislike();
             }
 
             //Chatbox
@@ -448,7 +450,7 @@ class Chatroom extends React.Component {
     }
 
     setDislike() {
-
+       this.setState({dislikeActive: true});
     }
 
     setLike() {
@@ -497,7 +499,14 @@ class Chatroom extends React.Component {
     }
 
     handleDislike = () => {
-        this.setDislike();
+        this.setState({dislikeActive: false});
+        if(this.state.dislikeActive) {
+            socket.send(JSON.stringify({
+                type: "message",
+                messageType: "getDislike",
+                roomId: this.state.room.id
+            }))
+        }
     }
 
 
